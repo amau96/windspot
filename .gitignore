@@ -1,0 +1,15 @@
+# Fichiers compiles (regeneres par monkeyc)
+bin/
+gen/
+*.prg
+*.iq
+*.prg.debug.xml
+
+# Cles privees : ne jamais publier (developer_key reste dans ~/Applications)
+developer_key*
+*.der
+*.pem
+*.key
+
+# macOS
+.DS_Store

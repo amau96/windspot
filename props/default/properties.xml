@@ -1,0 +1,15 @@
+<resources>
+    <properties>
+        <property id="spotId" type="number">76</property>
+        <property id="spotName" type="string">Mazerolles</property>
+        <property id="lat" type="string">47.46</property>
+        <property id="lon" type="string">-1.46</property>
+        <property id="refreshMin" type="number">60</property>
+        <property id="morningEnd" type="number">24</property>
+        <property id="testMode" type="boolean">false</property>
+        <property id="curId" type="number">-1</property>
+        <property id="curName" type="string"></property>
+        <property id="curLat" type="string"></property>
+        <property id="curLon" type="string"></property>
+    </properties>
+</resources>

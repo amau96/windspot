@@ -1,0 +1,23 @@
+<resources>
+    <jsonData id="SpotIndex" filename="spots_index.json"/>
+    <jsonData id="Spots0" filename="spots_0.json"/>
+    <jsonData id="Spots1" filename="spots_1.json"/>
+    <jsonData id="Spots2" filename="spots_2.json"/>
+    <jsonData id="Spots3" filename="spots_3.json"/>
+    <jsonData id="Spots4" filename="spots_4.json"/>
+    <jsonData id="Spots5" filename="spots_5.json"/>
+    <jsonData id="Spots6" filename="spots_6.json"/>
+    <jsonData id="Spots7" filename="spots_7.json"/>
+    <jsonData id="Spots8" filename="spots_8.json"/>
+    <jsonData id="Spots9" filename="spots_9.json"/>
+    <jsonData id="Spots10" filename="spots_10.json"/>
+    <jsonData id="Spots11" filename="spots_11.json"/>
+    <jsonData id="Spots12" filename="spots_12.json"/>
+    <jsonData id="Spots13" filename="spots_13.json"/>
+    <jsonData id="Spots14" filename="spots_14.json"/>
+    <jsonData id="Spots15" filename="spots_15.json"/>
+    <jsonData id="Spots16" filename="spots_16.json"/>
+    <jsonData id="Spots17" filename="spots_17.json"/>
+    <jsonData id="Spots18" filename="spots_18.json"/>
+    <jsonData id="Spots19" filename="spots_19.json"/>
+</resources>

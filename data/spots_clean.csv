@@ -1,0 +1,315 @@
+Spot,Dép.,Département,Façade,Latitude,Longitude,Orientation côte (°),Wingfoil,Kitesurf,Windsurf,Surf,N,NE,E,SE,S,SW,W,NW,id,Remarques
+Aytré,17,Charente-Maritime,Atlantique,46.12,-1.13,350.0,,,,,,,,,,,,,1675ee38-3344-4200-be08-e3ab79e09841,aucune pratique renseignée
+Banc du Bucheron,17,Charente-Maritime,Atlantique,46.234,-1.47,135.0,,,,,,,,,,,,,1a3f60e4-667e-471c-a0f5-b66166b7aa57,aucune pratique renseignée
+Boyardville,17,Charente-Maritime,Atlantique,45.98,-1.23,150.0,,,,,,,,,,,,,7fdbaea6-b830-4ff3-8ce2-4ee5ec3e7a1e,aucune pratique renseignée
+Chatelaillon,17,Charente-Maritime,Atlantique,46.07,-1.1,350.0,,,,,,,,,,,,,0bae8653-2dc8-488a-b20e-4789eda50b65,aucune pratique renseignée
+Diamond Head,17,Charente-Maritime,Atlantique,46.25,-1.545,100.0,,,,,,,,,,,,,31637708-a729-4eef-a4fd-822e87d5c727,aucune pratique renseignée
+Grand Village,17,Charente-Maritime,Atlantique,45.851,-1.26,350.0,,,,,,,,,,,,,b817aaee-7d77-4862-a0c3-81d9103c19a4,aucune pratique renseignée
+L'Embellie,17,Charente-Maritime,Atlantique,45.790056,-1.215193,,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,Bof,Bon,Bof,Bof,Bof,Bof,Tres Bon,Tres Bon,0fb02b0d-c1ce-41d6-a148-f752e0384651,département ajouté (commune La Tremblade)
+La Gauterelle,17,Charente-Maritime,Atlantique,45.99,-1.29,110.0,,,,,,,,,,,,,8ee833dc-79d5-459d-b138-7a3ab734b4b4,aucune pratique renseignée
+La Lède,17,Charente-Maritime,Atlantique,45.66941,-1.148249,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Débutant,Danger,Danger,Danger,Tres Bon,Bon,Bon,Bon,Bof,af833015-daf6-4781-84f7-7284beee83b6,département ajouté (commune Les Mathes)
+La Perroche,17,Charente-Maritime,Atlantique,45.89,-1.29,315.0,,,,,,,,,,,,,6c4ad0ab-6b28-4a48-9a2d-815e70c41389,aucune pratique renseignée
+Le Gros Jonc,17,Charente-Maritime,Atlantique,46.17,-1.384,310.0,,,,,,,,,,,,,121680f9-14f5-40c1-a8a5-3b9db621ad4f,aucune pratique renseignée
+Oléron - Saumonard,17,Charente-Maritime,Atlantique,45.99,-1.24,310.0,,,,,,,,,,,,,fcce16de-67f6-46e5-8940-f8477d9d98f5,aucune pratique renseignée
+Plage des Huttes,17,Charente-Maritime,Atlantique,46.0,-1.4,340.0,,,,,,,,,,,,,0359bf24-4dad-45d7-a8e8-2f52f2364d9a,aucune pratique renseignée
+Plage des Prises,17,Charente-Maritime,Atlantique,46.19,-1.454,290.0,,,,,,,,,,,,,509c2957-ae40-430c-bca6-e05644474690,aucune pratique renseignée
+Plage Saint-Trojan-Les-Bains,17,Charente-Maritime,Atlantique,45.82,-1.25,340.0,,,,,,,,,,,,,b5eb09f9-f1ee-4c45-a175-9b9f5037211d,aucune pratique renseignée
+Plage Vert Bois,17,Charente-Maritime,Atlantique,45.87,-1.27,340.0,,,,,,,,,,,,,ca0fc8d7-2463-403e-8e5f-bc3bfedb5dc6,aucune pratique renseignée
+Port du Douhet,17,Charente-Maritime,Atlantique,46.0,-1.31,160.0,,,,,,,,,,,,,f201b31d-a7e9-4b4a-8d2b-a5a4adc76761,aucune pratique renseignée
+Rivedoux Nord,17,Charente-Maritime,Atlantique,46.17,-1.26,90.0,,,,,,,,,,,,,c25b5fb2-195f-4dfd-ae2c-b4fdde591641,aucune pratique renseignée
+Rivedoux Sud,17,Charente-Maritime,Atlantique,46.15,-1.27,225.0,,,,,,,,,,,,,b2a20cf0-6fc0-4bca-80c7-a879619241a1,aucune pratique renseignée
+Saint-Trojan-Les-Bains,17,Charente-Maritime,Atlantique,45.83,-1.19,20.0,,,,,,,,,,,,,6e37e50e-ccfc-485b-a2fe-ade190268fec,aucune pratique renseignée
+Soubregeon Saint-Denis Oléron,17,Charente-Maritime,Atlantique,46.04,-1.37,290.0,,,,,,,,,,,,,21e88ad5-5cb5-49b6-a7c5-b60bbe993514,aucune pratique renseignée
+Locquirec - Sables Blancs,22,Côtes-d'Armor,Atlantique,48.7,-3.66,225.0,,,,,,,,,,,,,4344dc7d-b22e-4e5c-a77f-fe087a8bf490,doublon probable : « Pors Ar Villec » à 734 m ; aucune pratique renseignée
+Moulin de La Rive,22,Côtes-d'Armor,Atlantique,48.69,-3.68,90.0,,,,,,,,,,,,,cb8eba13-de54-4afa-af89-fd96f93e2d71,aucune pratique renseignée
+Pors Ar Villec,22,Côtes-d'Armor,Atlantique,48.7,-3.65,90.0,,,,,,,,,,,,,b23ac2c3-f125-46bf-9c99-55dc57aec098,doublon probable : « Locquirec - Sables Blancs » à 734 m ; aucune pratique renseignée
+Trestraou,22,Côtes-d'Armor,Atlantique,48.82,-3.45,90.0,,,,,,,,,,,,,60526e85-e62a-4013-a47c-6916da51a30e,aucune pratique renseignée
+"Audierne, la grande plage",29,Finistère,Atlantique,48.009244,-4.547739,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,5feb3186-28e1-499f-979c-a8778c96f6f4,
+Baie d'Audierne,29,Finistère,Atlantique,48.0,-4.54,270.0,,,,,,,,,,,,,5da92317-de24-40f3-af68-88c5b936f081,aucune pratique renseignée
+Baie Des Trépassés,29,Finistère,Atlantique,48.05,-4.71,20.0,,,,,,,,,,,,,dd1c1d22-8993-42fc-8473-940829200478,aucune pratique renseignée
+Ile Tudy,29,Finistère,Atlantique,47.846342,-4.159955,220.0,Débutant,Débutant,Débutant,,,,,,,,,,137670f0-3354-409c-b17e-6be2c00ff115,
+Kerambigorn,29,Finistère,Atlantique,47.845988,-3.992328,260.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,6496c81c-a4c6-4a8c-9586-6c34a74ffadb,
+Kerleven,29,Finistère,Atlantique,47.892803,-3.964176,270.0,Non praticable,Débutant,Débutant,Non praticable,,,,,,,,,188d2a09-b169-4088-8c6c-6f593ed28e21,
+Kerouini (Trégunc),29,Finistère,Atlantique,47.806232,-3.867016,310.0,Non praticable,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,2f03018f-0bbb-4f41-9034-96cca3c6941b,
+Kersidan,29,Finistère,Atlantique,47.793842,-3.82144,280.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,145ce44e-25b6-4ab5-95a1-d795f423d713,
+Kersiny et Mesperleuc'h,29,Finistère,Atlantique,48.00264,-4.513707,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,cea190bf-cbe4-4519-8d92-78abcfa5a534,nom corrigé (était « Kersiny et Mesperleuc’h ») ; doublon probable : « Mesperleuc'h » à 742 m
+Kervel,29,Finistère,Atlantique,48.116371,-4.297032,10.0,Débutant,Débutant,Débutant,Intermédiaire,,,,,,,,,5371e27d-ab76-4099-b543-bb2f0d078df1,
+La Palue,29,Finistère,Atlantique,48.2,-4.57,355.0,,,,,,,,,,,,,4b19162a-36a7-41a9-b653-a279dd158a30,aucune pratique renseignée
+La Torche et Tronoën,29,Finistère,Atlantique,47.841105,-4.352904,350.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,1d0f747b-173d-4434-9e27-e258763db03c,
+Le Petit Minou,29,Finistère,Atlantique,48.33,-4.62,315.0,,,,,,,,,,,,,15e213e2-7e95-4047-b53b-c249868e6ec8,aucune pratique renseignée
+Lesconil,29,Finistère,Atlantique,47.795712,-4.203215,300.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,09639e6f-c2e4-4871-b2ae-3a345a6c1069,
+Loctudy,29,Finistère,Atlantique,47.827619,-4.156951,190.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,c7ad9d61-1081-4ade-b5df-4b18939be798,
+Losmarc'h,29,Finistère,Atlantique,48.21,-4.57,340.0,,,,,,,,,,,,,6bcef88c-3c91-4ce5-afca-f66cf83004e6,aucune pratique renseignée
+Mesperleuc'h,29,Finistère,Atlantique,48.000398,-4.504309,300.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,de75bd54-d7fa-48c7-bdb2-123d99b92ad3,doublon probable : « Kersiny et Mesperleuc'h » à 742 m
+Mousterlin,29,Finistère,Atlantique,47.8423,-4.021339,260.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,6cdabda7-faff-4b91-adac-de8dc5377946,
+Plage de Penhors,29,Finistère,Atlantique,47.938879,-4.42715,340.0,Confirmé,Confirmé,Confirmé,Non praticable,,,,,,,,,8160957d-8c14-4d10-a247-97993ec19faa,
+Plage du Ster,29,Finistère,Atlantique,47.79551,-4.314366,260.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,7d18cdfd-c507-4271-826a-92bb087d93df,
+"Plouhinec, Gwendrez",29,Finistère,Atlantique,47.989403,-4.484139,320.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,28d9db2f-cc1f-4191-b25a-be33a79dca6d,
+Pointe Saint-Gilles (Bénodet),29,Finistère,Atlantique,47.858895,-4.096914,280.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,52c809b8-1dc1-4e70-aaa7-1837da48e0f4,
+"Pouldreuzic, Penhors",29,Finistère,Atlantique,47.911042,-4.408611,340.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,64b1dd6c-8fb3-453b-a589-05f4321fe25f,
+"Saint-Jean-Trolimon, Tronoën",29,Finistère,Atlantique,47.851527,-4.35711,350.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,cd26b6a2-fd56-4123-b0cf-79602c6993b9,
+Sainte Marguerite,29,Finistère,Atlantique,48.6,-4.61,0.0,,,,,,,,,,,,,036dfd1f-c51a-4860-9fde-e69454b54c06,aucune pratique renseignée
+St Tugen,29,Finistère,Atlantique,48.01,-4.6,320.0,,,,,,,,,,,,,5e4c338e-1b90-4ec7-81fb-d492a2a90c47,aucune pratique renseignée
+"Tréguennec, Plage de Kermabec",29,Finistère,Atlantique,47.879741,-4.37565,340.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,5ec4e982-a8b3-4d73-b81f-d16bc6b9be77,
+Etang de Feins - Domaine de Boulet,35,Ille-et-Vilaine,Atlantique,48.34,-1.64,90.0,,,,,,,,,,,,,a2dbb442-759c-4ea6-a3d9-2061a90264f6,aucune pratique renseignée
+Etang de la Bornière,35,Ille-et-Vilaine,Atlantique,47.83,-1.68,225.0,,,,,,,,,,,,,8802c622-7f49-4e98-935d-8ba21c8d6c72,aucune pratique renseignée
+Etang de Trémelin,35,Ille-et-Vilaine,Atlantique,48.01,-2.03,90.0,,,,,,,,,,,,,d69ee465-544c-4640-a530-90a775d7c96f,aucune pratique renseignée
+La Cantache,35,Ille-et-Vilaine,Atlantique,48.141635,-1.262441,70.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,02d11f23-a27c-41e8-99f6-18b260a18699,
+Biscarrosse Plage,40,Landes,Atlantique,44.445914,-1.262314,10.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,18503680-86e2-4d58-8591-78a9d7fd9e87,doublon probable : « Biscarrosse Plage - Sud » à 382 m ; doublon probable : « Biscarrosse Plage - Nord » à 491 m
+Biscarrosse Plage - Nord,40,Landes,Atlantique,44.450325,-1.262056,10.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,a38ca609-aa72-4e88-88ad-d6821067d77a,doublon probable : « Biscarrosse Plage - Sud » à 872 m ; doublon probable : « Biscarrosse Plage » à 491 m
+Biscarrosse Plage - Plage du Vivier,40,Landes,Atlantique,44.458467,-1.254513,,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,c9a53b0c-98b8-433c-aac9-3e6d466be969,
+Biscarrosse Plage - Sud,40,Landes,Atlantique,44.442482,-1.262228,10.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,3996c13d-7cd5-487b-8168-47e3dbab1f03,nom corrigé (était « Biscarosse Plage - Sud ») ; doublon probable : « Biscarrosse Plage » à 382 m ; doublon probable : « Biscarrosse Plage - Nord » à 872 m
+Cap de l'Homy,40,Landes,Atlantique,44.04,-1.35,10.0,,,,,,,,,,,,,048e9e2d-b44f-4418-8921-ded544af1aca,aucune pratique renseignée
+Capbreton (La Piste),40,Landes,Atlantique,43.652721,-1.452944,10.0,Intermédiaire,Non praticable,Intermédiaire,Intermédiaire,,,,,,,,,6ed7d217-9d25-4aca-abca-0b9fcfc1d60d,nom corrigé (était « Capbreton (LaPiste) »)
+Contis,40,Landes,Atlantique,44.09,-1.33,10.0,,,,,,,,,,,,,4ab09442-240c-45ce-961b-f7fb3d0f2d96,aucune pratique renseignée
+Hossegor,40,Landes,Atlantique,43.661399,-1.444273,10.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,f82c9bd9-b13f-43c7-a9f8-364d5cc3df0d,
+Lac de Cazaux - Ispe,40,Landes,Atlantique,44.447093,-1.191394,130.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,cef535b0-2872-40a4-97d8-30a6269b41ea,nom corrigé (était « Lac de Cazaux  - Ispe »)
+Lac de Cazaux - La Broustasse,40,Landes,Atlantique,44.435618,-1.180171,90.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,b3c023ac-be18-4e5a-ad9b-3a79ab2a5f8c,doublon probable : « Lac de Cazaux - Navarosse » à 942 m
+Lac de Cazaux - Les Aigrettes,40,Landes,Atlantique,44.495993,-1.091702,315.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,01c6b17d-fe28-4c00-9c82-d2e12d8de851,
+Lac de Cazaux - Mayotte,40,Landes,Atlantique,44.440153,-1.162921,40.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,ea796dbd-1bbd-4e1b-904a-daa4006d7f90,doublon probable : « Lac de Cazaux - Navarosse » à 627 m
+Lac de Cazaux - Navarosse,40,Landes,Atlantique,44.436047,-1.168328,50.0,Non praticable,Débutant,Débutant,Non praticable,,,,,,,,,1153d0a3-2949-4332-ba58-631e464d86b2,nom corrigé (était « Lac de Cazaux -Navarosse ») ; doublon probable : « Lac de Cazaux - La Broustasse » à 942 m ; doublon probable : « Lac de Cazaux - Mayotte » à 627 m
+Lac de Cazaux - Port de l'Estey,40,Landes,Atlantique,44.484168,-1.104169,90.0,Intermédiaire,Intermédiaire,Non praticable,Non praticable,,,,,,,,,aeaa6e26-3f58-494f-b885-27612ea138df,
+Lac de Cazaux - port Maguide,40,Landes,Atlantique,44.460495,-1.191847,180.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,84bf3d67-8a92-453c-a9bd-d19a06802bdf,
+Lac de Léon - Nord,40,Landes,Atlantique,43.901183,-1.310458,320.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,a1df3585-f570-43a5-b725-7aeb314d8d64,
+Lac de Léon - Sud,40,Landes,Atlantique,43.88979,-1.316256,90.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,9eac1adb-8e95-41c6-a5d7-863e36383b35,
+Lac de Soustons,40,Landes,Atlantique,43.772054,-1.317329,70.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,9c682a1a-e0a2-4339-a5e8-a85f354c239c,
+Les Estagnots - Seignosse,40,Landes,Atlantique,43.687239,-1.462219,10.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,501bd496-a720-46ef-9be5-9f51fbfe98d2,nom corrigé (était « Les Estagnots- Seignosse »)
+Mimizan-Plage,40,Landes,Atlantique,44.21,-1.31,10.0,,,,,,,,,,,,,95763c1d-a98e-4d8e-83bf-8c71359253cf,aucune pratique renseignée
+Moliets Plage,40,Landes,Atlantique,43.853903,-1.402219,20.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,cf606226-2399-4b49-a963-fb85699ee385,
+Plage de Messanges,40,Landes,Atlantique,43.817189,-1.412862,10.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,e8d6259f-0a21-475f-9a85-071f7366df18,
+Seignosse - Bourdaines,40,Landes,Atlantique,43.705608,-1.46016,10.0,Confirmé,Confirmé,Confirmé,Intermédiaire,,,,,,,,,518ccdc3-41aa-493e-b1b6-8dccc84b30db,
+Soustons,40,Landes,Atlantique,43.769234,-1.43199,10.0,,,,,,,,,,,,,d34fa70e-7dc0-4cb2-bcd7-d4a65a6846b0,aucune pratique renseignée
+Tarnos - Plage du Metro,40,Landes,Atlantique,43.560491,-1.512169,20.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,fffee8b4-f435-4679-9168-53867ff87558,
+Batz sur Mer,44,Loire-Atlantique,Atlantique,47.2777,-2.4996,310.0,Non praticable,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,bf8cf8eb-f468-40c8-be7f-fb99a9f53267,
+CVAN,44,Loire-Atlantique,Atlantique,47.258734,-1.536436,180.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,97a9152e-8766-449d-891e-538180d52eda,département corrigé (était 04)
+Etang Aumée,44,Loire-Atlantique,Atlantique,47.6044,-2.063,180.0,,,,,,,,,,,,,ffb35671-facb-4b49-8bd7-03e83fab9b1c,aucune pratique renseignée
+La Baule,44,Loire-Atlantique,Atlantique,47.269096,-2.390903,250.0,,,,,,,,,,,,,82db43ac-145b-453a-87fb-a8968ab2183f,aucune pratique renseignée
+La Govelle,44,Loire-Atlantique,Atlantique,47.26298,-2.461453,310.0,Non praticable,Non praticable,Non praticable,Intermédiaire,,,,,,,,,1a1e44e8-953d-46e9-8155-a825a6fc4fd4,
+La Mine d'Or,44,Loire-Atlantique,Atlantique,47.4769,-2.4988,330.0,,,,,,,,,,,,,56066655-0943-4dea-8d01-af10252add11,aucune pratique renseignée
+La Turballe,44,Loire-Atlantique,Atlantique,47.3381,-2.5108,340.0,,,,,,,,,,,,,06c5890a-d26e-46a1-8ddc-d0783325b44a,aucune pratique renseignée
+Le Pointeau,44,Loire-Atlantique,Atlantique,47.228603,-2.185852,340.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,6ac1b369-9d16-4456-8f48-57170c9fe600,
+Les Moutiers en Retz,44,Loire-Atlantique,Atlantique,47.0512,-2.0056,340.0,,,,,,,,,,,,,858acc8e-7134-4fdb-88d5-e9ab1f02730b,aucune pratique renseignée
+Maz - l'Onglette,44,Loire-Atlantique,Atlantique,47.359205,-1.504354,45.0,Débutant,Non praticable,Débutant,Non praticable,Bof,Bof,Bof,Bof,Bof,Bof,Tres Bon,Bon,7ed435ce-133f-4bb5-bac1-55e1b56e842e,doublon probable : « Mazerolles » à 434 m ; doublon probable : « Mazerolles - depuis l'île » à 825 m
+Mazerolles,44,Loire-Atlantique,Atlantique,47.36,-1.51,180.0,Débutant,Non praticable,Débutant,Non praticable,Bof,Bof,Bof,Tres Bon,Tres Bon,Tres Bon,Bof,Bof,ec9b30a4-174d-4acf-aa1b-f15f6bbad843,doublon probable : « Maz - l'Onglette » à 434 m ; doublon probable : « Mazerolles - depuis l'île » à 960 m
+Mazerolles - depuis l'île,44,Loire-Atlantique,Atlantique,47.366335,-1.50134,90.0,Débutant,Non praticable,Débutant,Non praticable,Tres Bon,Tres Bon,Bon,Bof,Bof,Bof,Bof,Tres Bon,d809caf1-ad4d-4f22-b90f-e0727a92717a,doublon probable : « Maz - l'Onglette » à 825 m ; doublon probable : « Mazerolles » à 960 m
+Pénestin,44,Loire-Atlantique,Atlantique,47.4899,-2.4666,110.0,,,,,,,,,,,,,97c7b11f-8241-4848-9d4f-5d83ba571ff6,aucune pratique renseignée
+Pont Mahé,44,Loire-Atlantique,Atlantique,47.437377,-2.464369,330.0,,,,,,,,,,,,,f671caa2-34bc-46b9-8e86-1a4c1918a316,doublon probable : « Kerandré » à 949 m ; aucune pratique renseignée
+Pornichet,44,Loire-Atlantique,Atlantique,47.262922,-2.351075,310.0,,,,,,,,,,,,,2cbf69e2-f05c-4826-8a15-e7a79fa766a1,aucune pratique renseignée
+Pornichet - St Marguerite,44,Loire-Atlantique,Atlantique,47.2397,-2.3125,320.0,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,,08345ad6-426b-446d-a2ad-3443d3d7d54d,
+Saint Brévin - Les Dunes,44,Loire-Atlantique,Atlantique,47.1966,-2.167,340.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,773a0e25-b9f7-4904-8497-1c883df10743,
+Saint-Brevin-les-Pins,44,Loire-Atlantique,Atlantique,47.25,-2.18,20.0,,,,,,,,,,,,,f3fddb0d-f591-4e36-b80f-bd276488843a,aucune pratique renseignée
+Saint Brévin - Les Rochelets,44,Loire-Atlantique,Atlantique,47.215371,-2.172545,330.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,53018b8d-71a9-42d9-8124-821cca90b556,
+Saint Nazaire,44,Loire-Atlantique,Atlantique,47.2549,-2.2229,225.0,,,,,,,,,,,,,3576b835-ecff-4188-b5e1-f65fe997fdb7,aucune pratique renseignée
+Sorlock,44,Loire-Atlantique,Atlantique,47.42,-2.48,10.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,454bd040-6f15-4b3b-97a0-6f1b35be25f8,
+Tharon,44,Loire-Atlantique,Atlantique,47.17,-2.17,25.0,,,,,,,,,,,,,a61685ca-2ecb-485a-9d0a-2d74bf2b479e,aucune pratique renseignée
+Vioreau,44,Loire-Atlantique,Atlantique,47.523434,-1.423951,,Débutant,,,,,,,,,,,,50eec685-9c1d-47d9-b627-ec6e48ec11f4,département ajouté (commune Joué-sur-Erdre)
+Anse de Locmiquel,56,Morbihan,Atlantique,47.588655,-2.908718,350.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,511be23f-47d9-48c6-b89b-76962f318114,
+Arradon,56,Morbihan,Atlantique,47.619124,-2.810181,225.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,930a395a-c61c-4870-b843-594bc9452664,
+Belle île - Les Grands Sables,56,Morbihan,Atlantique,47.323581,-3.096942,110.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,6b85f62d-9bb1-4fbf-88b4-54434637c4ed,
+Carnac - Plage,56,Morbihan,Atlantique,47.567782,-3.070251,260.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,017e5ca2-a438-48c2-bf59-0a843bebd4a4,
+Damgan,56,Morbihan,Atlantique,47.513491,-2.590027,270.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,c97021b4-dfdf-4f2f-a01e-8404bb922e1b,
+Erdeven,56,Morbihan,Atlantique,47.606163,-3.184667,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,e67a6435-c505-497e-b5ee-6be198bcadda,
+Etel,56,Morbihan,Atlantique,47.66,-3.21,180.0,Non praticable,Non praticable,Non praticable,Non praticable,,,,,,,,,a0ed8a19-fb9e-4851-bef9-b74215a6ce5f,aucune pratique renseignée
+Fort-Bloqué,56,Morbihan,Atlantique,47.74,-3.51,340.0,,,,,,,,,,,,,2ca1a73d-b27c-43d8-9fa0-88c72b941265,aucune pratique renseignée
+Gâvres,56,Morbihan,Atlantique,47.691421,-3.348042,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,385079dd-6d21-4d82-97ed-783b8555d86f,
+Gâvres - Caserne,56,Morbihan,Atlantique,47.69197,-3.32654,280.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,fea04ad4-8c65-4e17-b068-8ec72f8aff47,"département déduit du spot voisin « Le Chell, Mer de Gâvres » à 1.5 km"
+Guidel-plage - La Falaise,56,Morbihan,Atlantique,47.762003,-3.529702,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,0d92a781-0e5a-4601-aba3-9485f1068b5f,
+"Île d'Arz, Golfe du Morbihan",56,Morbihan,Atlantique,47.582084,-2.815934,340.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,06c1ee5f-d12b-4f52-9805-d018da0cd1f1,
+Île de Houat - Treac'h er Goured,56,Morbihan,Atlantique,47.380859,-2.961075,340.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,4feb33f0-dd9f-48f0-9f68-a325d73d0322,
+Kerandré,56,Morbihan,Atlantique,47.441963,-2.475013,220.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,91aa1b47-6521-44bb-989c-bb554435be1e,doublon probable : « Pont Mahé » à 949 m
+Kerguelen - Larmor Plage,56,Morbihan,Atlantique,47.701618,-3.40134,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,b19bdd22-74ec-4a78-94cc-6bce5b336119,
+Kerjouanno,56,Morbihan,Atlantique,47.529257,-2.878249,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,d4c9a8d5-3e91-41e2-bcab-2cdde0b3d04e,
+"La Mouette Sinagote, Séné",56,Morbihan,Atlantique,47.598365,-2.735017,330.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,fe51c448-8463-4205-b541-b79e00342c59,
+La Roche Sèche,56,Morbihan,Atlantique,47.618719,-3.190283,270.0,Non praticable,Confirmé,Non praticable,Confirmé,,,,,,,,,70289d05-8b3a-4271-919f-0e2969de115e,
+La Trinité,56,Morbihan,Atlantique,47.573877,-3.02081,170.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,3fb0a7fc-e2b1-4ee2-a3c6-52c2bd64a3b0,
+Lac de Ploermel,56,Morbihan,Atlantique,47.95,-2.41,180.0,,,,,,,,,,,,,f653f2ca-6b5a-4d47-b508-21b251da4705,aucune pratique renseignée
+Landrézac,56,Morbihan,Atlantique,47.501721,-2.711478,310.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,da68c0f2-d192-4ada-aee2-738c3d9c2c11,
+"Le Chell, Mer de Gâvres",56,Morbihan,Atlantique,47.704852,-3.33375,270.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,5f7a48aa-7508-4128-941c-0ffe3e89c551,
+Le Lines,56,Morbihan,Atlantique,47.680067,-3.287314,310.0,Confirmé,Confirmé,Confirmé,Confirmé,,,,,,,,,67efe35a-cbc9-4b49-8614-58f4dd6c33e7,
+Le Men Du - La Trinité-sur-Mer,56,Morbihan,Atlantique,47.576497,-3.048492,270.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,8ae52767-840c-4b77-95c6-1dfe59138de2,
+Le Roaliguen,56,Morbihan,Atlantique,47.494429,-2.76673,270.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,4a7eeea4-5926-47cb-bd4a-d89234ec3139,
+Le Vivier,56,Morbihan,Atlantique,47.48,-3.15,340.0,Non praticable,Non praticable,Non praticable,Non praticable,,,,,,,,,1941b837-e401-4b93-b336-aa4795db4a3a,aucune pratique renseignée
+Légenese - Carnac,56,Morbihan,Atlantique,47.563786,-3.084411,,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,293fff23-3b24-4375-b354-85aa6e9872ac,
+Mane Gwen - Plouharnel,56,Morbihan,Atlantique,47.57282,-3.163727,330.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,28181c93-f014-458e-b84b-0fcb3a00ae54,
+Penthièvre Baie,56,Morbihan,Atlantique,47.55,-3.13,190.0,,,,,,,,,,,,,a295b20b-b068-4d9e-b870-72daaf81ff95,aucune pratique renseignée
+Penthièvre Mer,56,Morbihan,Atlantique,47.55,-3.15,340.0,,,,,,,,,,,,,32121aec-59a9-4532-849e-625a69d277b3,aucune pratique renseignée
+Penvins,56,Morbihan,Atlantique,47.495864,-2.676844,180.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,2cbc941b-1f68-4268-9bba-5fab5f7d4b08,
+Petite Mer de Gâvres,56,Morbihan,Atlantique,47.693761,-3.29358,110.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,752b2ea8-a085-4183-9139-462903ab00e4,
+Plage de la Nourriguel,56,Morbihan,Atlantique,47.711841,-3.372674,210.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,669f00c1-bfbc-432f-97dd-173c1bbd8a56,doublon probable : « Toulhars - Larmor Plage » à 744 m
+Plage des Govelins,56,Morbihan,Atlantique,47.512737,-2.855501,330.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,ed1a2bd0-1a86-45d2-9c2d-032082b0dc01,
+Plage du Kaolin - Ploermeur,56,Morbihan,Atlantique,47.720763,-3.492624,310.0,Non praticable,Non praticable,Non praticable,Confirmé,,,,,,,,,88d9cc62-de48-4bbd-ab6a-1c262493cfdd,
+Plage du Loch,56,Morbihan,Atlantique,47.752367,-3.519403,310.0,Non praticable,Non praticable,Non praticable,Débutant,,,,,,,,,22824c91-8e9f-452a-9ee3-2c434f7e3cb7,
+Pointe d'Arradon,56,Morbihan,Atlantique,47.614669,-2.837866,310.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,3a6936ba-3e43-4423-bd7f-6a161a795960,
+Pointe de Levein,56,Morbihan,Atlantique,47.684343,-3.16505,340.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,fc98d6dc-62e5-430b-93b1-f241d70746eb,
+Pointe du Blair,56,Morbihan,Atlantique,47.586723,-2.93806,340.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,ac4ad43b-19a2-49f8-8183-350be99cf326,
+Quiberon - Côte Sauvage,56,Morbihan,Atlantique,47.521026,-3.157112,,Non praticable,Non praticable,Non praticable,Intermédiaire,,,,,,,,,555d5b52-bca5-489d-926f-1d2a878a38bf,
+Quiberon - Petit Rohu,56,Morbihan,Atlantique,47.506708,-3.113335,180.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,24d124a9-e192-4f55-8b56-ad52a5446dd3,
+Sables Blancs,56,Morbihan,Atlantique,47.564017,-3.117888,190.0,,,,,,,,,,,,,15afdf4c-f974-4b09-a80d-10511e08f06e,aucune pratique renseignée
+Saint Colomban,56,Morbihan,Atlantique,47.567319,-3.102266,340.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,fe7954cd-0ab4-41e2-a936-fc3c1c16e567,
+Saint-Philibert - Plage de Kernevest,56,Morbihan,Atlantique,47.566421,-3.001628,270.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,905d1110-bda4-4e93-9e55-837cd4496913,département déduit du spot voisin « La Trinité » à 1.7 km
+Saint-Pierre Coté Océan (Locmariaquer),56,Morbihan,Atlantique,47.55698,-2.972445,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,75fa88d0-1282-4aa3-97c8-4df56140a5f3,doublon probable : « Saint-Pierre (Locmariaquer) » à 478 m
+Saint-Pierre (Locmariaquer),56,Morbihan,Atlantique,47.561266,-2.971931,110.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,61b9f289-90c7-4ffe-8011-28cdef6179bb,nom corrigé (était « Saint-Pierre  (Locmariaquer) ») ; doublon probable : « Saint-Pierre Coté Océan (Locmariaquer) » à 478 m
+Sainte-Barbe,56,Morbihan,Atlantique,47.59,-3.17,340.0,,,,,,,,,,,,,51818dee-9cb4-4d13-b21d-4cfcd4909ab9,aucune pratique renseignée
+Suscinio,56,Morbihan,Atlantique,47.504475,-2.728021,270.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,076f3abd-9820-4bd1-956f-d76211e8544a,
+Toulhars - Larmor Plage,56,Morbihan,Atlantique,47.705488,-3.375806,225.0,Intermédiaire,Non praticable,Intermédiaire,Intermédiaire,,,,,,,,,4065424f-da2b-47c4-86e4-f967706084dc,doublon probable : « Plage de la Nourriguel » à 744 m
+"Toulindac, Golfe du Morbihan",56,Morbihan,Atlantique,47.59644,-2.870415,300.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,e7ef9d7b-6ef7-47e6-9469-07a0f672052a,
+Belle Henriette,85,Vendée,Atlantique,46.3378,-1.3647,300.0,,,,,,,,,,,,,c85c3df4-c962-4958-9497-f32fd716e408,aucune pratique renseignée
+Bud Bud,85,Vendée,Atlantique,46.39,-1.5,340.0,,,,,,,,,,,,,7f50b062-ebde-4d6d-bde6-363666e72414,aucune pratique renseignée
+Fromentine,85,Vendée,Atlantique,46.8869,-2.1618,350.0,,,,,,,,,,,,,5a96febc-967b-4498-b756-4fbeb0eb063f,aucune pratique renseignée
+Jard-sur-Mer,85,Vendée,Atlantique,46.4038,-1.574,280.0,,,,,,,,,,,,,3b111423-2cec-4977-9748-74bb7b233c7b,aucune pratique renseignée
+Jard-sur-Mer - Maison Clémenceau,85,Vendée,Atlantique,46.4046,-1.5438,190.0,,,,,,,,,,,,,bf739a44-6bda-44ec-b4b7-91cdc0e38dc2,aucune pratique renseignée
+La Gachere,85,Vendée,Atlantique,46.58,-1.85,340.0,,,,,,,,,,,,,9b884d57-6e0c-4f6f-a308-d30c48e3ae73,aucune pratique renseignée
+La Sauzaie,85,Vendée,Atlantique,46.63,-1.9,330.0,,,,,,,,,,,,,cba2f7f2-5dc5-42f2-8037-80e6e03c815a,aucune pratique renseignée
+Les Dunes,85,Vendée,Atlantique,46.61,-1.86,340.0,,,,,,,,,,,,,f285ad33-eb58-4969-9153-b92fd1db1bd4,aucune pratique renseignée
+Les Sables d'Olonne,85,Vendée,Atlantique,46.49,-1.78,280.0,,,,,,,,,,,,,975f1d6a-5745-4a9d-85b4-f502053a9c4c,même nom que « Les Sables-d'Olonne » à 4.4 km ; aucune pratique renseignée
+Les Sables-d'Olonne,85,Vendée,Atlantique,46.51,-1.83,340.0,,,,,,,,,,,,,715292f0-db19-4841-a3a9-c88b7bf5be5f,même nom que « Les Sables d'Olonne » à 4.4 km ; aucune pratique renseignée
+Noirmoutier - Barbâtre,85,Vendée,Atlantique,46.9117,-2.1735,340.0,,,,,,,,,,,,,bf21f00d-b9bc-4f73-abcb-4fb0df4e8480,aucune pratique renseignée
+Noirmoutier - La Digue,85,Vendée,Atlantique,46.9177,-2.1435,180.0,,,,,,,,,,,,,d6e06e9f-b6ec-498f-a05d-6fc90202a5f0,aucune pratique renseignée
+Noirmoutier - La Luzéronde,85,Vendée,Atlantique,47.00975,-2.29923,20.0,,,,,,,,,,,,,27412525-70ad-47c7-aa42-aac650ae7823,aucune pratique renseignée
+Noirmoutier - Les Sableaux,85,Vendée,Atlantique,46.9983,-2.2153,180.0,,,,,,,,,,,,,74635711-e9d7-4046-9b53-f7421d48a4cf,aucune pratique renseignée
+Noirmoutier - Pointe de la Loire,85,Vendée,Atlantique,46.9567,-2.2556,270.0,,,,,,,,,,,,,49a686f5-818d-41cd-b1b3-a2bc3ad20b06,aucune pratique renseignée
+Notre Dame de Monts,85,Vendée,Atlantique,46.8297,-2.1564,350.0,,,,,,,,,,,,,203d218e-5864-4288-870f-1d4fd0564758,aucune pratique renseignée
+Plage Des Mouettes,85,Vendée,Atlantique,46.75,-2.03,310.0,,,,,,,,,,,,,66b63f65-ccc3-4387-a6cc-a897ab346ba8,aucune pratique renseignée
+Plage du Tanchet,85,Vendée,Atlantique,46.48,-1.77,340.0,,,,,,,,,,,,,0804539e-a0ad-4830-8e37-841ae149bce9,aucune pratique renseignée
+Port Bourgenay - Le Veillon,85,Vendée,Atlantique,46.43,-1.66,310.0,,,,,,,,,,,,,f6dffadc-0966-4826-9c2c-5e374ce2164a,aucune pratique renseignée
+Saint-Gilles Grande Plage,85,Vendée,Atlantique,46.68,-1.95,330.0,,,,,,,,,,,,,99081763-7075-45c7-8223-1835b996158d,aucune pratique renseignée
+Saint Jean de Monts,85,Vendée,Atlantique,46.7834,-2.082,310.0,,,,,,,,,,,,,ae05004c-b6f7-4200-99d5-574d92ecc1b8,aucune pratique renseignée
+Sauveterre Droite,85,Vendée,Atlantique,46.55,-1.84,340.0,,,,,,,,,,,,,fc249835-e146-47d2-9ab9-dbb810ded384,aucune pratique renseignée
+Tranche-sur-Mer,85,Vendée,Atlantique,46.3398,-1.4283,220.0,,,,,,,,,,,,,7daa3ea9-247b-4413-b9fa-41714f8d2e7b,aucune pratique renseignée
+Tranche-sur-Mer - Le Phare,85,Vendée,Atlantique,46.3349,-1.468,270.0,,,,,,,,,,,,,cf6372f7-36bf-46ee-97bf-67eb67ba882f,aucune pratique renseignée
+Boscodon,05,Hautes-Alpes,Intérieur,44.533464,6.430371,45.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,a7e8079f-83e0-4cff-9b76-62c87c933214,façade corrigée (lac de montagne)
+Plan d'eau d'Embrun,05,Hautes-Alpes,Intérieur,44.548738,6.47168,0.0,Non praticable,Non praticable,Non praticable,Non praticable,,,,,,,,,cc11ff00-8e6f-4d06-9f2c-b245735bb65e,façade corrigée (lac de montagne) ; aucune pratique renseignée
+Lac d'Anterne,74,Haute-Savoie,Intérieur,45.991177,6.797835,,Non praticable,Non praticable,Non praticable,Non praticable,,,,,,,,,f042af0b-c95f-4457-a94c-22e1ca65d2bd,façade corrigée (lac de montagne) ; département ajouté (commune Passy) ; aucune pratique renseignée
+Saint-Julien-du-Verdon,04,Alpes-de-Haute-Provence,Méditerranée,43.911265,6.54386,90.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,76124a95-e69c-42d9-a383-dbd6efe34c03,
+Antibes - L'Olivette,06,Alpes-Maritimes,Méditerranée,43.552778,7.115191,0.0,Non praticable,Non praticable,Intermédiaire,Non praticable,,,,,,,,,91085930-647e-47b0-9d86-a97ab8ac6357,
+Antibes - La Salis,06,Alpes-Maritimes,Méditerranée,43.571367,7.129817,140.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,57a30b95-2c6d-45d4-bd3d-deba37c540f2,
+Cannes,06,Alpes-Maritimes,Méditerranée,43.534666,7.038385,270.0,Confirmé,Confirmé,Confirmé,Non praticable,,,,,,,,,ed3d7525-deee-4573-ab36-2b88e5f29969,
+"Plage des Dauphins, Mandelieu",06,Alpes-Maritimes,Méditerranée,43.533429,6.955034,200.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,a5e71942-e0b4-4970-ab39-89380f1fc06c,
+Saint-Laurent-du-Var,06,Alpes-Maritimes,Méditerranée,43.654584,7.194414,315.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,9d82101d-e2bb-4309-873a-5e7cbc07702c,
+Aqualand - Port-Barcarès,11,Aude,Méditerranée,42.842367,3.054546,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,5b10f43c-4f5e-4400-88c7-c6044d49b9be,
+Etang De Gruissan,11,Aude,Méditerranée,43.097599,3.096556,280.0,Non praticable,Débutant,Non praticable,Non praticable,,,,,,,,,e4411379-c9bb-4249-babe-e24655349c3e,
+Etang de Lapalme,11,Aude,Méditerranée,42.966724,3.006647,40.0,Non praticable,Débutant,Débutant,Non praticable,,,,,,,,,38fd10f0-06be-4408-be2f-7ac72a50fcd6,
+Etang de Mateille,11,Aude,Méditerranée,43.119671,3.118894,90.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,c0ad9248-90f6-4b8a-8e19-d6e0351102cf,
+Gruissan,11,Aude,Méditerranée,43.069139,3.103985,210.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,0a0048ae-156b-47fd-82ad-2896dd0dcede,même nom que « Gruissan » à 4.0 km
+Gruissan,11,Aude,Méditerranée,43.09622,3.13626,200.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,3efdea4f-ac95-4ec5-a4e9-d3d5b80a0e34,département corrigé (était 34) ; même nom que « Gruissan » à 4.0 km
+Gruissan Plage,11,Aude,Méditerranée,43.084812,3.116858,190.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,94d10a02-2ed2-48ce-8408-ab697de4842a,
+Gruissan - Plage Mateille,11,Aude,Méditerranée,43.116398,3.137283,200.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,ce627073-68f0-4bb0-83a3-44f25a1ecb39,département déduit du spot voisin « Etang de Mateille » à 1.5 km
+Gruissan - Vieille Nouvelle,11,Aude,Méditerranée,43.059858,3.098664,210.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,05967020-7fa2-4bd2-8a84-c20cf4a81283,
+La Franqui,11,Aude,Méditerranée,42.931919,3.04579,130.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,03404912-3da0-43ab-8317-6e78b429ef63,
+La Franqui - Les Coussoules,11,Aude,Méditerranée,42.943481,3.047507,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,48275feb-220b-4b11-8d65-c82f0bfc95d0,
+La Mine - Leucate,11,Aude,Méditerranée,42.897252,3.015611,320.0,Non praticable,Non praticable,Débutant,Non praticable,,,,,,,,,65798b84-4ab3-47b4-8b56-c16fd1e37d79,doublon probable : « Les Pêcheurs - Leucate » à 739 m
+La Nautique - Est,11,Aude,Méditerranée,43.137038,3.011798,10.0,Non praticable,Intermédiaire,Non praticable,Non praticable,,,,,,,,,8befef11-ad6d-42b8-aa21-3d40433e4b55,
+La Nautique - Narbonne,11,Aude,Méditerranée,43.140734,2.998066,280.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,c14ae4a3-5b9d-45b1-b5a1-867a1c070a1c,
+Lac de Jouarres,11,Aude,Méditerranée,43.272269,2.70169,350.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,1024ee5f-9ba4-454b-8a72-51bc35ff6613,
+Le Goulet - Leucate,11,Aude,Méditerranée,42.909952,3.016862,330.0,Non praticable,Non praticable,Débutant,Non praticable,,,,,,,,,362f6fea-7bc8-493f-b2fd-1d188e6a8a2b,doublon probable : « Les Pêcheurs - Leucate » à 676 m
+Le Parc à Huitres - Leucate,11,Aude,Méditerranée,42.880618,3.03549,20.0,Non praticable,Non praticable,Débutant,Non praticable,,,,,,,,,66392ced-14a4-4d5f-b22c-70a6ca4fb9c4,
+Le Rouet,11,Aude,Méditerranée,42.974762,3.054888,190.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,1a327b32-ee2d-423a-8225-2e2f0955da0b,
+Les Pêcheurs - Leucate,11,Aude,Méditerranée,42.903885,3.016255,0.0,Non praticable,Non praticable,Débutant,Non praticable,,,,,,,,,53c5410c-1c9a-4766-939b-1057915d567f,doublon probable : « La Mine - Leucate » à 739 m ; doublon probable : « Le Goulet - Leucate » à 676 m
+Leucate - Les Pilotis,11,Aude,Méditerranée,42.887662,3.058493,190.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,ab6f9e66-adea-42ee-8375-b2053bcca29a,doublon probable : « Port-Leucate » à 993 m
+Leucate - Plage,11,Aude,Méditerranée,42.897472,3.063127,190.0,,,,,,,,,,,,,c165e888-ff7c-4a0d-a7ad-b860c791da98,aucune pratique renseignée
+Port Barcarès - Agly,11,Aude,Méditerranée,42.804973,3.048881,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,de4e5b6d-7f9b-4327-8967-cb7db3740020,
+Port la Nouvelle,11,Aude,Méditerranée,43.039075,3.08723,210.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,cd347325-e2d8-4def-8e14-5b9d626ff914,
+Port-Leucate,11,Aude,Méditerranée,42.878732,3.058665,190.0,Débutant,Débutant,Débutant,Débutant,,,,,,,,,f75783c7-9992-4972-aae1-b8426181c98c,doublon probable : « Leucate - Les Pilotis » à 993 m
+Sigean - Port Mahon,11,Aude,Méditerranée,43.060611,3.012059,135.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,a7e4ce82-904d-42c7-a61b-258c3a87307f,
+Anse de Carteau - Est,13,Bouches-du-Rhône,Méditerranée,43.384214,4.907279,0.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,f47a5068-a55f-48e5-8386-342f431a41e4,
+Beauduc,13,Bouches-du-Rhône,Méditerranée,43.41,4.58,0.0,Débutant,Débutant,,,Bon,Bon,Danger,Bon,Bon,Bon,Tres Bon,Tres Bon,35360f7b-b1e5-463f-8eba-47447ed3a3da,
+Beauduc - Etang,13,Bouches-du-Rhône,Méditerranée,43.365633,4.601126,90.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,9eb92a49-1e4e-4d09-90ad-72ebe2a8c45f,
+Bonnieu,13,Bouches-du-Rhône,Méditerranée,43.34734,5.022061,30.0,Débutant,Non praticable,Intermédiaire,Non praticable,Bon,,Danger,,Bon,Bon,Tres Bon,Tres Bon,98a72790-e348-44f0-8816-e7393e46d6e4,
+Carro,13,Bouches-du-Rhône,Méditerranée,43.327806,5.036528,315.0,Confirmé,Confirmé,Confirmé,Non praticable,Danger,Bof,Tres Bon,Bof,Bon,Tres Bon,Tres Bon,Danger,9239b1c1-0195-4a8a-ac60-0be86c25aa4d,
+Epluchures Beach,13,Bouches-du-Rhône,Méditerranée,43.258455,5.373601,350.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,829eee22-3b13-4c1f-867e-6e8bb831f5f6,
+Fos,13,Bouches-du-Rhône,Méditerranée,43.42,4.92,260.0,Débutant,Débutant,,,Danger,,Tres Bon,Tres Bon,Tres Bon,Tres Bon,Bon,Danger,a2f82776-1557-49cc-a99a-875584b3e9f5,
+L'Anse Carteau - Port Saint Louis,13,Bouches-du-Rhône,Méditerranée,43.383963,4.857506,180.0,Débutant,Débutant,Non praticable,Non praticable,,,,,,,,,eb18aada-dd7d-424f-8f11-f4d3ddd8adad,
+"La Ciotat, Baie Vierge",13,Bouches-du-Rhône,Méditerranée,43.186639,5.645642,270.0,Confirmé,Confirmé,Confirmé,Non praticable,,,,,,,,,dd578b74-1f75-4171-a0fe-73b785e910d5,
+La Ciotat - Grande Plage,13,Bouches-du-Rhône,Méditerranée,43.184,5.62,260.0,Débutant,Confirmé,,,Danger,Danger,Tres Bon,Tres Bon,Tres Bon,Tres Bon,Bon,Danger,596d62fc-fc07-43c0-b4d7-e263fdadcfc2,
+La Pointe Rouge,13,Bouches-du-Rhône,Méditerranée,43.246985,5.371006,45.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,e6cb5fd6-6d58-4c41-b81a-e3fbac0b99e3,nom de département corrigé (était « Haute-Alpes »)
+Lac de Peyrolles,13,Bouches-du-Rhône,Méditerranée,43.652752,5.588973,90.0,Non praticable,Non praticable,Non praticable,Non praticable,Bof,Bof,Bof,Bof,Bof,Bof,Bof,Bof,210461e3-135b-4313-b901-57771420e9d8,aucune pratique renseignée
+Les Renaïres,13,Bouches-du-Rhône,Méditerranée,43.362223,5.010408,330.0,Non praticable,Non praticable,Intermédiaire,Non praticable,,,,,,,,,a2ba7540-04ed-4d33-b483-b7a853d6aba2,
+Martigues - La Piscine,13,Bouches-du-Rhône,Méditerranée,43.41,5.062,190.0,,,,,,,,,,,,,c1e472e6-b183-4b0b-8595-f1a8d1c09285,nom corrigé (était « Martigues - LaPiscine ») ; aucune pratique renseignée
+Piemanson Ouest,13,Bouches-du-Rhône,Méditerranée,43.337651,4.732016,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,be6f9c30-5f95-4e49-bda7-123b29b957ea,
+Plage de Piémaison,13,Bouches-du-Rhône,Méditerranée,43.337899,4.794504,280.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,8f07262c-8331-4cc3-a135-0a2918bd4d82,
+Plage du Bouquet,13,Bouches-du-Rhône,Méditerranée,43.488237,5.11585,340.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,11a82fb9-0fa2-44b5-b24c-0939a842554c,département déduit du spot voisin « Plage du Jaï » à 8.0 km
+Plage du Jaï,13,Bouches-du-Rhône,Méditerranée,43.43,5.175,45.0,Débutant,Débutant,Débutant,Non praticable,Bon,Bon,Danger,Danger,Danger,Tres Bon,Tres Bon,Tres Bon,47749b60-dfd0-4b92-a286-82201119573e,
+Plage Napoleon,13,Bouches-du-Rhône,Méditerranée,43.348393,4.888574,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,31f9ee7f-1ea9-446b-bf6e-132e3cc9094d,
+Rognac,13,Bouches-du-Rhône,Méditerranée,43.479986,5.223849,10.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,82987a7b-42e9-4ce7-8679-a207e9b32a25,
+Saint Chamas,13,Bouches-du-Rhône,Méditerranée,43.536284,5.033305,340.0,Débutant,Non praticable,Débutant,Non praticable,Tres Bon,,Bof,,Tres Bon,Tres Bon,Tres Bon,Tres Bon,1af17353-9bce-4706-b3e5-48dff0cca75f,façade corrigée
+Saintes-Maries-de-la-Mer,13,Bouches-du-Rhône,Méditerranée,43.443314,4.414443,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,7e369ed6-5617-4aa7-8a5b-a8913c84e71e,
+Sausset-Les-Pins,13,Bouches-du-Rhône,Méditerranée,43.327423,5.113106,90.0,Confirmé,Non praticable,Confirmé,Non praticable,,,,,,,,,44aaa143-a077-4fd2-95db-b54248d219d3,
+Etang du Ponant,30,Gard,Méditerranée,43.560986,4.12133,275.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,5dbe7455-1a04-4b05-bb31-5cfd04d00e30,
+Grau du Roi,30,Gard,Méditerranée,43.530266,4.129826,350.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,24552360-3a9b-4506-9fe8-26d81065ec1a,
+L'Espiguette,30,Gard,Méditerranée,43.482448,4.113518,300.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,80b26f4b-7186-4e0b-971d-74655bc479a6,
+Le Boucanet,30,Gard,Méditerranée,43.539833,4.118837,350.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,26129372-c614-41ef-9caf-c1c2f76f32ca,
+Port Camargue - Sud,30,Gard,Méditerranée,43.516191,4.104754,0.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,22a6aa47-f519-4bec-850e-142f46295c3f,
+Villeneuve-Les-Maguelone,30,Gard,Méditerranée,43.504291,3.893967,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,340af1d4-e1cd-4e7b-9b98-aeff8d9c45f8,
+Cap d'Agde,34,Hérault,Méditerranée,43.271644,3.496311,60.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,b28748bd-7d71-4a31-86e7-0c0d7a64e0bc,
+Cap d'Agde - Tamarissiere,34,Hérault,Méditerranée,43.287952,3.431897,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,8f6942c8-1a74-4943-8b30-9c2730f6259c,
+Carnon - Le Petit Travers,34,Hérault,Méditerranée,43.550567,4.016623,260.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,7754ed83-97f8-4df1-acda-658931e4d1a5,
+Carnon - Les Roquilles,34,Hérault,Méditerranée,43.536471,3.974478,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,e625d18d-3d55-4cd1-be94-51ce1db96f59,
+Etang d' Ingril - Frontignan,34,Hérault,Méditerranée,43.443575,3.785387,60.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,0147a918-e4b0-4a58-bada-03d9b368fa14,
+Etang de Thau,34,Hérault,Méditerranée,43.402522,3.653575,,Non praticable,Débutant,Débutant,Non praticable,,,,,,,,,96eed06c-8fd3-4e47-b85a-df23b7a3ee9d,
+Grau d'Agde,34,Hérault,Méditerranée,43.279267,3.45005,270.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,0133618b-d9aa-4814-a881-5c754e326d54,département déduit du spot voisin « Cap d'Agde - Tamarissiere » à 1.8 km
+La Grande Motte,34,Hérault,Méditerranée,43.553271,4.068799,270.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,1f2fd7c2-71c9-441e-9cca-ddd6fbf39205,
+Lac du Salagou - Nord,34,Hérault,Méditerranée,43.667204,3.354693,270.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,fbbc53e6-c638-4b38-995f-e9b2aa0bd7c6,
+Lac du Salagou - Sud,34,Hérault,Méditerranée,43.649243,3.375547,90.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,ff44c2fb-7602-478b-ac2f-f4c37810cd8d,
+"Le Barrou, Étang de Thau",34,Hérault,Méditerranée,43.423627,3.663252,45.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,5c94859a-bad1-4407-a5f4-4481feb6a239,
+Marseillan,34,Hérault,Méditerranée,43.344843,3.538199,180.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,c8ce7fad-c66f-4961-a283-ff981fa37c2d,
+Marseillan - Etang de Thau,34,Hérault,Méditerranée,43.333638,3.545622,45.0,Non praticable,Débutant,Débutant,Non praticable,,,,,,,,,e28661b9-e499-4158-8e9d-94ee14719ebb,
+Marseillan Plage,34,Hérault,Méditerranée,43.321181,3.572963,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,fa0f03d3-e337-418e-8f9c-9113809dba0f,
+Palavas-les-Flots,34,Hérault,Méditerranée,43.457342,3.916287,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,aec55ee7-4850-49b4-b1dc-22ef5b0a2f37,
+"Pont Aresquiers, Frontignan-Plage",34,Hérault,Méditerranée,43.459332,3.824876,230.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,2409080c-532a-4d94-b0f3-28cdbb1a45e8,
+Saint Pierre La Mer,34,Hérault,Méditerranée,43.176641,3.227928,210.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,b131bcec-4614-4d8c-bd16-87a23fcfd20a,
+Sète,34,Hérault,Méditerranée,43.39061,3.670163,90.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,a512a1d6-f04c-4b9c-922d-2af5c41614e4,département déduit du spot voisin « Sète - Plage » à 1.1 km
+Sète - Plage,34,Hérault,Méditerranée,43.388302,3.657418,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,7f6947bc-db4a-4e1c-950c-0977edb3020c,nom corrigé (était « Séte - Plage »)
+Valras - Embouchure de l'Aude,34,Hérault,Méditerranée,43.206239,3.241911,220.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,a3f2db29-0bfe-4fd7-ae2b-54f2a5935f82,
+Valras Plage,34,Hérault,Méditerranée,43.247453,3.307316,225.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,cfe64371-86e2-4083-b672-5f029dc58e61,
+Argelès,66,Pyrénées-Orientales,Méditerranée,42.555799,3.05686,180.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,620866c8-d975-45be-81e4-a36cffc9bf81,département déduit du spot voisin « Le Racou » à 1.8 km
+Argelès - Plage Nord,66,Pyrénées-Orientales,Méditerranée,42.57331,3.051112,180.0,Non praticable,Débutant,Non praticable,Non praticable,,,,,,,,,77a17f75-4820-4749-9da3-84a439e4eacd,
+Canet en Roussillon,66,Pyrénées-Orientales,Méditerranée,42.67297,3.043731,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,7b573e95-1ee0-44bb-bbac-ac1eedac680c,
+Canet-en-Roussillon - Pont des Basses,66,Pyrénées-Orientales,Méditerranée,42.658454,3.044243,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,2985c754-aef6-4624-97de-7c146d851216,département déduit du spot voisin « Canet en Roussillon » à 1.6 km
+"Embouchure, Port-Barcarès",66,Pyrénées-Orientales,Méditerranée,42.781354,3.046305,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Intermédiaire,,,,,,,,,f399485c-d13d-4f48-92ff-605c93fb33cb,
+Eole - Etang de Leucate,66,Pyrénées-Orientales,Méditerranée,42.832108,3.029737,,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,8a056003-71b0-4087-b78e-b66179f457a1,département corrigé (était 11) ; nom de département corrigé (était « Aude ») ; doublon probable : « Les Dosses - Etang de Leucate » à 447 m
+L'Embouchure Du Tech,66,Pyrénées-Orientales,Méditerranée,42.588478,3.052829,180.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,8869af06-8f31-45d2-acf5-088301520980,
+La Coudalère - Etang de Leucate,66,Pyrénées-Orientales,Méditerranée,42.814922,3.007504,45.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,e7ae562b-0c60-4e33-8de6-fcf2094ee2fb,
+Le Racou,66,Pyrénées-Orientales,Méditerranée,42.539864,3.061497,160.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,4026cce6-ef58-4463-af35-7b9ec48e3e58,
+Les Dosses 2 - Etang de Leucate,66,Pyrénées-Orientales,Méditerranée,42.839912,3.016519,45.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,057c3ba3-856f-4955-af1f-cd4e6307ded9,doublon probable : « Les Dosses - Etang de Leucate » à 949 m
+Les Dosses - Etang de Leucate,66,Pyrénées-Orientales,Méditerranée,42.835192,3.026218,270.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,62af87b5-52ca-4167-99a3-a177e4314767,doublon probable : « Eole - Etang de Leucate » à 447 m ; doublon probable : « Les Dosses 2 - Etang de Leucate » à 949 m
+Les Trois Colonnes - Port Barcarès,66,Pyrénées-Orientales,Méditerranée,42.81404,3.053345,180.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,d0bedb3c-aa93-4de6-921c-e027208d2e92,
+Saint-Cyprien,66,Pyrénées-Orientales,Méditerranée,42.64002,3.044589,180.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,6258930d-bd42-4346-af8a-3f9d84cb74f4,
+Saint Laurent de la Salanque,66,Pyrénées-Orientales,Méditerranée,42.806295,2.996606,60.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,e8a14056-8db0-4ecd-86ff-988de3ccd978,
+Sainte-Marie,66,Pyrénées-Orientales,Méditerranée,42.735413,3.042785,180.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,70367b0f-5e5c-47aa-a22e-017966a50190,
+Ayguade,83,Var,Méditerranée,43.10255,6.178823,220.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,dbf10c18-f258-4504-917b-cc6db69957a1,doublon probable : « Mérou - Hyères » à 759 m
+Baie d'Agay,83,Var,Méditerranée,43.429861,6.863364,270.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,fd9262ff-cfa1-4dea-bbc6-50c1e75601fc,
+Bandol,83,Var,Méditerranée,43.134752,5.772542,310.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,9267e255-3ab5-4c18-87cf-20303e056faf,
+Beauvallon,83,Var,Méditerranée,43.290077,6.61141,225.0,Confirmé,Confirmé,Confirmé,Non praticable,,,,,,,,,17e19e62-7533-4ab6-b122-263dd74830a6,
+Brégançon,83,Var,Méditerranée,43.105934,6.309414,280.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,57d38457-bd00-45f6-891a-1d84fa224c89,
+Brutal Beach,83,Var,Méditerranée,43.110353,5.808331,340.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,d12ad285-16af-4a77-a492-759db77d66a7,
+Carqueuranne,83,Var,Méditerranée,43.081804,6.098484,280.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,f3bdc8ec-228e-497d-becc-689f2551acbb,
+Fréjus Plage,83,Var,Méditerranée,43.417175,6.748096,220.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,dc9bb4c8-60af-4b26-98e2-277ab3cfc109,
+Gigaro,83,Var,Méditerranée,43.179395,6.591967,280.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,42cc7c53-70a7-4812-a650-7eea2a3564b5,
+L'Almanarre,83,Var,Méditerranée,43.07,6.12,340.0,Débutant,Débutant,,,Bof,Bon,Danger,Danger,Bon,Bon,Tres Bon,Tres Bon,a9620fe4-c0a8-499c-8ffd-1d9519cb977d,doublon probable : « L'Almanarre - Le Robinson » à 790 m
+L'Almanarre - Le Robinson,83,Var,Méditerranée,43.077099,6.119815,310.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,47bed847-edfc-48ac-b9e6-6915d476c947,doublon probable : « L'Almanarre » à 790 m
+La Bergerie,83,Var,Méditerranée,43.051204,6.153544,180.0,Débutant,Intermédiaire,,,Bof,Tres Bon,Tres Bon,Bon,Bon,Bon,Danger,Danger,8e6076e3-f942-4da0-ab4b-d044a38f1740,
+La Bouillabaisse,83,Var,Méditerranée,43.266675,6.62203,40.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,30cd1e8a-14ac-4fb8-b5dd-191c65dd0c58,
+"La Capte, Hyères",83,Var,Méditerranée,43.066711,6.153848,180.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,8d955ac7-0d64-4eae-83cf-a90862ac0683,
+La Coudou,83,Var,Méditerranée,43.0976,5.809172,345.0,Confirmé,Non praticable,Confirmé,Non praticable,Bof,Bof,Bof,Bon,Bon,Bon,Tres Bon,Tres Bon,0b2c7c40-663c-43b0-be8e-68bd0c7f4134,
+La Faviere,83,Var,Méditerranée,43.12,6.362286,230.0,Confirmé,Non praticable,Confirmé,Non praticable,,,,,,,,,db1c6ced-1a60-4bbd-ae02-1d054f86848f,
+La Londe-les-Maures,83,Var,Méditerranée,43.113343,6.242894,250.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,08b0bb62-ccfa-42f6-92f3-fd661102e9b3,
+La Nartelle,83,Var,Méditerranée,43.32012,6.669046,180.0,Intermédiaire,Non praticable,Intermédiaire,Intermédiaire,,,,,,,,,1d752a66-81ac-4653-9b4e-7e16f81df556,
+Lac de Saint-Croix - Les Salles,83,Var,Méditerranée,43.773201,6.199549,45.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,676ce928-fd68-4b54-ae6c-b02d1836ab62,
+Lac de Sainte-Croix,83,Var,Méditerranée,43.762478,6.206931,0.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,5a984c3d-c000-4efa-aa04-192778e46b47,
+Lac de Sainte-Croix - Bauduen,83,Var,Méditerranée,43.740344,6.161098,90.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,b8a9a885-3e44-4901-bee4-96bed180d91f,
+Le Brusc,83,Var,Méditerranée,43.08,5.8,45.0,Débutant,Non praticable,,,Bon,Bof,Danger,Bof,Bof,Bof,Tres Bon,Tres Bon,dccbfe41-d07e-4f4c-872f-6f641449f446,
+Le Lavandou,83,Var,Méditerranée,43.131871,6.369582,190.0,Confirmé,Non praticable,Confirmé,Non praticable,,,,,,,,,363d6040-070e-4aa3-8e04-9bcef3606053,
+Le Mourillon,83,Var,Méditerranée,43.107484,5.94517,270.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,ef96c863-507d-46b6-87ea-cc2786ddf2ac,
+Le Veillat,83,Var,Méditerranée,43.420167,6.766999,310.0,Intermédiaire,Non praticable,Non praticable,Non praticable,,,,,,,,,f2c2aeba-f154-4d87-8018-b8b6496e8931,doublon probable : « Saint-Raphaël - Beau Rivage » à 443 m
+Les Lecques,83,Var,Méditerranée,43.174417,5.68817,315.0,Intermédiaire,Intermédiaire,Intermédiaire,Débutant,,,,,Tres Bon,Tres Bon,Tres Bon,,3ba03f82-8d3e-4814-b160-31fe9f9aafaa,
+Les Sablettes,83,Var,Méditerranée,43.076879,5.892877,270.0,Confirmé,Non praticable,Confirmé,Confirmé,,,,,,,,,ea55f19a-122b-4613-9ef7-5f26101eb0e2,
+Les Salins - Hyères,83,Var,Méditerranée,43.113014,6.205645,260.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,aee2a6bd-6530-464a-bc85-63ae49585c40,
+Mérou - Hyères,83,Var,Méditerranée,43.108064,6.184337,250.0,Non praticable,Débutant,Non praticable,Non praticable,,,,,,,,,6fe6cb6e-c0eb-4cf2-ae3a-7b9bbda55433,nom corrigé (était « Mérou - Hières ») ; doublon probable : « Ayguade » à 759 m
+Pampelonne,83,Var,Méditerranée,43.229445,6.67059,180.0,Débutant,Débutant,Débutant,Non praticable,,,,,,,,,c45e28c4-5907-449f-a95c-ff851259aa73,
+Plage du Mourillon,83,Var,Méditerranée,43.10659,5.957811,225.0,Débutant,Non praticable,Débutant,Non praticable,,,,,,,,,82eef790-8014-427b-a8c1-183b9fc44fa7,
+Porquerolles,83,Var,Méditerranée,43.007095,6.189165,135.0,Non praticable,Débutant,Débutant,Non praticable,,,,,,,,,41e40fca-9311-42a0-81b3-8749767ef54d,département déduit du spot voisin « Porquerolles-Le Langoustier » à 1.9 km
+Porquerolles-Le Langoustier,83,Var,Méditerranée,43.000831,6.167212,45.0,Non praticable,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,458a7d33-6fcc-4f8a-893c-54f46d6494ce,
+Port Cogolin,83,Var,Méditerranée,43.266081,6.595918,135.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,37d3d1d2-9faf-4374-9655-2692513cc5fa,
+Saint Aygulf,83,Var,Méditerranée,43.40486,6.737451,190.0,Débutant,Débutant,Débutant,Débutant,,,,,,,,,c72c1ceb-a8eb-47ab-9697-d73bb56aa070,
+Saint-Clair,83,Var,Méditerranée,43.140953,6.387693,210.0,Intermédiaire,Non praticable,Intermédiaire,Non praticable,,,,,,,,,b79050c8-9a77-4f15-813f-18ac9d77fcc0,
+Saint-Raphaël - Beau Rivage,83,Var,Méditerranée,43.417455,6.771011,315.0,Intermédiaire,Intermédiaire,Intermédiaire,Non praticable,,,,,,,,,93076f89-6e52-42c9-ba5f-9e5b4f3de1d2,doublon probable : « Le Veillat » à 443 m

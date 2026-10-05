@@ -1,0 +1,11 @@
+<resources>
+    <!-- Editeur de cadran natif (970, fenix 8...) : deux emplacements de donnees, au choix parmi ce que propose la montre -->
+    <watchface-config>
+        <data>
+            <complication id="1" allowAny="true"/>
+            <complication id="2" allowAny="true"/>
+            <!-- emplacement 3 : a la place de la date (notre date si rien n'est choisi) -->
+            <complication id="3" allowAny="true"/>
+        </data>
+    </watchface-config>
+</resources>
