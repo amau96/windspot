@@ -305,13 +305,5 @@
                 <listEntry value="301">@Strings.Spot301</listEntry>
             </settingConfig>
         </setting>
-        <setting propertyKey="@Properties.refreshMin" title="@Strings.RefreshTitle">
-            <settingConfig type="list">
-                <listEntry value="15">@Strings.Min15</listEntry>
-                <listEntry value="30">@Strings.Min30</listEntry>
-                <listEntry value="60">@Strings.Min60</listEntry>
-                <listEntry value="120">@Strings.Min120</listEntry>
-            </settingConfig>
-        </setting>
     </settings>
 </resources>

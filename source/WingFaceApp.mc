@@ -3,6 +3,7 @@ import Toybox.Background;
 import Toybox.Lang;
 import Toybox.System;
 import Toybox.Time;
+import Toybox.Time.Gregorian;
 import Toybox.WatchUi;
 
 (:background)
@@ -40,7 +41,12 @@ class WingFaceApp extends Application.AppBase {
     // Appele quand le service d'arriere-plan renvoie ses donnees
     function onBackgroundData(data) {
         if (data instanceof Dictionary) {
-            if (data.hasKey("v") && !forCurrentSpot(data)) {
+            if (data.hasKey("same")) {
+                // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle
+                Application.Storage.setValue("chk", Time.now().value());
+                Application.Storage.deleteValue("err");
+                registerRefresh();
+            } else if (data.hasKey("v") && !forCurrentSpot(data)) {
                 // reponse pour un ancien spot (spot change pendant la requete) : on redemande
                 registerRefresh();
             } else if (data.hasKey("v")) {
@@ -49,6 +55,8 @@ class WingFaceApp extends Application.AppBase {
                 registerRefresh();
             } else if (data.hasKey("err")) {
                 Application.Storage.setValue("err", data["err"]);
+                // nouvel essai dans 20 min (le reveil precedent pouvait etre unique)
+                Background.registerForTemporalEvent(new Time.Duration(20 * 60));
             }
         }
         WatchUi.requestUpdate();
@@ -60,14 +68,16 @@ class WingFaceApp extends Application.AppBase {
         WatchUi.requestUpdate();
     }
 
-    // Requete periodique ; si les donnees sont perimees ou ne partent pas de minuit
+    // Prochaine requete calee sur les runs d'AROME HD : quelques minutes apres la mise en ligne
+    // attendue du run suivant. Si les donnees sont perimees ou ne partent pas de minuit
     // (ancien format), une requete immediate (au plus tot 5 min apres la precedente).
     function registerRefresh() {
-        var minutes = Application.Properties.getValue("refreshMin");
-        if (minutes == null || minutes < 5) {
-            minutes = 60;
-        }
-        if (needsFetch(minutes)) {
+        var d = Application.Storage.getValue("wind");
+        var run = (d instanceof Dictionary) ? d["run"] : null;
+        // le service compare ce run aux metadonnees pour eviter un telechargement inutile
+        Application.Properties.setValue("runAt", (run instanceof Array) ? run[0] : 0);
+        var minutes = refreshMinutes();
+        if (needsFetch(run instanceof Array ? staleAfter() : minutes * 60)) {
             var at = Time.now();
             var last = Background.getLastTemporalEventTime();
             if (last != null) {
@@ -76,8 +86,40 @@ class WingFaceApp extends Application.AppBase {
             }
             Background.registerForTemporalEvent(at);
         } else {
-            Background.registerForTemporalEvent(new Time.Duration(minutes * 60));
+            Background.registerForTemporalEvent(new Time.Duration(nextDelay(run, minutes)));
         }
+    }
+
+    function refreshMinutes() {
+        var minutes = Application.Properties.getValue("refreshMin");
+        if (minutes == null || minutes < 5) {
+            minutes = 60;
+        }
+        return minutes;
+    }
+
+    // Delai (s) depuis le dernier reveil jusqu'au prochain : run suivant = debut du dernier run
+    // + intervalle + delai de mise en ligne observe + 10 min de marge ; run en retard -> 20 min.
+    // La nuit (23 h - 5 h), on saute les runs : le premier du matin suffit.
+    // Sans metadonnees : intervalle de secours (reglage, 60 min par defaut).
+    function nextDelay(run, minutes) {
+        if (!(run instanceof Array)) {
+            return minutes * 60;
+        }
+        var now = Time.now().value();
+        var cycle = run[2] + run[1] + 600;
+        var next = run[0] + cycle;
+        if (next - now < 300) {
+            next = now + 1200;
+        } else if (next - now > cycle) {
+            next = now + run[2];
+        }
+        while (isNight(next)) {
+            next += run[2];
+        }
+        var last = Background.getLastTemporalEventTime();
+        var delay = next - (last != null ? last.value() : now);
+        return delay < 300 ? 300 : delay;
     }
 
     // Spot effectif : liste « Spot » (telephone) ou menu montre (numero spotId).
@@ -107,13 +149,17 @@ class WingFaceApp extends Application.AppBase {
         return lat != null && lon != null && lat.toString().equals(data["lat"]) && lon.toString().equals(data["lon"]);
     }
 
-    function needsFetch(minutes) {
+    function isNight(t) {
+        var h = Gregorian.info(new Time.Moment(t), Time.FORMAT_SHORT).hour;
+        return h >= 23 || h < 5;
+    }
+
+    function needsFetch(maxAge) {
         var d = Application.Storage.getValue("wind");
         if (!(d instanceof Dictionary) || d["f"] == null || d["t0"] == null) {
             return true;
         }
-        var now = Time.now().value();
-        if (now - d["f"] > minutes * 60) {
+        if (Time.now().value() - lastContact(d["f"]) > maxAge) {
             return true;
         }
         return d["t0"] > Time.today().value();
@@ -127,6 +173,22 @@ function setCurrentSpot(id, name, lat, lon) {
     Application.Properties.setValue("curLat", lat == null ? "" : (lat instanceof Lang.String ? lat : lat.format("%.3f")));
     Application.Properties.setValue("curLon", lon == null ? "" : (lon instanceof Lang.String ? lon : lon.format("%.3f")));
     Application.Storage.deleteValue("wind");
+    Application.Storage.deleteValue("chk");
+    Application.Storage.deleteValue("err");
+    Application.Properties.setValue("runAt", 0);
+}
+
+// Dernier contact reussi avec Open-Meteo : donnees recues (f) ou controle « meme run » (chk)
+function lastContact(f) {
+    var chk = Application.Storage.getValue("chk");
+    return (chk != null && chk > f) ? chk : f;
+}
+
+// Age (s) au-dela duquel les donnees sont perimees : un run toutes les 3 h le jour,
+// rien entre 23 h et 6 h (pause de nuit)
+function staleAfter() {
+    var h = System.getClockTime().hour;
+    return (h >= 23 || h < 7) ? 36000 : 14400;
 }
 
 // Cherche un spot par son numero dans les listes par departement

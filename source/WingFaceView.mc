@@ -21,6 +21,7 @@ class WingFaceView extends WatchUi.WatchFace {
     var dimColors = DIM_COLORS;
     var calmText = 0x6FA8F0;
     const PAST_COLOR = 0x1C1C1C;
+    const STALE_COLOR = 0x8A8880;  // vent affiche en gris quand les donnees sont trop anciennes
     const RING_LEVEL = 0.55; // luminosite des couleurs de l'anneau sur AMOLED (1 = couleurs pleines)
     var ringLevel = RING_LEVEL;
     const PAST_STYLE = 3;    // heures passees : 1 = vent passe tres sombre, 2 = trait fin gris, 3 = trait fin couleur sombre
@@ -38,7 +39,9 @@ class WingFaceView extends WatchUi.WatchFace {
     var fetchedAt = 0;
     var testMode = false;
     var dirs = null;     // direction du vent par heure (degres, d'ou il vient), -1 si inconnue
-    var fontBig = null;
+    var curVal = 0;      // vent actuel, interpole entre l'heure en cours et la suivante (dixiemes de noeud)
+    var curDir = -1;     // direction actuelle, interpolee de meme (-1 si inconnue)
+    var stale = false;   // donnees trop anciennes (pas de contact avec Open-Meteo)
     var fontMid = null;
     var fontLabel = Graphics.FONT_XTINY;
     var fontLoad = Graphics.FONT_XTINY;
@@ -61,7 +64,6 @@ class WingFaceView extends WatchUi.WatchFace {
 
     function onLayout(dc) {
         var u = dc.getWidth() / 340.0;
-        fontBig = timeFont((82 * u).toNumber(), Graphics.FONT_NUMBER_MEDIUM);
         // sans police vectorielle (fenix 6) : la plus grande police de chiffres (57 px sur 260)
         fontMid = timeFont((104 * u).toNumber(), Graphics.FONT_NUMBER_THAI_HOT);
         fontLabel = timeFont((15 * u).toNumber(), Graphics.FONT_XTINY);
@@ -108,7 +110,7 @@ class WingFaceView extends WatchUi.WatchFace {
             vals = d["v"];
             dirs = d.hasKey("d") ? d["d"] : null;
             t0 = d["t0"];
-            fetchedAt = d["f"];
+            fetchedAt = lastContact(d["f"]);
         } else {
             vals = null;
         }
@@ -199,18 +201,33 @@ class WingFaceView extends WatchUi.WatchFace {
             if (n < 1) { n = 0; }
         }
 
-        var morningEnd = prop("morningEnd", 10);
-        var morning = (clock.hour < morningEnd);
+        if (n > 0) {
+            interpolateNow(off, clock.min);
+        }
+        stale = (vals != null && !testMode && (now - fetchedAt) > staleAfter());
 
         // veille allegee seulement sur AMOLED ; un ecran MIP (toujours allume) garde l'ecran complet
         if (inSleep && amoled) {
             drawSleep(dc, cx, cy, u, clock, off, n);
         } else if (n == 0) {
             drawLoadingScreen(dc, cx, cy, u, clock);
-        } else if (morning) {
-            drawMorning(dc, cx, cy, u, clock, off, n);
         } else {
-            drawNormal(dc, cx, cy, u, clock, off, n, now);
+            drawMain(dc, cx, cy, u, clock, off, n);
+        }
+    }
+
+    // Vent « maintenant » : prevision de l'heure en cours et de la suivante, ponderees par les minutes
+    // (la prevision est horaire ; sans ca, la valeur saute d'un coup a chaque heure pile)
+    function interpolateNow(off, min) {
+        var f = min / 60.0;
+        var v0 = vals[off];
+        var hasNext = off + 1 < vals.size();
+        curVal = hasNext ? (v0 + (vals[off + 1] - v0) * f + 0.5).toNumber() : v0;
+        curDir = (dirs != null && off < dirs.size()) ? dirs[off] : -1;
+        if (curDir >= 0 && hasNext && off + 1 < dirs.size() && dirs[off + 1] >= 0) {
+            // par le plus court chemin (350 -> 10 passe par 0, pas par 180)
+            var diff = ((dirs[off + 1] - curDir + 540) % 360) - 180;
+            curDir = ((curDir + diff * f + 360).toNumber()) % 360;
         }
     }
 
@@ -263,14 +280,6 @@ class WingFaceView extends WatchUi.WatchFace {
         drawGradientText(dc, x + wh, y, font, ms);
     }
 
-    // Heure empilee : heures au-dessus, minutes en degrade en dessous
-    function drawTimeStacked(dc, cx, yH, yM, font, clock) {
-        dc.setColor(HOUR_COLOR, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, yH, font, hourString(clock), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        var ms = clock.min.format("%02d");
-        drawGradientText(dc, cx - dc.getTextWidthInPixels(ms, font) / 2, yM, font, ms);
-    }
-
     function timeString(clock) {
         var h = clock.hour;
         if (!System.getDeviceSettings().is24Hour) {
@@ -297,8 +306,9 @@ class WingFaceView extends WatchUi.WatchFace {
         for (var i = 0; i < infos.size(); i++) {
             txt += (i > 0 ? "   " : "") + infos[i];
         }
-        if (vals != null && !testMode && (now - fetchedAt) > 10800) {
-            txt = txt + "   !";
+        if (stale) {
+            // age des donnees, par ex. « MAJ 5h » (le vent est aussi affiche en gris)
+            txt = txt + "   MAJ " + ((now - fetchedAt) / 3600).toString() + "h";
         } else if (testMode) {
             txt = txt + "   TEST";
         }
@@ -392,7 +402,7 @@ class WingFaceView extends WatchUi.WatchFace {
         dc.setPenWidth(1);
     }
 
-    function drawMorning(dc, cx, cy, u, clock, off, n) {
+    function drawMain(dc, cx, cy, u, clock, off, n) {
         var info = Gregorian.info(new Time.Moment(t0 + off * 3600), Time.FORMAT_SHORT);
         var h0 = info.hour;
         var dow0 = info.day_of_week;
@@ -417,7 +427,7 @@ class WingFaceView extends WatchUi.WatchFace {
 
     // Une ligne : vent actuel en couleur, puis « · max 8 à 15h » en petit gris, alignes sur la ligne de base
     function drawWindLine(dc, cx, y, off, n, h0) {
-        var cur = vals[off];
+        var cur = curVal;
         var curStr = knots(cur);
         var peakStr = peakText(off, n, h0);
         if (!peakStr.equals("")) { peakStr = " · " + peakStr; }
@@ -427,12 +437,12 @@ class WingFaceView extends WatchUi.WatchFace {
         var w2 = dc.getTextWidthInPixels(peakStr, fSmall);
         var asc = Graphics.getFontAscent(fBig);
         // fleche de direction apres la vitesse (si connue)
-        var dir = (dirs != null && off < dirs.size()) ? dirs[off] : -1;
+        var dir = curDir;
         var gap = (dir >= 0) ? (asc * 0.25).toNumber() : 0;   // espace entre « nd » et la fleche
         var aw = (dir >= 0) ? (asc * 1.15).toNumber() : 0;
         var x = cx - (w1 + gap + aw + w2) / 2;
         var base = y + asc / 2;
-        dc.setColor(windColor(cur), Graphics.COLOR_TRANSPARENT);
+        dc.setColor(stale ? STALE_COLOR : windColor(cur), Graphics.COLOR_TRANSPARENT);
         dc.drawText(x, base - asc, fBig, curStr, Graphics.TEXT_JUSTIFY_LEFT);
         if (dir >= 0) {
             drawArrow(dc, x + w1 + gap + aw / 2, base - (asc * 0.36).toNumber(), (asc * 0.45), dir);
@@ -569,7 +579,7 @@ class WingFaceView extends WatchUi.WatchFace {
         drawSpot(dc, cx, yb + (36 * u).toNumber(), u);
 
         // curseur sur l'heure courante
-        var t0n = vals[off];
+        var t0n = curVal;
         if (t0n > CAP) { t0n = CAP; }
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
         dc.setPenWidth(2);
@@ -620,23 +630,6 @@ class WingFaceView extends WatchUi.WatchFace {
         return name + "…";
     }
 
-    function drawNormal(dc, cx, cy, u, clock, off, n, now) {
-        if (n > 0) {
-            drawRing(dc, cx, cy, u, off, false);
-            drawNowTick(dc, cx, cy, u, clock);
-        }
-        drawTopLine(dc, cx, cy - (98 * u).toNumber(), now);
-
-        drawTimeStacked(dc, cx, cy - (48 * u).toNumber(), cy + (24 * u).toNumber(), fontBig, clock);
-
-        // ecran sans donnees : voir drawLoadingScreen
-        dc.setColor(0xE6E4DC, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy + (72 * u).toNumber(), Graphics.FONT_XTINY, topDateText(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        var cur = vals[off];
-        dc.setColor(windColor(cur), Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, cy + (104 * u).toNumber(), Graphics.FONT_SMALL, knots(cur), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-    }
-
     // Ecran sans donnees : meme mise en page que l'ecran principal (anneau vide, date, heure),
     // le message de chargement prend la place de la ligne vent et de la courbe
     function drawLoadingScreen(dc, cx, cy, u, clock) {
@@ -666,12 +659,26 @@ class WingFaceView extends WatchUi.WatchFace {
         var u = dc.getWidth() / 340.0;
         var hx = dc.getFontHeight(fontLoad);
         var hl = dc.getFontHeight(fontLabel);
+        // derniere requete en echec : on dit pourquoi au lieu de « Chargement… »
+        var err = Application.Storage.getValue("err");
+        var title = small ? "Chargement…" : "Chargement des prévisions…";
+        var lines = small ? ["sous 5 min", "téléphone à côté"] : ["sous 5 min · téléphone", "Bluetooth à côté"];
+        if (err != null) {
+            // codes Garmin -1 a -299 : liaison Bluetooth avec le telephone ; le reste : reseau ou service meteo
+            var ble = err < 0 && err > -300;
+            if (ble) {
+                title = small ? "Pas de téléphone" : "Téléphone non connecté";
+                lines = small ? ["Bluetooth ?", "essai auto · " + err] : ["Bluetooth et Garmin Connect", "nouvel essai auto · " + err];
+            } else {
+                title = small ? "Météo indisponible" : "Prévisions indisponibles";
+                lines = small ? ["service injoignable", "essai auto · " + err] : ["service météo injoignable", "nouvel essai auto · " + err];
+            }
+        }
         dc.setColor(0xC8C6BE, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, y, fontLoad, small ? "Chargement…" : "Chargement des prévisions…", Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        dc.drawText(cx, y, fontLoad, title, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         // le spot est a sa place definitive, sous la courbe (graphique : yb = 98u, spot a yb + 36u)
         drawSpot(dc, cx, dc.getHeight() / 2 + (134 * u).toNumber(), u);
         y += (hx - hl) / 2;
-        var lines = small ? ["sous 5 min", "téléphone à côté"] : ["sous 5 min · téléphone", "Bluetooth à côté"];
         for (var i = 0; i < lines.size(); i++) {
             y += hl;
             dc.setColor(0x8F8D86, Graphics.COLOR_TRANSPARENT);
@@ -694,8 +701,8 @@ class WingFaceView extends WatchUi.WatchFace {
         dc.setColor(0x6B6A64, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx + ox, cy + (40 * u).toNumber() + oy, Graphics.FONT_XTINY, topDateText(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         if (n > 0) {
-            dc.setColor(windColor(vals[off]), Graphics.COLOR_TRANSPARENT);
-            dc.drawText(cx + ox, cy + (68 * u).toNumber() + oy, Graphics.FONT_XTINY, knots(vals[off]), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.setColor(stale ? STALE_COLOR : windColor(curVal), Graphics.COLOR_TRANSPARENT);
+            dc.drawText(cx + ox, cy + (68 * u).toNumber() + oy, Graphics.FONT_XTINY, knots(curVal), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
         if (!big) {
             // anciens AMOLED (regle : aucun pixel allume plus de 3 min) : une ligne sur deux eteinte,

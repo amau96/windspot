@@ -5,19 +5,19 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.Time;
 
-// Service d'arriere-plan : une requete Open-Meteo, fusion des modeles par heure.
-// Ordre de priorite : AROME HD, ARPEGE, ICON, GFS (premiere valeur non nulle).
+// Service d'arriere-plan : une requete Open-Meteo (vitesse et direction), fusion des modeles par heure.
+// Ordre de priorite : AROME HD, ARPEGE, ICON (premier modele qui a une vitesse ; sa direction avec).
+// Avant, lecture des metadonnees d'AROME HD : si aucun nouveau run n'est en ligne, on ne retelecharge pas.
 (:background)
 class WingService extends System.ServiceDelegate {
 
     // minuit local + 24 h du jour + horizon de la courbe (113 h)
     const MAX_HOURS = 140;
 
-    // resultat de la 1re requete (vitesse), complete par la 2e (direction)
-    var result = null;
     var lastLat = "";
     var lastLon = "";
-    var dirOff = 0;
+    // dernier run AROME en ligne : [debut du run, delai de mise en ligne, intervalle entre runs] (s)
+    var runInfo = null;
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -33,14 +33,46 @@ class WingService extends System.ServiceDelegate {
         lastLat = lat.toString();
         lastLon = lon.toString();
 
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_GET,
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
+        };
+        Communications.makeWebRequest("https://api.open-meteo.com/data/meteofrance_arome_france_hd/static/meta.json", null, options, method(:onMeta));
+    }
+
+    // Metadonnees du modele : meme run que les donnees de la montre -> on s'arrete la ;
+    // sinon (ou metadonnees indisponibles) on telecharge les previsions
+    function onMeta(code as Number, data as Dictionary or String or Null) as Void {
+        if (code == 200 && data instanceof Dictionary) {
+            var run = data["last_run_initialisation_time"];
+            var avail = data["last_run_availability_time"];
+            var iv = data["update_interval_seconds"];
+            if (run != null && avail != null && iv != null) {
+                runInfo = [run, avail - run, iv];
+                var known = Application.Properties.getValue("runAt");
+                if (known != null && known == run) {
+                    Background.exit({ "same" => runInfo });
+                    return;
+                }
+            }
+        }
+        fetchForecast();
+    }
+
+    // Exactement les heures utiles : depuis minuit (heure locale) jusqu'a MAX_HOURS
+    function fetchForecast() as Void {
+        var now = Time.now().value();
+        var tz = System.getClockTime().timeZoneOffset;
+        var midnight = ((now + tz) / 86400) * 86400 - tz;
+        var past = (now - midnight) / 3600;
         var params = {
             "latitude" => lastLat,
             "longitude" => lastLon,
-            "hourly" => "wind_speed_10m",
-            "models" => "meteofrance_arome_france_hd,meteofrance_arpege_europe,icon_seamless,gfs_seamless",
+            "hourly" => "wind_speed_10m,wind_direction_10m",
+            "models" => "meteofrance_arome_france_hd,meteofrance_arpege_europe,icon_seamless",
             "wind_speed_unit" => "kn",
-            "forecast_days" => 6,
-            "past_days" => 1,
+            "past_hours" => past,
+            "forecast_hours" => MAX_HOURS - past,
             "timeformat" => "unixtime",
             "timezone" => "GMT"
         };
@@ -52,6 +84,7 @@ class WingService extends System.ServiceDelegate {
         Communications.makeWebRequest("https://api.open-meteo.com/v1/forecast", params, options, method(:onReceive));
     }
 
+    // Erreurs : code Garmin/HTTP de la requete, ou 1001-1004 si la reponse est inexploitable
     function onReceive(code as Number, data as Dictionary or String or Null) as Void {
         if (code != 200 || !(data instanceof Dictionary)) {
             Background.exit({ "err" => code });
@@ -59,30 +92,27 @@ class WingService extends System.ServiceDelegate {
         }
         var hourly = data["hourly"];
         if (!(hourly instanceof Dictionary)) {
-            Background.exit({ "err" => -1 });
+            Background.exit({ "err" => 1001 });
             return;
         }
         var times = hourly["time"];
         if (times == null || times.size() == 0) {
-            Background.exit({ "err" => -2 });
+            Background.exit({ "err" => 1002 });
             return;
         }
 
-        var keys = [
-            "wind_speed_10m_meteofrance_arome_france_hd",
-            "wind_speed_10m_meteofrance_arpege_europe",
-            "wind_speed_10m_icon_seamless",
-            "wind_speed_10m_gfs_seamless"
-        ];
-        var series = [];
-        for (var k = 0; k < keys.size(); k++) {
-            var s = hourly[keys[k]];
+        var models = ["meteofrance_arome_france_hd", "meteofrance_arpege_europe", "icon_seamless"];
+        var speeds = [];
+        var dirs = [];
+        for (var k = 0; k < models.size(); k++) {
+            var s = hourly["wind_speed_10m_" + models[k]];
             if (s != null) {
-                series.add(s);
+                speeds.add(s);
+                dirs.add(hourly["wind_direction_10m_" + models[k]]);
             }
         }
-        if (series.size() == 0) {
-            Background.exit({ "err" => -3 });
+        if (speeds.size() == 0) {
+            Background.exit({ "err" => 1003 });
             return;
         }
 
@@ -94,72 +124,38 @@ class WingService extends System.ServiceDelegate {
         var off = (midnight - start) / 3600;
         if (off < 0) { off = 0; }
 
-        var out = [];
+        var outV = [];
+        var outD = [];
         var total = times.size() - off;
         if (total > MAX_HOURS) { total = MAX_HOURS; }
         for (var i = 0; i < total; i++) {
+            var j = off + i;
             var v = null;
-            for (var k = 0; k < series.size(); k++) {
-                var s = series[k];
-                if (off + i < s.size()) {
-                    var x = s[off + i];
-                    if (x != null) {
-                        v = x;
-                        break;
-                    }
+            var dir = null;
+            for (var k = 0; k < speeds.size(); k++) {
+                var s = speeds[k];
+                if (j < s.size() && s[j] != null) {
+                    v = s[j];
+                    var ds = dirs[k];
+                    if (ds != null && j < ds.size()) { dir = ds[j]; }
+                    break;
                 }
             }
             if (v == null) {
                 break;
             }
-            // dixiemes de noeud, entier
-            out.add((v.toFloat() * 10 + 0.5).toNumber());
+            // dixiemes de noeud, entier ; direction en degres (d'ou vient le vent), -1 si absente
+            outV.add((v.toFloat() * 10 + 0.5).toNumber());
+            outD.add(dir == null ? -1 : dir.toNumber());
         }
 
-        if (out.size() == 0) {
-            Background.exit({ "err" => -4 });
+        if (outV.size() == 0) {
+            Background.exit({ "err" => 1004 });
             return;
         }
-        // 2e requete, petite : direction du vent (modele « meilleur choix » d'Open-Meteo), memes heures
         // coordonnees demandees : le cadran ignore la reponse si le spot a change entre-temps
-        result = { "t0" => start + off * 3600, "v" => out, "f" => now, "lat" => lastLat, "lon" => lastLon };
-        dirOff = off;
-        series = null;
-        hourly = null;
-        data = null;
-        var params = {
-            "latitude" => lastLat,
-            "longitude" => lastLon,
-            "hourly" => "wind_direction_10m",
-            "forecast_days" => 6,
-            "past_days" => 1,
-            "timeformat" => "unixtime",
-            "timezone" => "GMT"
-        };
-        var options = {
-            :method => Communications.HTTP_REQUEST_METHOD_GET,
-            :headers => { "Content-Type" => Communications.REQUEST_CONTENT_TYPE_URL_ENCODED },
-            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
-        };
-        Communications.makeWebRequest("https://api.open-meteo.com/v1/forecast", params, options, method(:onReceiveDir));
-    }
-
-    // Directions (degres, d'ou vient le vent) alignees sur les vitesses ; si echec, on garde les vitesses seules
-    function onReceiveDir(code as Number, data as Dictionary or String or Null) as Void {
-        var res = result;
-        if (code == 200 && data instanceof Dictionary) {
-            var hourly = data["hourly"];
-            if (hourly instanceof Dictionary && hourly["wind_direction_10m"] != null) {
-                var src = hourly["wind_direction_10m"];
-                var n = (res["v"] as Array).size();
-                var dirs = [];
-                for (var i = 0; i < n; i++) {
-                    var x = (dirOff + i < src.size()) ? src[dirOff + i] : null;
-                    dirs.add(x == null ? -1 : x.toNumber());
-                }
-                res["d"] = dirs;
-            }
-        }
+        var res = { "t0" => start + off * 3600, "v" => outV, "d" => outD, "f" => now, "lat" => lastLat, "lon" => lastLon };
+        if (runInfo != null) { res["run"] = runInfo; }
         Background.exit(res);
     }
 }
