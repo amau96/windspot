@@ -1,3 +1,4 @@
+import Toybox.ActivityMonitor;
 import Toybox.Application;
 import Toybox.Complications;
 import Toybox.Lang;
@@ -76,9 +77,14 @@ function infoText(id as Complications.Id) as String? {
     var v = c.value;
     var type = id.getType();
     if (type == Complications.COMPLICATION_TYPE_BATTERY) { return v.format("%d") + " %"; }
-    if (type == Complications.COMPLICATION_TYPE_STEPS) { return v.toString() + " pas"; }
-    if (type == Complications.COMPLICATION_TYPE_HEART_RATE) { return v.toString() + " bpm"; }
-    if (type == Complications.COMPLICATION_TYPE_BODY_BATTERY) { return "BB " + v.toString(); }
+    if (type == Complications.COMPLICATION_TYPE_STEPS) {
+        // certaines montres donnent les pas en milliers (Float 1.4 -> « 1.400000 ») : compteur exact de la montre
+        var steps = ActivityMonitor.getInfo().steps;
+        if (steps == null) { steps = (v instanceof Lang.Float || v instanceof Lang.Double) ? (v * 1000).toNumber() : v; }
+        return steps.toString() + " pas";
+    }
+    if (type == Complications.COMPLICATION_TYPE_HEART_RATE) { return v.format("%d") + " bpm"; }
+    if (type == Complications.COMPLICATION_TYPE_BODY_BATTERY) { return "BB " + v.format("%d"); }
     if (type == Complications.COMPLICATION_TYPE_SUNRISE || type == Complications.COMPLICATION_TYPE_SUNSET) {
         if (v instanceof Lang.Number) {
             var m = (v > 1440) ? v / 60 : v;          // secondes ou minutes depuis minuit
