@@ -43,8 +43,12 @@ class WingFaceApp extends Application.AppBase {
     function onBackgroundData(data) {
         if (data instanceof Dictionary) {
             if (data.hasKey("ping")) {
-                // statistique du jour envoyee : pas d'autre envoi avant demain
-                Application.Properties.setValue("pingDay", data["ping"]);
+                // statistiques envoyees : [jour, version, spot] ; rien de plus avant demain,
+                // une nouvelle version ou un autre spot
+                var p = data["ping"];
+                Application.Properties.setValue("pingDay", p[0]);
+                Application.Properties.setValue("pingVer", p[1]);
+                Application.Properties.setValue("pingSpot", p[2]);
             }
             if (data.hasKey("same")) {
                 // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle

@@ -13,6 +13,8 @@
         <property id="runAt" type="number">0</property>
         <property id="stats" type="boolean">true</property>
         <property id="pingDay" type="number">0</property>
+        <property id="pingVer" type="string"></property>
+        <property id="pingSpot" type="string"></property>
         <property id="model" type="string"></property>
     </properties>
 </resources>

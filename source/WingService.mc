@@ -8,8 +8,9 @@ import Toybox.Time;
 // Service d'arriere-plan : une requete Open-Meteo (vitesse et direction), fusion des modeles par heure.
 // Ordre de priorite : AROME HD, ARPEGE, ICON (premier modele qui a une vitesse ; sa direction avec).
 // Avant, lecture des metadonnees d'AROME HD : si aucun nouveau run n'est en ligne, on ne retelecharge pas.
-// Une fois par jour (si « Statistiques anonymes » est actif), un evenement Google Analytics :
-// identifiant anonyme de l'app sur la montre, modele, version, nom du spot.
+// Statistiques Google Analytics (si « Statistiques anonymes » est actif) : une fois par jour, et a
+// l'installation, a la mise a jour, au changement de spot ; identifiant anonyme de l'app sur la
+// montre, modele, version, nom du spot.
 (:background)
 class WingService extends System.ServiceDelegate {
 
@@ -20,8 +21,8 @@ class WingService extends System.ServiceDelegate {
     var lastLon = "";
     // dernier run AROME en ligne : [debut du run, delai de mise en ligne, intervalle entre runs] (s)
     var runInfo = null;
-    // jour local de la statistique envoyee pendant ce reveil (0 : aucune), remonte au cadran
-    var pinged = 0;
+    // statistiques envoyees pendant ce reveil : [jour, version, spot] (null : aucune), remonte au cadran
+    var pinged = null;
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -37,7 +38,7 @@ class WingService extends System.ServiceDelegate {
         lastLat = lat.toString();
         lastLon = lon.toString();
 
-        if (!sendDailyStat()) {
+        if (!sendStats()) {
             fetchMeta();
         }
     }
@@ -50,40 +51,65 @@ class WingService extends System.ServiceDelegate {
         Communications.makeWebRequest("https://api.open-meteo.com/data/meteofrance_arome_france_hd/static/meta.json", null, options, method(:onMeta));
     }
 
-    // Statistique du jour (Google Analytics, Measurement Protocol) ; la meteo suit dans tous les cas.
-    // Renvoie false si rien n'est envoye aujourd'hui (deja fait, desactive ou pas de cle).
-    function sendDailyStat() as Boolean {
-        var now = Time.now().value();
-        var day = (now + System.getClockTime().timeZoneOffset) / 86400;
+    // Statistiques (Google Analytics, Measurement Protocol), en une seule requete ; la meteo suit dans tous les cas.
+    //  - install        : premier envoi depuis cette montre (installation, ou premiere version avec statistiques)
+    //  - version_update : version differente de celle du dernier envoi (previous_version)
+    //  - spot_change    : spot different de celui du dernier envoi
+    //  - daily_active   : une fois par jour
+    // Renvoie false si rien n'est a envoyer (deja fait, desactive ou pas de cle).
+    function sendStats() as Boolean {
         var uid = System.getDeviceSettings().uniqueIdentifier;
-        if (GA_ID.equals("") || Application.Properties.getValue("stats") == false || uid == null
-                || day == Application.Properties.getValue("pingDay")) {
+        if (GA_ID.equals("") || Application.Properties.getValue("stats") == false || uid == null) {
             return false;
         }
+        var day = (Time.now().value() + System.getClockTime().timeZoneOffset) / 86400;
+        var lastDay = Application.Properties.getValue("pingDay");
+        var lastVer = Application.Properties.getValue("pingVer");
+        var lastSpot = Application.Properties.getValue("pingSpot");
+        if (lastVer == null) { lastVer = ""; }
+        if (lastSpot == null) { lastSpot = ""; }
         var model = Application.Properties.getValue("model");
+        if (model == null || model.equals("")) { model = System.getDeviceSettings().partNumber; }
         var spot = Application.Properties.getValue("curName");
-        var body = {
-            "client_id" => uid,
-            "events" => [{
-                "name" => "daily_active",
-                "params" => {
-                    "model" => (model == null || model.equals("")) ? System.getDeviceSettings().partNumber : model,
-                    "app_version" => APP_VERSION,
-                    "spot" => (spot == null) ? "" : spot.toString(),     // nom du spot (« Mazerolles »)
-                    "session_id" => day.toString(),
-                    "engagement_time_msec" => 1000
-                }
-            }]
-        };
+        spot = (spot == null) ? "" : spot.toString();     // nom du spot (« Mazerolles »)
+
+        var events = [];
+        if (lastVer.equals("")) {
+            events.add(statEvent("install", model, spot, day, null));
+        } else if (!lastVer.equals(APP_VERSION)) {
+            events.add(statEvent("version_update", model, spot, day, lastVer));
+        }
+        if (!lastSpot.equals("") && !spot.equals("") && !lastSpot.equals(spot)) {
+            events.add(statEvent("spot_change", model, spot, day, null));
+        }
+        if (day != lastDay) {
+            events.add(statEvent("daily_active", model, spot, day, null));
+        }
+        if (events.size() == 0) {
+            return false;
+        }
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_POST,
             :headers => { "Content-Type" => Communications.REQUEST_CONTENT_TYPE_JSON },
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_TEXT_PLAIN
         };
-        pinged = day;
+        // remonte au cadran ce qui a ete envoye (jour, version, spot) pour ne pas le renvoyer
+        pinged = [(day != lastDay) ? day : lastDay, APP_VERSION, spot.equals("") ? lastSpot : spot];
         Communications.makeWebRequest("https://www.google-analytics.com/mp/collect?measurement_id=" + GA_ID
-            + "&api_secret=" + GA_SECRET, body, options, method(:onStat));
+            + "&api_secret=" + GA_SECRET, { "client_id" => uid, "events" => events }, options, method(:onStat));
         return true;
+    }
+
+    function statEvent(name as String, model, spot as String, day as Number, previous) as Dictionary {
+        var params = {
+            "model" => model,
+            "app_version" => APP_VERSION,
+            "spot" => spot,
+            "session_id" => day.toString(),
+            "engagement_time_msec" => 1000
+        };
+        if (previous != null) { params["previous_version"] = previous; }
+        return { "name" => name, "params" => params };
     }
 
     // Reponse ignoree (une statistique perdue n'est pas grave) ; on enchaine sur la meteo
@@ -91,9 +117,9 @@ class WingService extends System.ServiceDelegate {
         fetchMeta();
     }
 
-    // Fin du service : le cadran note le jour de la statistique pour ne pas la renvoyer
+    // Fin du service : le cadran note ce qui a ete envoye pour ne pas le renvoyer
     function finish(res as Dictionary) as Void {
-        if (pinged != 0) { res["ping"] = pinged; }
+        if (pinged != null) { res["ping"] = pinged; }
         Background.exit(res);
     }
 
