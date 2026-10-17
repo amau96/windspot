@@ -14,11 +14,11 @@ Pour afficher les prévisions, le cadran envoie à [Open-Meteo](https://open-met
 
 ## Statistiques anonymes
 
-Une fois par jour, si le réglage **« Statistiques anonymes »** est activé (il l'est par défaut et peut être désactivé dans les réglages du cadran), le cadran envoie à Google Analytics :
+Une fois par jour, ainsi qu'à l'installation, lors d'une mise à jour et lors d'un changement de spot, si le réglage **« Statistiques anonymes »** est activé (il l'est par défaut et peut être désactivé dans les réglages du cadran), le cadran envoie à Google Analytics :
 
 - un identifiant anonyme fourni par Garmin, propre à l'application sur cette montre (il ne permet pas d'identifier la personne) ;
 - le modèle de montre ;
-- la version de l'application ;
+- la version de l'application (et la précédente lors d'une mise à jour) ;
 - le nom du spot choisi.
 
 Ces données servent uniquement à savoir combien de montres utilisent Windspot et à améliorer l'application. Elles ne sont ni vendues ni partagées, et sont conservées selon la durée de conservation de Google Analytics (2 mois pour les données détaillées).
@@ -41,11 +41,11 @@ To show forecasts, the watch face sends the **coordinates of the selected spot**
 
 ## Anonymous statistics
 
-Once a day, if the **"Statistiques anonymes"** setting is on (on by default, it can be turned off in the watch face settings), the watch face sends to Google Analytics:
+Once a day, as well as on install, on update and when the spot is changed, if the **"Statistiques anonymes"** setting is on (on by default, it can be turned off in the watch face settings), the watch face sends to Google Analytics:
 
 - an anonymous identifier provided by Garmin, specific to the app on this watch (it does not identify the person);
 - the watch model;
-- the app version;
+- the app version (and the previous one on update);
 - the name of the selected spot.
 
 This data is only used to know how many watches use Windspot and to improve the app. It is neither sold nor shared, and is kept according to Google Analytics data retention (2 months for detailed data).

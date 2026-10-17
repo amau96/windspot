@@ -326,17 +326,32 @@ class WingFaceView extends WatchUi.WatchFace {
         return DAYS[info.day_of_week - 1] + ". " + info.day.toString() + " " + MONTHS[info.month - 1];
     }
 
+    // Ligne du haut : donnees choisies, puis « MAJ 5h » si les donnees vent sont anciennes.
+    // Si le tout ne tient pas dans le cercle a cette hauteur, on retire les dernieres donnees
+    // (l'indicateur MAJ reste).
     function drawTopLine(dc, cx, y, now) {
         var infos = infoTexts();
-        var txt = "";
-        for (var i = 0; i < infos.size(); i++) {
-            txt += (i > 0 ? "   " : "") + infos[i];
-        }
+        var tail = "";
         if (stale) {
             // age des donnees, par ex. « MAJ 5h » (le vent est aussi affiche en gris)
-            txt = txt + "   MAJ " + ((now - fetchedAt) / 3600).toString() + "h";
+            tail = "MAJ " + ((now - fetchedAt) / 3600).toString() + "h";
         } else if (testMode) {
-            txt = txt + "   TEST";
+            tail = "TEST";
+        }
+        var u = dc.getWidth() / 340.0;
+        var dy = (y - dc.getHeight() / 2).abs();
+        var rIn = 156 * u;
+        var room = (dy < rIn) ? (2 * Math.sqrt(rIn * rIn - dy * dy)).toNumber() : 0;
+        var n = infos.size();
+        var txt = "";
+        while (true) {
+            txt = "";
+            for (var i = 0; i < n; i++) {
+                txt += (i > 0 ? "   " : "") + infos[i];
+            }
+            if (!tail.equals("")) { txt += (n > 0 ? "   " : "") + tail; }
+            if (n == 0 || dc.getTextWidthInPixels(txt, Graphics.FONT_XTINY) <= room) { break; }
+            n--;
         }
         dc.setColor(cInfo, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, y, Graphics.FONT_XTINY, txt, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
@@ -541,37 +556,17 @@ class WingFaceView extends WatchUi.WatchFace {
         return ["max " + v + " nd " + h, "max " + v + " · " + h];
     }
 
-    // Coucher du soleil au spot, aujourd'hui (secondes epoch), calcule une fois par jour et par spot.
-    // Formules NOAA (equation du temps, declinaison), precision de l'ordre de la minute.
+    // Coucher du soleil au spot, aujourd'hui (secondes epoch), calcule une fois par jour et par spot
     var sunsetDay = -1;
     var sunsetLat = "";
     var sunsetVal = 0;
     function sunsetAt() {
-        var lat = prop("curLat", "");
-        var lon = prop("curLon", "");
-        if (lat == null || lat.toString().equals("")) { lat = prop("lat", "47.46"); }
-        if (lon == null || lon.toString().equals("")) { lon = prop("lon", "-1.46"); }
         var now = nowSec();
-        var tz = System.getClockTime().timeZoneOffset;
-        var day = (now + tz) / 86400;              // jour local
-        var key = lat.toString() + lon.toString();
+        var day = (now + System.getClockTime().timeZoneOffset) / 86400;
+        var c = spotCoords();
+        var key = c[0].toString() + c[1].toString();
         if (day == sunsetDay && key.equals(sunsetLat)) { return sunsetVal; }
-        var la = Math.toRadians(lat.toString().toFloat());
-        var lo = lon.toString().toFloat();
-        var doy = Gregorian.info(new Time.Moment(now), Time.FORMAT_SHORT);
-        var jan1 = Gregorian.moment({ :year => doy.year, :month => 1, :day => 1, :hour => 0 });
-        var g = 2 * Math.PI / 365.0 * ((now - jan1.value()) / 86400);
-        var eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g)
-            - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
-        var dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g)
-            + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
-        var c = Math.cos(Math.toRadians(90.833)) / (Math.cos(la) * Math.cos(dec)) - Math.tan(la) * Math.tan(dec);
-        if (c > 1) { c = 1; }       // nuit polaire
-        if (c < -1) { c = -1; }     // jour polaire
-        var ha = Math.toDegrees(Math.acos(c));
-        // minutes UTC depuis minuit UTC du jour local
-        var minutes = 720 + 4 * (ha - lo) - eqt;
-        sunsetVal = day * 86400 + (minutes * 60).toNumber();
+        sunsetVal = sunTime(c[0], c[1], now, false);
         sunsetDay = day;
         sunsetLat = key;
         return sunsetVal;

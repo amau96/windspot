@@ -16,5 +16,8 @@
         <property id="pingVer" type="string"></property>
         <property id="pingSpot" type="string"></property>
         <property id="model" type="string"></property>
+        <property id="data1" type="number">1</property>
+        <property id="data2" type="number">2</property>
+        <property id="data3" type="number">10</property>
     </properties>
 </resources>

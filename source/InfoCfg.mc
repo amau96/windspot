@@ -112,3 +112,10 @@ class EditDelegate extends WatchUi.WatchFaceDelegate {
 
 (:cfg)
 function editDelegate() as WatchUi.WatchFaceDelegate? { return new EditDelegate(); }
+
+// Montres avec editeur natif : les donnees se choisissent dans « Personnaliser », pas dans ce menu
+(:cfg)
+function dataMenuEntry() as Array? { return null; }
+
+(:cfg)
+function openDataMenu() as Void {}

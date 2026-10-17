@@ -19,11 +19,14 @@ enum {
     ENTRY_GROUP,    // donnees : numero de ressource du departement
     ENTRY_FACADE,   // donnees : [[departement, numero], ...]
     ENTRY_RECENT,   // donnees : liste de spots recents
-    ENTRY_NEAR      // donnees : position [lat, lon]
+    ENTRY_NEAR,     // donnees : position [lat, lon]
+    ENTRY_DATA      // menu « Donnees affichees » (montres sans editeur natif)
 }
 
 function rootSpotMenu() as [WatchUi.Views, WatchUi.InputDelegates] {
     var entries = [];
+    var data = dataMenuEntry();
+    if (data != null) { entries.add(data); }
     var recent = Application.Storage.getValue("recent");
     if (recent instanceof Array && recent.size() > 0) {
         entries.add(["Récents", recentNames(recent), ENTRY_RECENT, recent]);
@@ -214,6 +217,9 @@ class SpotMenuDelegate extends WatchUi.Menu2InputDelegate {
             for (var i = 0; i < r.size(); i++) {
                 sub.add([(r[i] as Array)[0], null, ENTRY_SPOT, r[i]]);
             }
+        } else if (kind == ENTRY_DATA) {
+            openDataMenu();
+            return;
         } else if (kind == ENTRY_NEAR) {
             sub = nearEntries(e[3] as Array);
         }
