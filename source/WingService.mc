@@ -9,7 +9,7 @@ import Toybox.Time;
 // Ordre de priorite : AROME HD, ARPEGE, ICON (premier modele qui a une vitesse ; sa direction avec).
 // Avant, lecture des metadonnees d'AROME HD : si aucun nouveau run n'est en ligne, on ne retelecharge pas.
 // Une fois par jour (si « Statistiques anonymes » est actif), un evenement Google Analytics :
-// identifiant anonyme de l'app sur la montre, modele, version, numero du spot.
+// identifiant anonyme de l'app sur la montre, modele, version, nom du spot.
 (:background)
 class WingService extends System.ServiceDelegate {
 
@@ -61,7 +61,7 @@ class WingService extends System.ServiceDelegate {
             return false;
         }
         var model = Application.Properties.getValue("model");
-        var spot = Application.Properties.getValue("curId");
+        var spot = Application.Properties.getValue("curName");
         var body = {
             "client_id" => uid,
             "events" => [{
@@ -69,7 +69,7 @@ class WingService extends System.ServiceDelegate {
                 "params" => {
                     "model" => (model == null || model.equals("")) ? System.getDeviceSettings().partNumber : model,
                     "app_version" => APP_VERSION,
-                    "spot" => (spot == null) ? "" : spot.toString(),
+                    "spot" => (spot == null) ? "" : spot.toString(),     // nom du spot (« Mazerolles »)
                     "session_id" => day.toString(),
                     "engagement_time_msec" => 1000
                 }

@@ -30,7 +30,7 @@ def main():
     path = os.path.expanduser("~/.windspot_ga")
     if os.path.exists(path):
         lines = [l.strip() for l in open(path, encoding="utf-8") if l.strip()]
-        if len(lines) >= 2:
+        if len(lines) >= 2 and lines[1] != "COLLER_LA_CLE_ICI":
             ga_id, ga_secret = lines[0], lines[1]
     for v in (version, ga_id, ga_secret):
         if '"' in v or "\\" in v:
@@ -43,7 +43,7 @@ import Toybox.Lang;
 (:background) const GA_SECRET = "{ga_secret}";
 '''
     open(os.path.join(ROOT, "source", "BuildInfo.mc"), "w", encoding="utf-8").write(out)
-    print(f"source/BuildInfo.mc : version {version}, statistiques {'activees' if ga_id else 'DESACTIVEES (pas de ~/.windspot_ga)'}")
+    print(f"source/BuildInfo.mc : version {version}, statistiques {'activees' if ga_id else 'DESACTIVEES (cle absente de ~/.windspot_ga)'}")
 
 
 if __name__ == "__main__":
