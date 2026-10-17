@@ -22,6 +22,17 @@ class WingFaceView extends WatchUi.WatchFace {
     var calmText = 0x8A9BB8;
     const PAST_COLOR = 0x1C1C1C;
     const STALE_COLOR = 0x8A8880;  // vent affiche en gris quand les donnees sont trop anciennes
+    // Couleurs des textes (AMOLED) ; ecrans MIP : couleurs exactes de la palette 64 couleurs, plus
+    // contrastees (blanc / gris clair), les teintes intermediaires y etant approchees et ternes
+    var cDate = 0xE6E4DC;    // date
+    var cInfo = 0xC8C6BE;    // ligne du haut, titre de chargement
+    var cDays = 0xD0CEC6;    // jours sous la courbe
+    var cSoft = 0x9A9890;    // pic du jour, nom du spot
+    var cSoft2 = 0x8F8D86;   // lignes d'aide du chargement
+    var cLine = 0x999999;    // ligne pointillee des 12 nd
+    var cSep = 0x777777;     // separations des jours
+    var cStale = STALE_COLOR;
+    var cHour = 0xDCDAF2;    // heures
     const RING_LEVEL = 0.55; // luminosite des couleurs de l'anneau sur AMOLED (1 = couleurs pleines)
     var ringLevel = RING_LEVEL;
     const PAST_STYLE = 3;    // heures passees : 1 = vent passe tres sombre, 2 = trait fin gris, 3 = trait fin couleur sombre
@@ -79,6 +90,15 @@ class WingFaceView extends WatchUi.WatchFace {
             colors = MIP_COLORS;
             dimColors = MIP_COLORS;
             calmText = 0xAAAAAA;
+            cDate = 0xFFFFFF;
+            cInfo = 0xFFFFFF;
+            cDays = 0xFFFFFF;
+            cSoft = 0xAAAAAA;
+            cSoft2 = 0xAAAAAA;
+            cLine = 0xAAAAAA;
+            cSep = 0xAAAAAA;
+            cStale = 0xAAAAAA;
+            cHour = 0xFFFFFF;
         }
     }
 
@@ -243,9 +263,12 @@ class WingFaceView extends WatchUi.WatchFace {
 
     // Degrade des minutes facon cadran Garmin : vert -> cyan -> bleu
     const GRAD = [0x35E07A, 0x1FC9D6, 0x2F7FF0];
-    const HOUR_COLOR = 0xDCDAF2;
+
+    // MIP : trois couleurs exactes de la palette (vert, cyan, bleu) en paliers, sans teintes intermediaires
+    const GRAD_MIP = [0x55FF55, 0x00FFFF, 0x00AAFF];
 
     function gradColor(t) {
+        if (!amoled) { return GRAD_MIP[t < 0.34 ? 0 : (t < 0.67 ? 1 : 2)]; }
         if (t < 0.5) { return lerpColor(GRAD[0], GRAD[1], t * 2); }
         return lerpColor(GRAD[1], GRAD[2], (t - 0.5) * 2);
     }
@@ -278,7 +301,7 @@ class WingFaceView extends WatchUi.WatchFace {
         var ms = clock.min.format("%02d");
         var wh = dc.getTextWidthInPixels(hs, font);
         var x = cx - (wh + dc.getTextWidthInPixels(ms, font)) / 2;
-        dc.setColor(HOUR_COLOR, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cHour, Graphics.COLOR_TRANSPARENT);
         dc.drawText(x, y, font, hs, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
         drawGradientText(dc, x + wh, y, font, ms);
     }
@@ -315,7 +338,7 @@ class WingFaceView extends WatchUi.WatchFace {
         } else if (testMode) {
             txt = txt + "   TEST";
         }
-        dc.setColor(0xC8C6BE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cInfo, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, y, Graphics.FONT_XTINY, txt, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
@@ -413,7 +436,7 @@ class WingFaceView extends WatchUi.WatchFace {
         drawRing(dc, cx, cy, u, off, false);
         drawNowTick(dc, cx, cy, u, clock);
 
-        dc.setColor(0xE6E4DC, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cDate, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, cy - ((small ? 104 : 120) * u).toNumber(), Graphics.FONT_XTINY, topDateText(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         if (!small) {
             drawTopLine(dc, cx, cy - (94 * u).toNumber(), nowSec());
@@ -456,12 +479,12 @@ class WingFaceView extends WatchUi.WatchFace {
         }
         var x = cx - (w1 + gap + aw + w2) / 2;
         var base = y + asc / 2;
-        dc.setColor(stale ? STALE_COLOR : windColor(cur), Graphics.COLOR_TRANSPARENT);
+        dc.setColor(stale ? cStale : windColor(cur), Graphics.COLOR_TRANSPARENT);
         dc.drawText(x, base - asc, fBig, curStr, Graphics.TEXT_JUSTIFY_LEFT);
         if (dir >= 0) {
             drawArrow(dc, x + w1 + gap + aw / 2, base - (asc * 0.36).toNumber(), (asc * 0.45), dir);
         }
-        dc.setColor(0x9A9890, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cSoft, Graphics.COLOR_TRANSPARENT);
         dc.drawText(x + w1 + gap + aw, base - Graphics.getFontAscent(fSmall), fSmall, peakStr, Graphics.TEXT_JUSTIFY_LEFT);
     }
 
@@ -601,7 +624,7 @@ class WingFaceView extends WatchUi.WatchFace {
 
         // ligne pointillee a 12 noeuds
         var y12 = yb - (120 * k).toNumber();
-        dc.setColor(0x999999, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cLine, Graphics.COLOR_TRANSPARENT);
         for (var x = x0; x < x0 + wTot; x += 8) {
             dc.drawLine(x, y12, x + 4, y12);
         }
@@ -624,7 +647,7 @@ class WingFaceView extends WatchUi.WatchFace {
             if (i == n || (h0 + i) % 24 == 0) {
                 if (i < n) {
                     var xs = x0 + (i * wTot) / n;
-                    dc.setColor(0x777777, Graphics.COLOR_TRANSPARENT);
+                    dc.setColor(cSep, Graphics.COLOR_TRANSPARENT);
                     dc.drawLine(xs, yb - (45 * u).toNumber(), xs, yb);
                 }
                 if (i - start >= 14) {
@@ -633,7 +656,7 @@ class WingFaceView extends WatchUi.WatchFace {
                     if (dx < 0) { dx = -dx; }
                     if (dx <= maxDx) {
                         var di = (dow0 - 1 + (h0 + start) / 24) % 7;
-                        dc.setColor(0xD0CEC6, Graphics.COLOR_TRANSPARENT);
+                        dc.setColor(cDays, Graphics.COLOR_TRANSPARENT);
                         dc.drawText(center, yLab, Graphics.FONT_XTINY, tiny ? DAYS1[di] : DAYS2[di], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
                     }
                 }
@@ -671,12 +694,12 @@ class WingFaceView extends WatchUi.WatchFace {
         var pr = (pin / 2).toNumber();
         var pcx = x + pr;
         var pcy = y - (2 * u).toNumber();
-        dc.setColor(0x9A9890, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cSoft, Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(pcx, pcy, pr);
         dc.fillPolygon([[pcx - pr + 1, pcy + 1], [pcx + pr - 1, pcy + 1], [pcx, pcy + pr * 2]]);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         dc.fillCircle(pcx, pcy, (pr / 2.5).toNumber());
-        dc.setColor(0x9A9890, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cSoft, Graphics.COLOR_TRANSPARENT);
         dc.drawText(x + pin + gap, y, fontLabel, name, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
@@ -709,7 +732,7 @@ class WingFaceView extends WatchUi.WatchFace {
         drawRingLabels(dc, cx, cy, u, r);
         drawNowTick(dc, cx, cy, u, clock);
 
-        dc.setColor(0xE6E4DC, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cDate, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, cy - ((small ? 104 : 120) * u).toNumber(), Graphics.FONT_XTINY, topDateText(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         if (!small) {
             drawTopLine(dc, cx, cy - (94 * u).toNumber(), nowSec());
@@ -739,14 +762,14 @@ class WingFaceView extends WatchUi.WatchFace {
                 lines = small ? ["service injoignable", "essai auto · " + err] : ["service météo injoignable", "nouvel essai auto · " + err];
             }
         }
-        dc.setColor(0xC8C6BE, Graphics.COLOR_TRANSPARENT);
+        dc.setColor(cInfo, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx, y, fontLoad, title, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         // le spot est a sa place definitive, sous la courbe (graphique : yb = 98u, spot a yb + 36u)
         drawSpot(dc, cx, dc.getHeight() / 2 + (134 * u).toNumber(), u);
         y += (hx - hl) / 2;
         for (var i = 0; i < lines.size(); i++) {
             y += hl;
-            dc.setColor(0x8F8D86, Graphics.COLOR_TRANSPARENT);
+            dc.setColor(cSoft2, Graphics.COLOR_TRANSPARENT);
             dc.drawText(cx, y, fontLabel, lines[i], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
     }
@@ -766,7 +789,7 @@ class WingFaceView extends WatchUi.WatchFace {
         dc.setColor(0x6B6A64, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx + ox, cy + (40 * u).toNumber() + oy, Graphics.FONT_XTINY, topDateText(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         if (n > 0) {
-            dc.setColor(stale ? STALE_COLOR : windColor(curVal), Graphics.COLOR_TRANSPARENT);
+            dc.setColor(stale ? cStale : windColor(curVal), Graphics.COLOR_TRANSPARENT);
             dc.drawText(cx + ox, cy + (68 * u).toNumber() + oy, Graphics.FONT_XTINY, knots(curVal), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
         if (!big) {
