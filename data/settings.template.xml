@@ -5,5 +5,8 @@
                 <!--SPOTS-->
             </settingConfig>
         </setting>
+        <setting propertyKey="@Properties.stats" title="@Strings.StatsTitle">
+            <settingConfig type="boolean" />
+        </setting>
     </settings>
 </resources>

@@ -13,3 +13,6 @@ developer_key*
 
 # macOS
 .DS_Store
+
+# Genere par tools/make_buildinfo.py (version + cle Google Analytics) : ne pas publier
+source/BuildInfo.mc

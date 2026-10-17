@@ -11,5 +11,8 @@
         <property id="curLat" type="string"></property>
         <property id="curLon" type="string"></property>
         <property id="runAt" type="number">0</property>
+        <property id="stats" type="boolean">true</property>
+        <property id="pingDay" type="number">0</property>
+        <property id="model" type="string"></property>
     </properties>
 </resources>

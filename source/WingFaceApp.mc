@@ -21,6 +21,7 @@ class WingFaceApp extends Application.AppBase {
 
     function getInitialView() {
         resolveSpot();
+        resolveModel();
         registerRefresh();
         var d = editMode ? editDelegate() : null;
         if (d != null) {
@@ -41,6 +42,10 @@ class WingFaceApp extends Application.AppBase {
     // Appele quand le service d'arriere-plan renvoie ses donnees
     function onBackgroundData(data) {
         if (data instanceof Dictionary) {
+            if (data.hasKey("ping")) {
+                // statistique du jour envoyee : pas d'autre envoi avant demain
+                Application.Properties.setValue("pingDay", data["ping"]);
+            }
             if (data.hasKey("same")) {
                 // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle
                 Application.Storage.setValue("chk", Time.now().value());
@@ -120,6 +125,18 @@ class WingFaceApp extends Application.AppBase {
         var last = Background.getLastTemporalEventTime();
         var delay = next - (last != null ? last.value() : now);
         return delay < 300 ? 300 : delay;
+    }
+
+    // Nom du modele pour les statistiques (« fr970 »), d'apres le numero de piece Garmin ;
+    // lu une seule fois, le service d'arriere-plan envoie le numero de piece si le modele est inconnu
+    function resolveModel() {
+        var part = System.getDeviceSettings().partNumber;
+        var known = Application.Properties.getValue("model");
+        if (known != null && !known.equals("") && part.equals(Application.Storage.getValue("modelPart"))) { return; }
+        var table = WatchUi.loadResource(Rez.JsonData.Models) as Dictionary;
+        var name = table[part];
+        Application.Properties.setValue("model", name == null ? part : name);
+        Application.Storage.setValue("modelPart", part);
     }
 
     // Spot effectif : liste « Spot » (telephone) ou menu montre (numero spotId).

@@ -8,6 +8,8 @@ import Toybox.Time;
 // Service d'arriere-plan : une requete Open-Meteo (vitesse et direction), fusion des modeles par heure.
 // Ordre de priorite : AROME HD, ARPEGE, ICON (premier modele qui a une vitesse ; sa direction avec).
 // Avant, lecture des metadonnees d'AROME HD : si aucun nouveau run n'est en ligne, on ne retelecharge pas.
+// Une fois par jour (si « Statistiques anonymes » est actif), un evenement Google Analytics :
+// identifiant anonyme de l'app sur la montre, modele, version, numero du spot.
 (:background)
 class WingService extends System.ServiceDelegate {
 
@@ -18,6 +20,8 @@ class WingService extends System.ServiceDelegate {
     var lastLon = "";
     // dernier run AROME en ligne : [debut du run, delai de mise en ligne, intervalle entre runs] (s)
     var runInfo = null;
+    // jour local de la statistique envoyee pendant ce reveil (0 : aucune), remonte au cadran
+    var pinged = 0;
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -33,11 +37,64 @@ class WingService extends System.ServiceDelegate {
         lastLat = lat.toString();
         lastLon = lon.toString();
 
+        if (!sendDailyStat()) {
+            fetchMeta();
+        }
+    }
+
+    function fetchMeta() as Void {
         var options = {
             :method => Communications.HTTP_REQUEST_METHOD_GET,
             :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_JSON
         };
         Communications.makeWebRequest("https://api.open-meteo.com/data/meteofrance_arome_france_hd/static/meta.json", null, options, method(:onMeta));
+    }
+
+    // Statistique du jour (Google Analytics, Measurement Protocol) ; la meteo suit dans tous les cas.
+    // Renvoie false si rien n'est envoye aujourd'hui (deja fait, desactive ou pas de cle).
+    function sendDailyStat() as Boolean {
+        var now = Time.now().value();
+        var day = (now + System.getClockTime().timeZoneOffset) / 86400;
+        var uid = System.getDeviceSettings().uniqueIdentifier;
+        if (GA_ID.equals("") || Application.Properties.getValue("stats") == false || uid == null
+                || day == Application.Properties.getValue("pingDay")) {
+            return false;
+        }
+        var model = Application.Properties.getValue("model");
+        var spot = Application.Properties.getValue("curId");
+        var body = {
+            "client_id" => uid,
+            "events" => [{
+                "name" => "daily_active",
+                "params" => {
+                    "model" => (model == null || model.equals("")) ? System.getDeviceSettings().partNumber : model,
+                    "app_version" => APP_VERSION,
+                    "spot" => (spot == null) ? "" : spot.toString(),
+                    "session_id" => day.toString(),
+                    "engagement_time_msec" => 1000
+                }
+            }]
+        };
+        var options = {
+            :method => Communications.HTTP_REQUEST_METHOD_POST,
+            :headers => { "Content-Type" => Communications.REQUEST_CONTENT_TYPE_JSON },
+            :responseType => Communications.HTTP_RESPONSE_CONTENT_TYPE_TEXT_PLAIN
+        };
+        pinged = day;
+        Communications.makeWebRequest("https://www.google-analytics.com/mp/collect?measurement_id=" + GA_ID
+            + "&api_secret=" + GA_SECRET, body, options, method(:onStat));
+        return true;
+    }
+
+    // Reponse ignoree (une statistique perdue n'est pas grave) ; on enchaine sur la meteo
+    function onStat(code as Number, data as Dictionary or String or Null) as Void {
+        fetchMeta();
+    }
+
+    // Fin du service : le cadran note le jour de la statistique pour ne pas la renvoyer
+    function finish(res as Dictionary) as Void {
+        if (pinged != 0) { res["ping"] = pinged; }
+        Background.exit(res);
     }
 
     // Metadonnees du modele : meme run que les donnees de la montre -> on s'arrete la ;
@@ -51,7 +108,7 @@ class WingService extends System.ServiceDelegate {
                 runInfo = [run, avail - run, iv];
                 var known = Application.Properties.getValue("runAt");
                 if (known != null && known == run) {
-                    Background.exit({ "same" => runInfo });
+                    finish({ "same" => runInfo });
                     return;
                 }
             }
@@ -87,17 +144,17 @@ class WingService extends System.ServiceDelegate {
     // Erreurs : code Garmin/HTTP de la requete, ou 1001-1004 si la reponse est inexploitable
     function onReceive(code as Number, data as Dictionary or String or Null) as Void {
         if (code != 200 || !(data instanceof Dictionary)) {
-            Background.exit({ "err" => code });
+            finish({ "err" => code });
             return;
         }
         var hourly = data["hourly"];
         if (!(hourly instanceof Dictionary)) {
-            Background.exit({ "err" => 1001 });
+            finish({ "err" => 1001 });
             return;
         }
         var times = hourly["time"];
         if (times == null || times.size() == 0) {
-            Background.exit({ "err" => 1002 });
+            finish({ "err" => 1002 });
             return;
         }
 
@@ -112,7 +169,7 @@ class WingService extends System.ServiceDelegate {
             }
         }
         if (speeds.size() == 0) {
-            Background.exit({ "err" => 1003 });
+            finish({ "err" => 1003 });
             return;
         }
 
@@ -150,12 +207,12 @@ class WingService extends System.ServiceDelegate {
         }
 
         if (outV.size() == 0) {
-            Background.exit({ "err" => 1004 });
+            finish({ "err" => 1004 });
             return;
         }
         // coordonnees demandees : le cadran ignore la reponse si le spot a change entre-temps
         var res = { "t0" => start + off * 3600, "v" => outV, "d" => outD, "f" => now, "lat" => lastLat, "lon" => lastLon };
         if (runInfo != null) { res["run"] = runInfo; }
-        Background.exit(res);
+        finish(res);
     }
 }

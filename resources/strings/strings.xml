@@ -1,9 +1,5 @@
 <resources>
     <string id="AppName">Windspot</string>
     <string id="SpotIdTitle">Spot</string>
-    <string id="RefreshTitle">Rafraichissement des previsions</string>
-    <string id="Min15">15 minutes</string>
-    <string id="Min30">30 minutes</string>
-    <string id="Min60">60 minutes</string>
-    <string id="Min120">2 heures</string>
+    <string id="StatsTitle">Statistiques anonymes</string>
 </resources>
