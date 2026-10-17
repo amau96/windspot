@@ -12,14 +12,14 @@ import Toybox.WatchUi;
 // Toutes les valeurs de vent sont en dixiemes de noeud (entiers).
 class WingFaceView extends WatchUi.WatchFace {
 
-    // Seuils (dixiemes de noeud) : <8 bleu, 8-12 vert d'eau, 12-16 vert, 16-20 jaune, 20-25 orange, >25 rouge
-    const COLORS = [0x3A78D0, 0x2EBF91, 0x7BDB4A, 0xF2C037, 0xF08A24, 0xE24B4A];
-    const DIM_COLORS = [0x1A3766, 0x165E48, 0x3D6D25, 0x7A601C, 0x78450F, 0x712524];
+    // Seuils (dixiemes de noeud) : <8 bleu, 8-12 bleu ciel, 12-16 vert, 16-20 jaune, 20-25 orange, >25 rouge
+    const COLORS = [0x3A78D0, 0x4FB8F0, 0x7BDB4A, 0xF2C037, 0xF08A24, 0xE24B4A];
+    const DIM_COLORS = [0x1A3766, 0x235A78, 0x3D6D25, 0x7A601C, 0x78450F, 0x712524];
     // Ecrans MIP 64 couleurs (fenix 6) : teintes exactes de la palette, sinon le jaune vire a l'orange
-    const MIP_COLORS = [0x5555FF, 0x00AAAA, 0x55FF55, 0xFFFF55, 0xFFAA00, 0xFF5555];
+    const MIP_COLORS = [0x5555FF, 0x00AAFF, 0x55FF55, 0xFFFF55, 0xFFAA00, 0xFF5555];
     var colors = COLORS;
     var dimColors = DIM_COLORS;
-    var calmText = 0x6FA8F0;
+    var calmText = 0x8A9BB8;
     const PAST_COLOR = 0x1C1C1C;
     const STALE_COLOR = 0x8A8880;  // vent affiche en gris quand les donnees sont trop anciennes
     const RING_LEVEL = 0.55; // luminosite des couleurs de l'anneau sur AMOLED (1 = couleurs pleines)
@@ -78,7 +78,7 @@ class WingFaceView extends WatchUi.WatchFace {
         if (!amoled) {
             colors = MIP_COLORS;
             dimColors = MIP_COLORS;
-            calmText = 0x55AAFF;
+            calmText = 0xAAAAAA;
         }
     }
 
@@ -158,17 +158,20 @@ class WingFaceView extends WatchUi.WatchFace {
         return testMode ? new TestClock(10, 23) : System.getClockTime();
     }
 
+    // Tranche de couleur d'apres le vent arrondi au noeud, comme le chiffre affiche
+    // (15,6 nd s'affiche « 16 nd » : il doit etre jaune, pas vert)
     function band(t) {
-        if (t < 80) { return 0; }
-        if (t < 120) { return 1; }
-        if (t < 160) { return 2; }
-        if (t < 200) { return 3; }
-        if (t < 250) { return 4; }
+        var k = (t + 5) / 10;
+        if (k < 8) { return 0; }
+        if (k < 12) { return 1; }
+        if (k < 16) { return 2; }
+        if (k < 20) { return 3; }
+        if (k < 25) { return 4; }
         return 5;
     }
 
     function windColor(t) {
-        if (t < 80) { return calmText; }
+        if (band(t) == 0) { return calmText; }
         return colors[band(t)];
     }
 
@@ -429,17 +432,28 @@ class WingFaceView extends WatchUi.WatchFace {
     function drawWindLine(dc, cx, y, off, n, h0) {
         var cur = curVal;
         var curStr = knots(cur);
-        var peakStr = peakText(off, n, h0);
-        if (!peakStr.equals("")) { peakStr = " · " + peakStr; }
         var fBig = Graphics.FONT_XTINY;
         var fSmall = Graphics.FONT_XTINY;
         var w1 = dc.getTextWidthInPixels(curStr, fBig);
-        var w2 = dc.getTextWidthInPixels(peakStr, fSmall);
         var asc = Graphics.getFontAscent(fBig);
         // fleche de direction apres la vitesse (si connue)
         var dir = curDir;
         var gap = (dir >= 0) ? (asc * 0.25).toNumber() : 0;   // espace entre « nd » et la fleche
         var aw = (dir >= 0) ? (asc * 1.15).toNumber() : 0;
+        // pic : format le plus complet qui tient dans le cercle a cette hauteur (la place depend
+        // de la police de chaque montre, pas seulement de la taille d'ecran), sinon le plus court
+        var u = dc.getWidth() / 340.0;
+        var dy = (y - dc.getHeight() / 2).abs();
+        var rIn = 156 * u;
+        var room = (dy < rIn) ? (2 * Math.sqrt(rIn * rIn - dy * dy)).toNumber() : 0;
+        var peaks = peakTexts(off, h0);
+        var peakStr = "";
+        var w2 = 0;
+        for (var i = 0; i < peaks.size(); i++) {
+            peakStr = " · " + peaks[i];
+            w2 = dc.getTextWidthInPixels(peakStr, fSmall);
+            if (w1 + gap + aw + w2 <= room) { break; }
+        }
         var x = cx - (w1 + gap + aw + w2) / 2;
         var base = y + asc / 2;
         dc.setColor(stale ? STALE_COLOR : windColor(cur), Graphics.COLOR_TRANSPARENT);
@@ -474,9 +488,15 @@ class WingFaceView extends WatchUi.WatchFace {
         ]);
     }
 
-    // Pic de toute la journee (de minuit a minuit, heures passees comprises)
-    function peakText(off, n, h0) {
+    // Pic de toute la journee (de minuit a minuit, heures passees comprises) ; a partir d'1 h
+    // avant le coucher du soleil au spot, pic du lendemain avec le nom du jour.
+    // Formats du plus complet au plus court (drawWindLine prend le premier qui tient) :
+    // « max 18 nd 15h » puis « max 18 · 15h » ; « sam. 22 nd 15h » puis « sa 22 nd 15h ».
+    // Le plus court tient sur les 113 montres (verifie avec tools/textwidth.py).
+    function peakTexts(off, h0) {
         var day0 = off - h0;
+        var tomorrow = (nowSec() >= sunsetAt() - 3600) && (day0 + 24 < vals.size());
+        if (tomorrow) { day0 += 24; }
         var first = (day0 < 0) ? 0 : day0;
         var last = day0 + 24;
         if (last > vals.size()) { last = vals.size(); }
@@ -488,11 +508,50 @@ class WingFaceView extends WatchUi.WatchFace {
                 bestIdx = i;
             }
         }
-        if (best < 0) { return ""; }
-        if (small) {
-            return "max " + ((best + 5) / 10).toString() + " · " + (bestIdx - day0).toString() + "h";
+        if (best < 0) { return []; }
+        var v = ((best + 5) / 10).toString();
+        var h = (bestIdx - day0).toString() + "h";
+        if (tomorrow) {
+            var dow = Gregorian.info(new Time.Moment(nowSec() + 86400), Time.FORMAT_SHORT).day_of_week - 1;
+            return [DAYS[dow] + ". " + v + " nd " + h, DAYS2[dow] + " " + v + " nd " + h];
         }
-        return "max " + knots(best) + " à " + (bestIdx - day0).toString() + "h";
+        return ["max " + v + " nd " + h, "max " + v + " · " + h];
+    }
+
+    // Coucher du soleil au spot, aujourd'hui (secondes epoch), calcule une fois par jour et par spot.
+    // Formules NOAA (equation du temps, declinaison), precision de l'ordre de la minute.
+    var sunsetDay = -1;
+    var sunsetLat = "";
+    var sunsetVal = 0;
+    function sunsetAt() {
+        var lat = prop("curLat", "");
+        var lon = prop("curLon", "");
+        if (lat == null || lat.toString().equals("")) { lat = prop("lat", "47.46"); }
+        if (lon == null || lon.toString().equals("")) { lon = prop("lon", "-1.46"); }
+        var now = nowSec();
+        var tz = System.getClockTime().timeZoneOffset;
+        var day = (now + tz) / 86400;              // jour local
+        var key = lat.toString() + lon.toString();
+        if (day == sunsetDay && key.equals(sunsetLat)) { return sunsetVal; }
+        var la = Math.toRadians(lat.toString().toFloat());
+        var lo = lon.toString().toFloat();
+        var doy = Gregorian.info(new Time.Moment(now), Time.FORMAT_SHORT);
+        var jan1 = Gregorian.moment({ :year => doy.year, :month => 1, :day => 1, :hour => 0 });
+        var g = 2 * Math.PI / 365.0 * ((now - jan1.value()) / 86400);
+        var eqt = 229.18 * (0.000075 + 0.001868 * Math.cos(g) - 0.032077 * Math.sin(g)
+            - 0.014615 * Math.cos(2 * g) - 0.040849 * Math.sin(2 * g));
+        var dec = 0.006918 - 0.399912 * Math.cos(g) + 0.070257 * Math.sin(g) - 0.006758 * Math.cos(2 * g)
+            + 0.000907 * Math.sin(2 * g) - 0.002697 * Math.cos(3 * g) + 0.00148 * Math.sin(3 * g);
+        var c = Math.cos(Math.toRadians(90.833)) / (Math.cos(la) * Math.cos(dec)) - Math.tan(la) * Math.tan(dec);
+        if (c > 1) { c = 1; }       // nuit polaire
+        if (c < -1) { c = -1; }     // jour polaire
+        var ha = Math.toDegrees(Math.acos(c));
+        // minutes UTC depuis minuit UTC du jour local
+        var minutes = 720 + 4 * (ha - lo) - eqt;
+        sunsetVal = day * 86400 + (minutes * 60).toNumber();
+        sunsetDay = day;
+        sunsetLat = key;
+        return sunsetVal;
     }
 
     function drawChart(dc, cx, cy, u, off, n, h0, dow0) {
@@ -546,9 +605,15 @@ class WingFaceView extends WatchUi.WatchFace {
         for (var x = x0; x < x0 + wTot; x += 8) {
             dc.drawLine(x, y12, x + 4, y12);
         }
-        // repere « 12 » au bout de la ligne pointillee (l'echelle est automatique)
+        // repere « 12 » au bout de la ligne pointillee (l'echelle est automatique). Sans police
+        // vectorielle, il est ecrit dans la meme police que la ligne vent et se confond avec l'heure
+        // du pic juste au-dessus (« 13h ») : il passe alors a gauche, au debut de la ligne.
         if (!tiny) {
-            dc.drawText(x0 + wTot + (3 * u).toNumber(), y12, fontLabel, "12", Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            if (fontLabel == Graphics.FONT_XTINY) {
+                dc.drawText(x0 - (3 * u).toNumber(), y12, fontLabel, "12", Graphics.TEXT_JUSTIFY_RIGHT | Graphics.TEXT_JUSTIFY_VCENTER);
+            } else {
+                dc.drawText(x0 + wTot + (3 * u).toNumber(), y12, fontLabel, "12", Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            }
         }
 
         // separations de jours et noms des jours
