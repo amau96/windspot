@@ -58,6 +58,8 @@ class WingFaceView extends WatchUi.WatchFace {
     var fontMid = null;
     var fontLabel = Graphics.FONT_XTINY;
     var fontLoad = Graphics.FONT_XTINY;
+    var fontLostTitle = Graphics.FONT_XTINY;  // message « pas de prevision » : plus grand en vectoriel
+    var fontLostLine = Graphics.FONT_XTINY;
     var small = false;
     var tiny = false;    // tres petit ecran (218 px) sans police vectorielle : courbe plus etroite, heure plus haute
     var amoled = false;  // ecran AMOLED : veille allegee (limite de pixels allumes, marquage)   // petit ecran (<= 240 px) sans police vectorielle : affichage allege
@@ -81,6 +83,10 @@ class WingFaceView extends WatchUi.WatchFace {
         fontMid = timeFont((104 * u).toNumber(), Graphics.FONT_NUMBER_THAI_HOT);
         fontLabel = timeFont((15 * u).toNumber(), Graphics.FONT_XTINY);
         fontLoad = timeFont((19 * u).toNumber(), Graphics.FONT_XTINY);
+        // largeurs verifiees sur les 52 montres vectorielles (data/font_metrics.json, a l'echelle)
+        var vector = (Graphics has :getVectorFont);
+        fontLostTitle = vector ? timeFont((24 * u).toNumber(), fontLoad) : fontLoad;
+        fontLostLine = vector ? fontLoad : fontLabel;
         small = dc.getWidth() <= 240 && !(Graphics has :getVectorFont);
         subscribeInfos();
         tiny = small && dc.getWidth() <= 218;
@@ -483,7 +489,7 @@ class WingFaceView extends WatchUi.WatchFace {
     // Garmin Connect est ferme ou endormi sur le telephone.
     function drawLost(dc, cx, cy, u) {
         var yb = cy + ((tiny ? 104 : 98) * u).toNumber();
-        var hl = dc.getFontHeight(fontLabel);
+        var hl = dc.getFontHeight(fontLostLine);
         // en jours au-dela de 48 h : « 120 h » deborde sur les ecrans a grande police (vivoactive 5)
         var hours = (nowSec() - fetchedAt) / 3600;
         var age = hours < 48 ? hours.toString() + " h" : (hours / 24).toString() + " j";
@@ -496,14 +502,14 @@ class WingFaceView extends WatchUi.WatchFace {
         if (err != null && !(err < 0 && err > -300)) {
             lines = small ? ["météo injoignable"] : ["météo injoignable", "nouvel essai auto"];
         }
-        var y = cy + (28 * u).toNumber();
+        var y = cy + (((Graphics has :getVectorFont) ? 30 : 28) * u).toNumber();
         dc.setColor(cInfo, Graphics.COLOR_TRANSPARENT);
-        dc.drawText(cx, y, fontLoad, title, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        y += (dc.getFontHeight(fontLoad) - hl) / 2;
+        dc.drawText(cx, y, fontLostTitle, title, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        y += (dc.getFontHeight(fontLostTitle) - hl) / 2;
         dc.setColor(cSoft2, Graphics.COLOR_TRANSPARENT);
         for (var i = 0; i < lines.size(); i++) {
             y += hl;
-            dc.drawText(cx, y, fontLabel, lines[i], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+            dc.drawText(cx, y, fontLostLine, lines[i], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
         drawSpot(dc, cx, yb + (36 * u).toNumber(), u);
     }
