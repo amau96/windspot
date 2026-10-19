@@ -1,5 +1,6 @@
 import Toybox.ActivityMonitor;
 import Toybox.Application;
+import Toybox.Background;
 import Toybox.Graphics;
 import Toybox.Lang;
 import Toybox.Math;
@@ -241,7 +242,9 @@ class WingFaceView extends WatchUi.WatchFace {
         // veille allegee seulement sur AMOLED ; un ecran MIP (toujours allume) garde l'ecran complet
         if (inSleep && amoled) {
             drawSleep(dc, cx, cy, u, clock, off, n);
-        } else if (n == 0) {
+        } else if (n == 0 && !lost) {
+            // donnees perdues depuis plus de 5 jours (plus aucune heure a venir) : ecran « Pas de
+            // prevision depuis 6 j » ci-dessous, pas « Chargement… »
             drawLoadingScreen(dc, cx, cy, u, clock);
         } else {
             drawMain(dc, cx, cy, u, clock, off, n);
@@ -794,7 +797,12 @@ class WingFaceView extends WatchUi.WatchFace {
         var err = Application.Storage.getValue("err");
         var title = small ? "Chargement…" : "Chargement des prévisions…";
         var lines = small ? ["sous 5 min", "téléphone à côté"] : ["sous 5 min · téléphone", "Bluetooth à côté"];
-        if (err != null) {
+        if (err == null && noReply()) {
+            // service reveille mais rien n'est revenu : requete restee sans reponse (Garmin Connect
+            // endormi sur le telephone) ou service arrete avant la fin
+            title = "Pas de réponse";
+            lines = small ? ["Garmin Connect ?", "essai auto"] : ["ouvre Garmin Connect", "nouvel essai auto"];
+        } else if (err != null) {
             // codes Garmin -1 a -299 : liaison Bluetooth avec le telephone ; le reste : reseau ou service meteo
             var ble = err < 0 && err > -300;
             if (ble) {
@@ -815,6 +823,15 @@ class WingFaceView extends WatchUi.WatchFace {
             dc.setColor(cSoft2, Graphics.COLOR_TRANSPARENT);
             dc.drawText(cx, y, fontLabel, lines[i], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }
+    }
+
+    // Dernier reveil du service reste sans reponse depuis plus d'une minute (un service dure 30 s au plus)
+    function noReply() {
+        var last = Background.getLastTemporalEventTime();
+        if (last == null) { return false; }
+        var t = last.value();
+        var rx = Application.Storage.getValue("rx");
+        return (rx == null || rx < t) && Time.now().value() - t > 60;
     }
 
     // Veille (always-on) : peu de pixels allumes, decalage leger anti marquage

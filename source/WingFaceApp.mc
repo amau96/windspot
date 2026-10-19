@@ -41,14 +41,17 @@ class WingFaceApp extends Application.AppBase {
 
     // Appele quand le service d'arriere-plan renvoie ses donnees
     function onBackgroundData(data) {
+        // heure de la derniere reponse du service : sans reponse apres un reveil, le cadran le dit
+        Application.Storage.setValue("rx", Time.now().value());
         if (data instanceof Dictionary) {
             if (data.hasKey("ping")) {
                 // statistiques envoyees : [jour, version, spot] ; rien de plus avant demain,
-                // une nouvelle version ou un autre spot
+                // une nouvelle version ou un autre spot. Dans Storage : les proprietes ajoutees
+                // par une mise a jour peuvent manquer (1.0.9 : pingVer, pingSpot)
                 var p = data["ping"];
-                Application.Properties.setValue("pingDay", p[0]);
-                Application.Properties.setValue("pingVer", p[1]);
-                Application.Properties.setValue("pingSpot", p[2]);
+                Application.Storage.setValue("pingDay", p[0]);
+                Application.Storage.setValue("pingVer", p[1]);
+                Application.Storage.setValue("pingSpot", p[2]);
             }
             if (data.hasKey("same")) {
                 // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle

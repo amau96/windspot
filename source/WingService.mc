@@ -23,24 +23,23 @@ class WingService extends System.ServiceDelegate {
     var runInfo = null;
     // statistiques envoyees pendant ce reveil : [jour, version, spot] (null : aucune), remonte au cadran
     var pinged = null;
+    // resultat meteo, rendu au cadran une fois les statistiques envoyees
+    var result = {};
 
     function initialize() {
         ServiceDelegate.initialize();
     }
 
     function onTemporalEvent() {
-        var lat = Application.Properties.getValue("curLat");
-        var lon = Application.Properties.getValue("curLon");
-        if (lat == null || lat.equals("")) { lat = Application.Properties.getValue("lat"); }
-        if (lon == null || lon.equals("")) { lon = Application.Properties.getValue("lon"); }
-        if (lat == null) { lat = "47.46"; }
-        if (lon == null) { lon = "-1.46"; }
+        var lat = bgProp("curLat", "");
+        var lon = bgProp("curLon", "");
+        if (lat.equals("")) { lat = bgProp("lat", "47.46"); }
+        if (lon.equals("")) { lon = bgProp("lon", "-1.46"); }
         lastLat = lat.toString();
         lastLon = lon.toString();
 
-        if (!sendStats()) {
-            fetchMeta();
-        }
+        // la meteo d'abord : les statistiques partent apres, quand le resultat est pret
+        fetchMeta();
     }
 
     function fetchMeta() as Void {
@@ -51,27 +50,25 @@ class WingService extends System.ServiceDelegate {
         Communications.makeWebRequest("https://api.open-meteo.com/data/meteofrance_arome_france_hd/static/meta.json", null, options, method(:onMeta));
     }
 
-    // Statistiques (Google Analytics, Measurement Protocol), en une seule requete ; la meteo suit dans tous les cas.
+    // Statistiques (Google Analytics, Measurement Protocol), en une seule requete, apres la meteo.
     //  - install        : premier envoi depuis cette montre (installation, ou premiere version avec statistiques)
     //  - version_update : version differente de celle du dernier envoi (previous_version)
     //  - spot_change    : spot different de celui du dernier envoi
     //  - daily_active   : une fois par jour
     // Renvoie false si rien n'est a envoyer (deja fait, desactive ou pas de cle).
+    // Etat des envois dans Storage (pingDay, pingVer, pingSpot), ancien emplacement : proprietes.
     function sendStats() as Boolean {
         var uid = System.getDeviceSettings().uniqueIdentifier;
-        if (GA_ID.equals("") || Application.Properties.getValue("stats") == false || uid == null) {
+        if (GA_ID.equals("") || bgProp("stats", true) == false || uid == null) {
             return false;
         }
         var day = (Time.now().value() + System.getClockTime().timeZoneOffset) / 86400;
-        var lastDay = Application.Properties.getValue("pingDay");
-        var lastVer = Application.Properties.getValue("pingVer");
-        var lastSpot = Application.Properties.getValue("pingSpot");
-        if (lastVer == null) { lastVer = ""; }
-        if (lastSpot == null) { lastSpot = ""; }
-        var model = Application.Properties.getValue("model");
-        if (model == null || model.equals("")) { model = System.getDeviceSettings().partNumber; }
-        var spot = Application.Properties.getValue("curName");
-        spot = (spot == null) ? "" : spot.toString();     // nom du spot (« Mazerolles »)
+        var lastDay = pingValue("pingDay", 0);
+        var lastVer = pingValue("pingVer", "");
+        var lastSpot = pingValue("pingSpot", "");
+        var model = bgProp("model", "");
+        if (model.equals("")) { model = System.getDeviceSettings().partNumber; }
+        var spot = bgProp("curName", "").toString();     // nom du spot (« Mazerolles »)
 
         var events = [];
         if (lastVer.equals("")) {
@@ -112,15 +109,26 @@ class WingService extends System.ServiceDelegate {
         return { "name" => name, "params" => params };
     }
 
-    // Reponse ignoree (une statistique perdue n'est pas grave) ; on enchaine sur la meteo
+    // Reponse ignoree (une statistique perdue n'est pas grave) : on rend le resultat meteo
     function onStat(code as Number, data as Dictionary or String or Null) as Void {
-        fetchMeta();
+        if (pinged != null) { result["ping"] = pinged; }
+        Background.exit(result);
     }
 
-    // Fin du service : le cadran note ce qui a ete envoye pour ne pas le renvoyer
+    // Fin de la meteo : statistiques s'il y en a a envoyer, puis fin du service. Une erreur dans
+    // les statistiques ne doit jamais bloquer la meteo (1.0.10 : propriete absente apres une mise
+    // a jour depuis la 1.0.8, le service plantait avant la requete et le cadran restait sans donnees).
     function finish(res as Dictionary) as Void {
-        if (pinged != null) { res["ping"] = pinged; }
-        Background.exit(res);
+        result = res;
+        var sent = false;
+        try {
+            sent = sendStats();
+        } catch (e) {
+            pinged = null;
+        }
+        if (!sent) {
+            Background.exit(res);
+        }
     }
 
     // Metadonnees du modele : meme run que les donnees de la montre -> on s'arrete la ;
@@ -132,8 +140,8 @@ class WingService extends System.ServiceDelegate {
             var iv = data["update_interval_seconds"];
             if (run != null && avail != null && iv != null) {
                 runInfo = [run, avail - run, iv];
-                var known = Application.Properties.getValue("runAt");
-                if (known != null && known == run) {
+                var known = bgProp("runAt", 0);
+                if (known == run) {
                     finish({ "same" => runInfo });
                     return;
                 }
@@ -241,4 +249,33 @@ class WingService extends System.ServiceDelegate {
         if (runInfo != null) { res["run"] = runInfo; }
         finish(res);
     }
+}
+
+// Propriete lue depuis le service : une propriete ajoutee par une mise a jour peut manquer
+// (exception a la lecture) ; valeur par defaut si absente, nulle ou d'un autre type
+(:background)
+function bgProp(key as String, def) {
+    var v = def;
+    try {
+        var p = Application.Properties.getValue(key);
+        if (p != null) { v = p; }
+    } catch (e) {
+        return def;
+    }
+    if (def instanceof Lang.String) { return v.toString(); }
+    if ((def instanceof Lang.Number) && !(v instanceof Lang.Number)) { return def; }
+    if ((def instanceof Lang.Boolean) && !(v instanceof Lang.Boolean)) { return def; }
+    return v;
+}
+
+// Etat des statistiques : Storage (ecrit par le cadran), sinon anciennes proprietes
+(:background)
+function pingValue(key as String, def) {
+    var v = null;
+    try {
+        v = Application.Storage.getValue(key);
+    } catch (e) {
+        v = null;
+    }
+    return (v != null) ? v : bgProp(key, def);
 }

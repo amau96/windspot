@@ -51,8 +51,9 @@ function editDelegate() as WatchUi.WatchFaceDelegate? { return null; }
 
 (:nocfg)
 function dataSlot(s as Number) as Number {
-    var v = Application.Properties.getValue("data" + s);
-    if (v == null) { v = [DATA_BATTERY, DATA_STEPS, DATA_DATE][s - 1]; }
+    // propriete absente apres une mise a jour depuis la 1.0.8 : choix garde dans Storage
+    var v = Application.Storage.getValue("data" + s);
+    if (!(v instanceof Number)) { v = bgProp("data" + s, [DATA_BATTERY, DATA_STEPS, DATA_DATE][s - 1]); }
     return v as Number;
 }
 
@@ -155,7 +156,12 @@ class DataChoiceDelegate extends WatchUi.Menu2InputDelegate {
 
     function onSelect(item as WatchUi.MenuItem) as Void {
         var k = item.getId() as Number;
-        Application.Properties.setValue("data" + slot, k);
+        try {
+            Application.Properties.setValue("data" + slot, k);
+            Application.Storage.deleteValue("data" + slot);
+        } catch (e) {
+            Application.Storage.setValue("data" + slot, k);
+        }
         parent.setSubLabel(DATA_NAMES[k]);
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
         WatchUi.requestUpdate();
