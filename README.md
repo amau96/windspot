@@ -11,6 +11,8 @@ Cadran Connect IQ pour la wing : vent moyen à 10 m en nœuds, modèles fusionn�
   courbe sur 5 jours colorée par tranche, ligne pointillée à 12 nd, séparations de jours, curseur.
 - Reste de la journée : heure en grand, date, vent actuel, anneau.
 - Veille (always-on) : heure et anneau atténués, léger décalage anti marquage.
+- Données anciennes : « MAJ 5h » en haut et vent en gris ; après 12 h sans prévision, le vent et la courbe
+  laissent place à « Pas de prévision depuis 38 h · ouvre Garmin Connect sur ton tél. » (en jours au-delà de 48 h) et l'anneau passe en gris.
 
 Seuils (nœuds) : moins de 8 bleu, 8 à 12 vert d'eau (léger), 12 à 16 vert, 16 à 20 jaune, 20 à 25 orange, plus de 25 rouge.
 Pour les changer : couleurs `COLORS`, `DIM_COLORS` (et `MIP_COLORS` pour les écrans 64 couleurs comme la fenix 6)

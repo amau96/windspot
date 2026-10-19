@@ -21,6 +21,7 @@ class WingFaceView extends WatchUi.WatchFace {
     var dimColors = DIM_COLORS;
     var calmText = 0x8A9BB8;
     const PAST_COLOR = 0x1C1C1C;
+    const LOST_AFTER = 43200;      // 12 h sans prevision : la courbe laisse place a un message
     const STALE_COLOR = 0x8A8880;  // vent affiche en gris quand les donnees sont trop anciennes
     // Couleurs des textes (AMOLED) ; ecrans MIP : couleurs exactes de la palette 64 couleurs, plus
     // contrastees (blanc / gris clair), les teintes intermediaires y etant approchees et ternes
@@ -53,6 +54,7 @@ class WingFaceView extends WatchUi.WatchFace {
     var curVal = 0;      // vent actuel, interpole entre l'heure en cours et la suivante (dixiemes de noeud)
     var curDir = -1;     // direction actuelle, interpolee de meme (-1 si inconnue)
     var stale = false;   // donnees trop anciennes (pas de contact avec Open-Meteo)
+    var lost = false;    // plus rien depuis LOST_AFTER : message a la place de la courbe
     var fontMid = null;
     var fontLabel = Graphics.FONT_XTINY;
     var fontLoad = Graphics.FONT_XTINY;
@@ -228,6 +230,7 @@ class WingFaceView extends WatchUi.WatchFace {
             interpolateNow(off, clock.min);
         }
         stale = (vals != null && !testMode && (now - fetchedAt) > staleAfter());
+        lost = stale && (now - fetchedAt) > LOST_AFTER;
 
         // veille allegee seulement sur AMOLED ; un ecran MIP (toujours allume) garde l'ecran complet
         if (inSleep && amoled) {
@@ -332,7 +335,7 @@ class WingFaceView extends WatchUi.WatchFace {
     function drawTopLine(dc, cx, y, now) {
         var infos = infoTexts();
         var tail = "";
-        if (stale) {
+        if (stale && !lost) {
             // age des donnees, par ex. « MAJ 5h » (le vent est aussi affiche en gris)
             tail = "MAJ " + ((now - fetchedAt) / 3600).toString() + "h";
         } else if (testMode) {
@@ -368,7 +371,11 @@ class WingFaceView extends WatchUi.WatchFace {
             var idx = off + h - h0;
             var c = PAST_COLOR;
             dc.setPenWidth(pen);
-            if (h < h0 && !dim) {
+            if (lost) {
+                // plus de prevision : tout le tour en gris, heures passees en trait fin comme d'habitude
+                c = dim ? 0x444444 : lerpColor(0x000000, cStale, ringLevel);
+                if (h < h0 && !dim) { dc.setPenWidth((3 * u).toNumber()); }
+            } else if (h < h0 && !dim) {
                 if (PAST_STYLE == 1) {
                     // vent passe en couleurs tres sombres
                     if (idx >= 0 && idx < size) {
@@ -461,9 +468,44 @@ class WingFaceView extends WatchUi.WatchFace {
         var sysFont = !(Graphics has :getVectorFont);
         drawTimeLine(dc, cx, cy - ((sysFont ? 32 : 26) * u).toNumber(), fontMid, clock);
 
-        drawWindLine(dc, cx, cy + ((sysFont ? 28 : 25) * u).toNumber(), off, n, h0);
+        if (lost) {
+            // vent actuel et max trop anciens pour etre utiles : le message prend leur place
+            drawLost(dc, cx, cy, u);
+        } else {
+            drawWindLine(dc, cx, cy + ((sysFont ? 28 : 25) * u).toNumber(), off, n, h0);
 
-        drawChart(dc, cx, cy, u, off, n, h0, dow0);
+            drawChart(dc, cx, cy, u, off, n, h0, dow0);
+        }
+    }
+
+    // Plus de prevision depuis LOST_AFTER : a la place du vent et de la courbe, depuis quand et quoi faire.
+    // Sans code d'erreur, la requete n'est pas partie ou n'est pas revenue : le plus souvent
+    // Garmin Connect est ferme ou endormi sur le telephone.
+    function drawLost(dc, cx, cy, u) {
+        var yb = cy + ((tiny ? 104 : 98) * u).toNumber();
+        var hl = dc.getFontHeight(fontLabel);
+        // en jours au-dela de 48 h : « 120 h » deborde sur les ecrans a grande police (vivoactive 5)
+        var hours = (nowSec() - fetchedAt) / 3600;
+        var age = hours < 48 ? hours.toString() + " h" : (hours / 24).toString() + " j";
+        var title = small ? "Météo vieille de " + age : "Pas de prévision depuis " + age;
+        var err = Application.Storage.getValue("err");
+        // largeurs verifiees sur toutes les montres (data/font_metrics.json) : deux lignes courtes
+        // tiennent dans le cercle, une seule longue ligne touchait l'anneau (petits ecrans : pas
+        // de nom de spot en dessous, la place ne manque pas)
+        var lines = ["ouvre Garmin Connect", "sur ton tél."];
+        if (err != null && !(err < 0 && err > -300)) {
+            lines = small ? ["météo injoignable"] : ["météo injoignable", "nouvel essai auto"];
+        }
+        var y = cy + (28 * u).toNumber();
+        dc.setColor(cInfo, Graphics.COLOR_TRANSPARENT);
+        dc.drawText(cx, y, fontLoad, title, Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        y += (dc.getFontHeight(fontLoad) - hl) / 2;
+        dc.setColor(cSoft2, Graphics.COLOR_TRANSPARENT);
+        for (var i = 0; i < lines.size(); i++) {
+            y += hl;
+            dc.drawText(cx, y, fontLabel, lines[i], Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
+        }
+        drawSpot(dc, cx, yb + (36 * u).toNumber(), u);
     }
 
     // Une ligne : vent actuel en couleur, puis « · max 8 à 15h » en petit gris, alignes sur la ligne de base
@@ -783,7 +825,7 @@ class WingFaceView extends WatchUi.WatchFace {
         dc.drawText(cx + ox, cy - ((big ? 26 : 10) * u).toNumber() + oy, big ? fontMid : Graphics.FONT_NUMBER_MEDIUM, timeString(clock), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         dc.setColor(0x6B6A64, Graphics.COLOR_TRANSPARENT);
         dc.drawText(cx + ox, cy + (40 * u).toNumber() + oy, Graphics.FONT_XTINY, topDateText(), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
-        if (n > 0) {
+        if (n > 0 && !lost) {
             dc.setColor(stale ? cStale : windColor(curVal), Graphics.COLOR_TRANSPARENT);
             dc.drawText(cx + ox, cy + (68 * u).toNumber() + oy, Graphics.FONT_XTINY, knots(curVal), Graphics.TEXT_JUSTIFY_CENTER | Graphics.TEXT_JUSTIFY_VCENTER);
         }

@@ -79,7 +79,7 @@ class WingFaceApp extends Application.AppBase {
 
     // Prochaine requete calee sur les runs d'AROME HD : quelques minutes apres la mise en ligne
     // attendue du run suivant. Si les donnees sont perimees ou ne partent pas de minuit
-    // (ancien format), une requete immediate (au plus tot 5 min apres la precedente).
+    // (ancien format), des requetes repetees toutes les 5 min jusqu'a la prochaine reponse.
     function registerRefresh() {
         var d = Application.Storage.getValue("wind");
         var run = (d instanceof Dictionary) ? d["run"] : null;
@@ -87,13 +87,10 @@ class WingFaceApp extends Application.AppBase {
         Application.Properties.setValue("runAt", (run instanceof Array) ? run[0] : 0);
         var minutes = refreshMinutes();
         if (needsFetch(run instanceof Array ? staleAfter() : minutes * 60)) {
-            var at = Time.now();
-            var last = Background.getLastTemporalEventTime();
-            if (last != null) {
-                var earliest = last.add(new Time.Duration(5 * 60));
-                if (earliest.greaterThan(at)) { at = earliest; }
-            }
-            Background.registerForTemporalEvent(at);
+            // reveil repete toutes les 5 min (immediat si le dernier date de plus de 5 min)
+            // jusqu'a la prochaine reponse : un reveil unique restait sans suite si le service
+            // n'aboutissait pas sans erreur, et le cadran ne se mettait plus a jour
+            Background.registerForTemporalEvent(new Time.Duration(5 * 60));
         } else {
             Background.registerForTemporalEvent(new Time.Duration(nextDelay(run, minutes)));
         }
