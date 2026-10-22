@@ -13,15 +13,15 @@
 ### Finistère (29) — 26 spots, 4 secteurs
 
 - **Brest - Crozon** (4) : La Palue, Le Petit Minou, Losmarc'h, Sainte Marguerite
-- **Audierne - Douarnenez** (8) : Audierne, la grande plage, Baie d'Audierne, Baie Des Trépassés, Kervel, Mesperleuc'h, Plage de Penhors, Plouhinec, Gwendrez, St Tugen
-- **La Torche - Bigouden** (8) : Ile Tudy, La Torche et Tronoën, Lesconil, Loctudy, Plage du Ster, Pouldreuzic, Penhors, Saint-Jean-Trolimon, Tronoën, Tréguennec, Plage de Kermabec
+- **Audierne - Douarnenez** (8) : Audierne - La grande plage, Baie d'Audierne, Baie Des Trépassés, Kervel, Mesperleuc'h, Plage de Penhors, Plouhinec - Gwendrez, St Tugen
+- **La Torche - Bigouden** (8) : Ile Tudy, La Torche et Tronoën, Lesconil, Loctudy, Plage du Ster, Pouldreuzic - Penhors, Saint-Jean-Trolimon - Tronoën, Tréguennec - Plage de Kermabec
 - **Bénodet - Concarneau** (6) : Kerambigorn, Kerleven, Kerouini (Trégunc), Kersidan, Mousterlin, Pointe Saint-Gilles (Bénodet)
 
 ### Landes (40) — 21 spots, 3 secteurs
 
 - **Biscarrosse - Cazaux** (8) : Biscarrosse Plage, Biscarrosse Plage - Plage du Vivier, Lac de Cazaux - Ispe, Lac de Cazaux - Les Aigrettes, Lac de Cazaux - Navarosse, Lac de Cazaux - Port de l'Estey, Lac de Cazaux - port Maguide, Mimizan-Plage
 - **Contis - Léon - Moliets** (7) : Cap de l'Homy, Contis, Lac de Léon - Nord, Lac de Léon - Sud, Lac de Soustons, Moliets Plage, Plage de Messanges
-- **Hossegor - Capbreton** (6) : Capbreton (La Piste), Hossegor, Les Estagnots - Seignosse, Seignosse - Bourdaines, Soustons, Tarnos - Plage du Metro
+- **Hossegor - Capbreton** (6) : Capbreton (La Piste), Hossegor, Seignosse - Les Estagnots, Seignosse - Bourdaines, Soustons, Tarnos - Plage du Metro
 
 ### Loire-Atlantique (44) — 21 spots, 4 secteurs
 
@@ -33,11 +33,11 @@
 ### Morbihan (56) — 47 spots, 9 secteurs
 
 - **Lac de Ploërmel** (1) : Lac de Ploermel
-- **Guidel - Ploemeur** (4) : Fort-Bloqué, Guidel-plage - La Falaise, Plage du Kaolin - Ploermeur, Plage du Loch
-- **Lorient - Gâvres - Étel** (9) : Etel, Gâvres, Gâvres - Caserne, Kerguelen - Larmor Plage, Larmor - Toulhars, Le Chell, Mer de Gâvres, Le Lines, Petite Mer de Gâvres, Pointe de Levein
+- **Guidel - Ploemeur** (4) : Fort-Bloqué, Guidel-plage - La Falaise, Ploemeur - Plage du Kaolin, Plage du Loch
+- **Lorient - Gâvres - Étel** (9) : Etel, Gâvres, Gâvres - Caserne, Larmor Plage - Kerguelen, Larmor - Toulhars, Le Chell, Mer de Gâvres, Le Lines, Petite Mer de Gâvres, Pointe de Levein
 - **Golfe du Morbihan** (10) : Anse de Locmiquel, Arradon, Île d'Arz, Golfe du Morbihan, Kerjouanno, La Mouette Sinagote, Séné, Locmariaquer - Saint-Pierre, Plage des Govelins, Pointe d'Arradon, Pointe du Blair, Toulindac, Golfe du Morbihan
-- **Erdeven - Plouharnel** (4) : Erdeven, La Roche Sèche, Mane Gwen - Plouharnel, Sainte-Barbe
-- **Carnac - Trinité** (7) : Carnac - Plage, La Trinité, Le Men Du - La Trinité-sur-Mer, Légenese - Carnac, Sables Blancs, Saint Colomban, Saint-Philibert - Plage de Kernevest
+- **Erdeven - Plouharnel** (4) : Erdeven, La Roche Sèche, Plouharnel - Mane Gwen, Sainte-Barbe
+- **Carnac - Trinité** (7) : Carnac - Plage, La Trinité, La Trinité-sur-Mer - Le Men Du, Carnac - Légenese, Sables Blancs, Saint Colomban, Saint-Philibert - Plage de Kernevest
 - **Quiberon** (5) : Le Vivier, Penthièvre Baie, Penthièvre Mer, Quiberon - Côte Sauvage, Quiberon - Petit Rohu
 - **Rhuys - Damgan** (5) : Damgan, Landrézac, Le Roaliguen, Penvins, Suscinio
 - **Îles** (2) : Belle île - Les Grands Sables, Île de Houat - Treac'h er Goured
@@ -71,14 +71,14 @@ Antibes - L'Olivette, Antibes - La Salis, Cannes, Plage des Dauphins, Mandelieu,
 - **Narbonne - Sigean** (3) : La Nautique - Est, La Nautique - Narbonne, Sigean - Port Mahon
 - **Gruissan - Port-la-Nouvelle** (8) : Etang De Gruissan, Etang de Mateille, Gruissan - Nord, Gruissan - Plage Mateille, Gruissan - Sud, Gruissan - Vieille Nouvelle, Gruissan Plage, Port la Nouvelle
 - **La Franqui - La Palme** (4) : Etang de Lapalme, La Franqui, La Franqui - Les Coussoules, Le Rouet
-- **Leucate - Barcarès** (6) : Aqualand - Port-Barcarès, Le Parc à Huitres - Leucate, Leucate - Les Pêcheurs, Leucate - Plage, Port Barcarès - Agly, Port-Leucate
+- **Leucate - Barcarès** (6) : Port-Barcarès - Aqualand, Leucate - Le Parc à Huitres, Leucate - Les Pêcheurs, Leucate - Plage, Port Barcarès - Agly, Port-Leucate
 
 ### Bouches-du-Rhône (13) — 23 spots, 4 secteurs
 
 - **Étang de Berre** (5) : Lac de Peyrolles, Plage du Bouquet, Plage du Jaï, Rognac, Saint Chamas
 - **Camargue** (4) : Beauduc, Beauduc - Etang, Piemanson Ouest, Saintes-Maries-de-la-Mer
-- **Fos - Côte Bleue** (10) : Anse de Carteau - Est, Bonnieu, Carro, Fos, L'Anse Carteau - Port Saint Louis, Les Renaïres, Martigues - La Piscine, Plage de Piémaison, Plage Napoleon, Sausset-Les-Pins
-- **Marseille - La Ciotat** (4) : Epluchures Beach, La Ciotat - Grande Plage, La Ciotat, Baie Vierge, La Pointe Rouge
+- **Fos - Côte Bleue** (10) : Anse de Carteau - Est, Bonnieu, Carro, Fos, Port Saint Louis - L'Anse Carteau, Les Renaïres, Martigues - La Piscine, Plage de Piémaison, Plage Napoleon, Sausset-Les-Pins
+- **Marseille - La Ciotat** (4) : Epluchures Beach, La Ciotat - Grande Plage, La Ciotat - Baie Vierge, La Pointe Rouge
 
 ### Gard (30) — 6 spots
 
@@ -86,13 +86,13 @@ Etang du Ponant, Grau du Roi, L'Espiguette, Le Boucanet, Port Camargue - Sud, Vi
 
 ### Hérault (34) — 21 spots, 3 secteurs
 
-- **Sète - Thau - Salagou** (7) : Etang d' Ingril - Frontignan, Etang de Thau, Lac du Salagou - Nord, Lac du Salagou - Sud, Le Barrou, Étang de Thau, Sète, Sète - Plage
+- **Sète - Thau - Salagou** (7) : Frontignan - Etang d'Ingril, Etang de Thau, Lac du Salagou - Nord, Lac du Salagou - Sud, Le Barrou, Étang de Thau, Sète, Sète - Plage
 - **Palavas - Grande-Motte** (5) : Carnon - Le Petit Travers, Carnon - Les Roquilles, La Grande Motte, Palavas-les-Flots, Pont Aresquiers, Frontignan-Plage
 - **Agde - Valras** (9) : Cap d'Agde, Cap d'Agde - Tamarissiere, Grau d'Agde, Marseillan, Marseillan - Etang de Thau, Marseillan Plage, Saint Pierre La Mer, Valras - Embouchure de l'Aude, Valras Plage
 
 ### Pyrénées-Orientales (66) — 13 spots, 2 secteurs
 
-- **Barcarès - Étang de Leucate** (6) : Embouchure, Port-Barcarès, Etang de Leucate - Les Dosses, La Coudalère - Etang de Leucate, Les Trois Colonnes - Port Barcarès, Saint Laurent de la Salanque, Sainte-Marie
+- **Barcarès - Étang de Leucate** (6) : Port-Barcarès - Embouchure, Etang de Leucate - Les Dosses, Etang de Leucate - La Coudalère, Port Barcarès - Les Trois Colonnes, Saint Laurent de la Salanque, Sainte-Marie
 - **Canet - Argelès** (7) : Argelès, Argelès - Plage Nord, Canet en Roussillon, Canet-en-Roussillon - Pont des Basses, L'Embouchure Du Tech, Le Racou, Saint-Cyprien
 
 ### Var (83) — 31 spots, 5 secteurs
@@ -101,7 +101,7 @@ Etang du Ponant, Grau du Roi, L'Espiguette, Le Boucanet, Port Camargue - Sud, Vi
 - **Saint-Tropez** (6) : Beauvallon, Gigaro, La Bouillabaisse, La Nartelle, Pampelonne, Port Cogolin
 - **Toulon - Bandol** (8) : Bandol, Brutal Beach, La Coudou, Le Brusc, Le Mourillon, Les Lecques, Les Sablettes, Plage du Mourillon
 - **Le Lavandou - Bormes** (4) : Brégançon, La Faviere, Le Lavandou, Saint-Clair
-- **Hyères - Giens** (9) : Carqueuranne, Hyères - Ayguade, L'Almanarre, La Bergerie, La Capte, Hyères, La Londe-les-Maures, Les Salins - Hyères, Porquerolles, Porquerolles-Le Langoustier
+- **Hyères - Giens** (9) : Carqueuranne, Hyères - Ayguade, L'Almanarre, La Bergerie, La Capte, Hyères, La Londe-les-Maures, Hyères - Les Salins, Porquerolles, Porquerolles-Le Langoustier
 
 ## Lacs
 
@@ -142,6 +142,6 @@ Créteil, Ecluzelles, Jablines, Léry-Poses, Moisson-Lavacourt, Vaires-sur-Marne
 - **Port-Leucate** ← Leucate - Les Pilotis, Port-Leucate
 - **Saint-Raphaël - Beau Rivage** ← Le Veillat, Saint-Raphaël - Beau Rivage
 
-## Noms de plus de 20 caractères (82) — risquent d'être coupés sur la montre
+## Noms de plus de 20 caractères (83) — risquent d'être coupés sur la montre
 
-Canet-en-Roussillon - Pont des Basses, Saint-Philibert - Plage de Kernevest, Biscarrosse Plage - Plage du Vivier, Les Trois Colonnes - Port Barcarès, Etang de Feins - Domaine de Boulet, L'Anse Carteau - Port Saint Louis, Pont Aresquiers, Frontignan-Plage, Noirmoutier - Pointe de la Loire, Île de Houat - Treac'h er Goured, Jard-sur-Mer - Maison Clémenceau, Lac de Saint-Croix - Les Salles, Lac de Cazaux - Port de l'Estey, La Coudalère - Etang de Leucate, Le Men Du - La Trinité-sur-Mer, Soubregeon Saint-Denis Oléron, Belle île - Les Grands Sables, Lac de Sainte-Croix - Bauduen, Plage des Dauphins, Mandelieu, Lac de Cazaux - Les Aigrettes, Tréguennec, Plage de Kermabec, Pointe Saint-Gilles (Bénodet), Valras - Embouchure de l'Aude, Etang de Leucate - Les Dosses, Lac de Cazaux - port Maguide, Toulindac, Golfe du Morbihan, Etang d' Ingril - Frontignan, Île d'Arz, Golfe du Morbihan, Plage Saint-Trojan-Les-Bains, Saint Laurent de la Salanque, Saint-Jean-Trolimon, Tronoën, Saint Brévin - Les Rochelets, Plage du Kaolin - Ploermeur, Le Parc à Huitres - Leucate, Port Bourgenay - Le Veillon, Porquerolles-Le Langoustier, Saint-Raphaël - Beau Rivage, Locmariaquer - Saint-Pierre, Gruissan - Vieille Nouvelle, La Franqui - Les Coussoules, Noirmoutier - La Luzéronde, Noirmoutier - Les Sableaux, Marseillan - Etang de Thau, Les Sables-d'Olonne - Nord, Tranche-sur-Mer - Le Phare, Les Sables-d'Olonne - Sud, Gruissan - Plage Mateille, Les Estagnots - Seignosse, Saint-Gilles Grande Plage, Locquirec - Sables Blancs, La Mouette Sinagote, Séné, Audierne, la grande plage, Carnon - Le Petit Travers, Embouchure, Port-Barcarès, Pornichet - St Marguerite, Guidel-plage - La Falaise, Lac de Cazaux - Navarosse, Cap d'Agde - Tamarissiere, La Ciotat - Grande Plage, Aqualand - Port-Barcarès, Le Barrou, Étang de Thau, Saint Brévin - Les Dunes, Villeneuve-Les-Maguelone, Kerguelen - Larmor Plage, Saintes-Maries-de-la-Mer, Quiberon - Côte Sauvage, Tarnos - Plage du Metro, Le Chell, Mer de Gâvres, La Nautique - Narbonne, Leucate - Les Pêcheurs, Saint-Trojan-Les-Bains, La Ciotat, Baie Vierge, Noirmoutier - La Digue, Saint-Julien-du-Verdon, Mane Gwen - Plouharnel, Seignosse - Bourdaines, Carnon - Les Roquilles, Noirmoutier - Barbâtre, Martigues - La Piscine, Quiberon - Petit Rohu, Anse de Carteau - Est, Lac du Salagou - Nord, Saint-Brevin-les-Pins
+Canet-en-Roussillon - Pont des Basses, Saint-Philibert - Plage de Kernevest, Biscarrosse Plage - Plage du Vivier, Etang de Feins - Domaine de Boulet, Port Barcarès - Les Trois Colonnes, Pont Aresquiers, Frontignan-Plage, Port Saint Louis - L'Anse Carteau, Jard-sur-Mer - Maison Clémenceau, Noirmoutier - Pointe de la Loire, Île de Houat - Treac'h er Goured, Etang de Leucate - La Coudalère, Lac de Cazaux - Port de l'Estey, Lac de Saint-Croix - Les Salles, La Trinité-sur-Mer - Le Men Du, Tréguennec - Plage de Kermabec, Belle île - Les Grands Sables, Etang de Leucate - Les Dosses, Lac de Cazaux - Les Aigrettes, Lac de Sainte-Croix - Bauduen, Plage des Dauphins, Mandelieu, Pointe Saint-Gilles (Bénodet), Saint-Jean-Trolimon - Tronoën, Soubregeon Saint-Denis Oléron, Valras - Embouchure de l'Aude, Lac de Cazaux - port Maguide, Plage Saint-Trojan-Les-Bains, Saint Brévin - Les Rochelets, Saint Laurent de la Salanque, Toulindac, Golfe du Morbihan, Île d'Arz, Golfe du Morbihan, Frontignan - Etang d'Ingril, Gruissan - Vieille Nouvelle, La Franqui - Les Coussoules, Leucate - Le Parc à Huitres, Locmariaquer - Saint-Pierre, Porquerolles-Le Langoustier, Port Bourgenay - Le Veillon, Saint-Raphaël - Beau Rivage, Audierne - La grande plage, Les Sables-d'Olonne - Nord, Marseillan - Etang de Thau, Noirmoutier - La Luzéronde, Noirmoutier - Les Sableaux, Ploemeur - Plage du Kaolin, Port-Barcarès - Embouchure, Tranche-sur-Mer - Le Phare, Cap d'Agde - Tamarissiere, Carnon - Le Petit Travers, Gruissan - Plage Mateille, Guidel-plage - La Falaise, La Mouette Sinagote, Séné, Lac de Cazaux - Navarosse, Les Sables-d'Olonne - Sud, Locquirec - Sables Blancs, Pornichet - St Marguerite, Saint-Gilles Grande Plage, Seignosse - Les Estagnots, La Ciotat - Grande Plage, Larmor Plage - Kerguelen, Le Barrou, Étang de Thau, Port-Barcarès - Aqualand, Saint Brévin - Les Dunes, Saintes-Maries-de-la-Mer, Villeneuve-Les-Maguelone, La Ciotat - Baie Vierge, Le Chell, Mer de Gâvres, Quiberon - Côte Sauvage, Tarnos - Plage du Metro, Carnon - Les Roquilles, La Nautique - Narbonne, Leucate - Les Pêcheurs, Martigues - La Piscine, Noirmoutier - Barbâtre, Noirmoutier - La Digue, Plouharnel - Mane Gwen, Saint-Julien-du-Verdon, Saint-Trojan-Les-Bains, Seignosse - Bourdaines, Anse de Carteau - Est, Lac du Salagou - Nord, Pouldreuzic - Penhors, Quiberon - Petit Rohu, Saint-Brevin-les-Pins

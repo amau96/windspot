@@ -32,6 +32,33 @@ MERGE_NAMES = {
     "Locquirec - Sables Blancs": "Locquirec - Sables Blancs",
 }
 
+# noms affiches « Ville - Spot » : le cadran garde la partie apres « - » quand le nom est trop long.
+# Seul l'affichage change : le tri (et donc le numero de spot enregistre sur les montres) reste
+# fait sur le nom d'origine.
+DISPLAY_NAMES = {
+    "Les Estagnots - Seignosse": "Seignosse - Les Estagnots",
+    "Plage du Kaolin - Ploermeur": "Ploemeur - Plage du Kaolin",
+    "Kerguelen - Larmor Plage": "Larmor Plage - Kerguelen",
+    "Mane Gwen - Plouharnel": "Plouharnel - Mane Gwen",
+    "Légenese - Carnac": "Carnac - Légenese",
+    "Le Men Du - La Trinité-sur-Mer": "La Trinité-sur-Mer - Le Men Du",
+    "Etang d' Ingril - Frontignan": "Frontignan - Etang d'Ingril",
+    "Le Parc à Huitres - Leucate": "Leucate - Le Parc à Huitres",
+    "Aqualand - Port-Barcarès": "Port-Barcarès - Aqualand",
+    "Les Trois Colonnes - Port Barcarès": "Port Barcarès - Les Trois Colonnes",
+    "La Coudalère - Etang de Leucate": "Etang de Leucate - La Coudalère",
+    "Les Salins - Hyères": "Hyères - Les Salins",
+    "L'Anse Carteau - Port Saint Louis": "Port Saint Louis - L'Anse Carteau",
+    "Embouchure, Port-Barcarès": "Port-Barcarès - Embouchure",
+    # « Ville, Spot » : la virgule garde la partie avant, donc passage au « - »
+    "Audierne, la grande plage": "Audierne - La grande plage",
+    "Plouhinec, Gwendrez": "Plouhinec - Gwendrez",
+    "Pouldreuzic, Penhors": "Pouldreuzic - Penhors",
+    "Saint-Jean-Trolimon, Tronoën": "Saint-Jean-Trolimon - Tronoën",
+    "Tréguennec, Plage de Kermabec": "Tréguennec - Plage de Kermabec",
+    "La Ciotat, Baie Vierge": "La Ciotat - Baie Vierge",
+}
+
 
 # nom de chaque secteur (cle : un spot du secteur)
 SECTOR_NAMES = {
@@ -189,13 +216,17 @@ def write_phone_settings(out, flat):
             m = re.search(r"\((\w+)\)$", label)
             walk(children, m.group(1) if m else label)
 
+    # libelles calcules sur le nom d'origine (DISPLAY_NAMES ne change que l'affichage du cadran)
+    orig = {v: k for k, v in DISPLAY_NAMES.items()}
+
     def short(n):
+        n = orig.get(n, n) if len(orig.get(n, n)) > 22 else n
         return n if len(n) <= 22 else re.split(r" - |, ", n)[0]
     count = collections.Counter((c, short(nd[0])) for c, nd in items)
     for c, nd in items:
         name = short(nd[0])
         if count[(c, name)] > 1 and name != nd[0]:
-            parts = re.split(r" - |, ", nd[0])
+            parts = re.split(r" - |, ", orig.get(nd[0], nd[0]))
             kw = [w for w in re.split(r"[ '-]", parts[0]) if len(w) >= 4]
             name = (kw[-1] + " - " if kw else "") + parts[-1]
         labels.append((nd[3], f"{c} · {name}"))
@@ -271,8 +302,11 @@ if __name__ == "__main__":
         tree[s["facade"]][(s["dept"], s["deptName"])].append(s)
 
     # arbre : [nom, enfants] pour les noeuds, [nom, lat, lon] pour les spots
+    def show(sp):
+        return DISPLAY_NAMES.get(sp["name"], sp["name"])
+
     def leaf(sp):
-        return [sp["name"], round(sp["p"][0], 3), round(sp["p"][1], 3)]
+        return [show(sp), round(sp["p"][0], 3), round(sp["p"][1], 3)]
     out, md = [], ["# Arbre des spots (menu montre)", "",
                    f"{len(rows)} spots dans le fichier nettoyé, {len(spots)} après fusion des spots à moins de 1 km.", ""]
     for f in FACADE_ORDER:
@@ -289,16 +323,16 @@ if __name__ == "__main__":
                     sec.sort(key=lambda sp: key(sp["name"]))
                     name = sector_name(sec)
                     children.append([name, [leaf(sp) for sp in sec]])
-                    md.append(f"- **{name}** ({len(sec)}) : " + ", ".join(sp["name"] for sp in sec))
+                    md.append(f"- **{name}** ({len(sec)}) : " + ", ".join(show(sp) for sp in sec))
                 md.append("")
                 depts.append([label, children])
             else:
                 depts.append([label, [leaf(sp) for sp in lst]])
-                md += [f"### {label} — {len(lst)} spots", "", ", ".join(sp["name"] for sp in lst), ""]
+                md += [f"### {label} — {len(lst)} spots", "", ", ".join(show(sp) for sp in lst), ""]
         out.append([f, depts])
     md += ["## Fusions (spots à moins de 1 km)", ""]
     md += [f"- **{n}** ← " + ", ".join(m) for n, m in sorted(merged)]
-    long = sorted({sp["name"] for sp in spots if len(sp["name"]) > 20}, key=len, reverse=True)
+    long = sorted({show(sp) for sp in spots if len(show(sp)) > 20}, key=lambda n: (-len(n), n))
     md += ["", f"## Noms de plus de 20 caractères ({len(long)}) — risquent d'être coupés sur la montre", "", ", ".join(long)]
     # numero de spot (1..N) dans l'ordre de l'arbre ; 0 = spot personnalise
     flat = []

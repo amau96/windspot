@@ -39,12 +39,13 @@ class WingFaceView extends WatchUi.WatchFace {
     var ringLevel = RING_LEVEL;
     const PAST_STYLE = 3;    // heures passees : 1 = vent passe tres sombre, 2 = trait fin gris, 3 = trait fin couleur sombre
     const PAST_LEVEL = 0.2;
-    const CAP = 280;
+    const CAP = 400;
     const HORIZON = 113;
     const DAYS = ["dim", "lun", "mar", "mer", "jeu", "ven", "sam"];
     const DAYS2 = ["di", "lu", "ma", "me", "je", "ve", "sa"];
     const DAYS1 = ["D", "L", "M", "M", "J", "V", "S"];
     const MONTHS = ["janv.", "fevr.", "mars", "avr.", "mai", "juin", "juil.", "aout", "sept.", "oct.", "nov.", "dec."];
+    const GENERIC = ["Nord", "Sud", "Est", "Ouest", "Plage"]; // fin de nom trop vague pour etre affichee seule
 
     var inSleep = false;
     var vals = null;
@@ -627,7 +628,7 @@ class WingFaceView extends WatchUi.WatchFace {
         var x0 = cx - ((tiny ? 97 : 110) * u).toNumber();
         var wTot = ((tiny ? 195 : 220) * u).toNumber();
         var yb = cy + ((tiny ? 104 : 98) * u).toNumber();
-        // echelle automatique : haut du graphique = max de la periode (entre 16 et 28 nd)
+        // echelle automatique : haut du graphique = max de la periode (entre 16 et 40 nd)
         var vmax = 160;
         for (var i = 0; i < n; i++) {
             if (vals[off + i] > vmax) { vmax = vals[off + i]; }
@@ -749,15 +750,20 @@ class WingFaceView extends WatchUi.WatchFace {
         dc.drawText(x + pin + gap, y, fontLabel, name, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
     }
 
-    // Nom qui tient dans maxW : entier, sinon la partie avant « - » ou « , », sinon coupe avec « … »
+    // Nom qui tient dans maxW : entier, sinon la partie apres « - » (« Noirmoutier - La Luzeronde »
+    // -> « La Luzeronde ») sauf mot generique (Nord, Sud...), sinon la partie avant « , »,
+    // sinon coupe avec « … »
     function fitName(dc, name, maxW) {
         if (dc.getTextWidthInPixels(name, fontLabel) <= maxW) { return name; }
         var sep = name.find(" - ");
-        if (sep == null) { sep = name.find(", "); }
         if (sep != null && sep > 0) {
-            name = name.substring(0, sep);
-            if (dc.getTextWidthInPixels(name, fontLabel) <= maxW) { return name; }
+            var tail = name.substring(sep + 3, name.length());
+            name = GENERIC.indexOf(tail) >= 0 ? name.substring(0, sep) : tail;
+        } else {
+            sep = name.find(", ");
+            if (sep != null && sep > 0) { name = name.substring(0, sep); }
         }
+        if (dc.getTextWidthInPixels(name, fontLabel) <= maxW) { return name; }
         while (name.length() > 1 && dc.getTextWidthInPixels(name + "…", fontLabel) > maxW) {
             name = name.substring(0, name.length() - 1);
         }
