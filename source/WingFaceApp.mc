@@ -150,7 +150,16 @@ class WingFaceApp extends Application.AppBase {
         if (id == null) { id = 0; }
         var seenId = Application.Storage.getValue("seenId");
         var cur = Application.Properties.getValue("curId");
-        if (id == seenId && cur != null && cur >= 0) { return; }
+        var newVer = !APP_VERSION.equals(Application.Storage.getValue("nameVer"));
+        if (newVer) { Application.Storage.setValue("nameVer", APP_VERSION); }
+        if (id == seenId && cur != null && cur >= 0) {
+            // nouvelle version : le nom du spot a pu changer dans la liste (1.0.12 : « Ville - Spot »)
+            if (newVer && cur > 0) {
+                var known = findSpot(cur);
+                if (known != null) { Application.Properties.setValue("curName", known[0].toString()); }
+            }
+            return;
+        }
         Application.Storage.setValue("seenId", id);
         var sp = (id > 0) ? findSpot(id) : null;
         if (sp == null) {

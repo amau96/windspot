@@ -161,7 +161,8 @@ function chooseSpot(sp as Array) as Void {
     var id = sp[3] as Number;
     Application.Properties.setValue("spotId", id);
     Application.Storage.setValue("seenId", id);
-    setCurrentSpot(id, name, (sp[1] as Number or Float).toFloat(), (sp[2] as Number or Float).toFloat());
+    // nom complet pour le cadran (fitName le raccourcit selon la place) ; nom court pour les recents
+    setCurrentSpot(id, sp[0], (sp[1] as Number or Float).toFloat(), (sp[2] as Number or Float).toFloat());
 
     var recent = Application.Storage.getValue("recent");
     var list = [[name, sp[1], sp[2], id]];
