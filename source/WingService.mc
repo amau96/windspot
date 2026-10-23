@@ -5,7 +5,7 @@ import Toybox.Lang;
 import Toybox.System;
 import Toybox.Time;
 
-// Service d'arriere-plan : une requete Open-Meteo (vitesse et direction), fusion des modeles par heure.
+// Service d'arriere-plan : requete Open-Meteo (vitesse et direction), fusion des modeles par heure.
 // Ordre de priorite : AROME HD, ARPEGE, ICON (premier modele qui a une vitesse ; sa direction avec).
 // Avant, lecture des metadonnees d'AROME HD : si aucun nouveau run n'est en ligne, on ne retelecharge pas.
 // Statistiques Google Analytics (si « Statistiques anonymes » est actif) : une fois par jour, et a
@@ -25,6 +25,12 @@ class WingService extends System.ServiceDelegate {
     var pinged = null;
     // resultat meteo, rendu au cadran une fois les statistiques envoyees
     var result = {};
+    // code de la requete des metadonnees (envoye avec fetch_error)
+    var metaCode = 0;
+    // derniere erreur de requete meteo, pour l'evenement fetch_error : parametres GA
+    var errInfo = null;
+    // fetch_error envoye pendant ce reveil : [jour, code], remonte au cadran
+    var errPinged = null;
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -55,6 +61,8 @@ class WingService extends System.ServiceDelegate {
     //  - version_update : version differente de celle du dernier envoi (previous_version)
     //  - spot_change    : spot different de celui du dernier envoi
     //  - daily_active   : une fois par jour
+    //  - fetch_error    : requete meteo en echec (une fois par jour et par code), avec de quoi chercher
+    //                     la cause : etape, modeles, heures deja recues, memoire, telephone connecte
     // Renvoie false si rien n'est a envoyer (deja fait, desactive ou pas de cle).
     // Etat des envois dans Storage (pingDay, pingVer, pingSpot), ancien emplacement : proprietes.
     function sendStats() as Boolean {
@@ -81,6 +89,14 @@ class WingService extends System.ServiceDelegate {
         }
         if (day != lastDay) {
             events.add(statEvent("daily_active", model, spot, day, null));
+        }
+        if (errInfo != null && !(pingValue("errDay", 0) == day && pingValue("errCode", 0) == errInfo["code"])) {
+            var ev = statEvent("fetch_error", model, spot, day, null);
+            var params = ev["params"] as Dictionary;
+            var keys = errInfo.keys();
+            for (var i = 0; i < keys.size(); i++) { params[keys[i]] = errInfo[keys[i]]; }
+            events.add(ev);
+            errPinged = [day, errInfo["code"]];
         }
         if (events.size() == 0) {
             return false;
@@ -112,6 +128,7 @@ class WingService extends System.ServiceDelegate {
     // Reponse ignoree (une statistique perdue n'est pas grave) : on rend le resultat meteo
     function onStat(code as Number, data as Dictionary or String or Null) as Void {
         if (pinged != null) { result["ping"] = pinged; }
+        if (errPinged != null) { result["errPing"] = errPinged; }
         Background.exit(result);
     }
 
@@ -125,6 +142,7 @@ class WingService extends System.ServiceDelegate {
             sent = sendStats();
         } catch (e) {
             pinged = null;
+            errPinged = null;
         }
         if (!sent) {
             Background.exit(res);
@@ -134,6 +152,7 @@ class WingService extends System.ServiceDelegate {
     // Metadonnees du modele : meme run que les donnees de la montre -> on s'arrete la ;
     // sinon (ou metadonnees indisponibles) on telecharge les previsions
     function onMeta(code as Number, data as Dictionary or String or Null) as Void {
+        metaCode = code;
         if (code == 200 && data instanceof Dictionary) {
             var run = data["last_run_initialisation_time"];
             var avail = data["last_run_availability_time"];
@@ -150,8 +169,27 @@ class WingService extends System.ServiceDelegate {
         fetchForecast();
     }
 
+    // Une requete pour les trois modeles ; sur les montres ou le service n'a que 32 Ko (fenix 6,
+    // vivoactive 3...), la reponse ne tient pas en memoire (-403) : une requete par modele,
+    // enchainees dans le meme reveil, chacune ne remplissant que les heures encore vides.
+    const MODELS = ["meteofrance_arome_france_hd", "meteofrance_arpege_europe", "icon_seamless"];
+    const SHORT = ["arome", "arpege", "icon"];
+    var groups = null;  // modeles de chaque requete
+    var step = 0;       // requete en cours
+    var t0 = 0;         // debut des donnees (minuit local, s)
+    var outV = null;    // vitesses fusionnees (dixiemes de noeud), null : heure encore vide
+    var outD = null;    // directions (degres, -1 si absente)
+
     // Exactement les heures utiles : depuis minuit (heure locale) jusqu'a MAX_HOURS
     function fetchForecast() as Void {
+        if (groups == null) {
+            groups = (System.getSystemStats().totalMemory < 48 * 1024) ? [[MODELS[0]], [MODELS[1]], [MODELS[2]]] : [MODELS];
+        }
+        var models = groups[step] as Array;
+        var list = "";
+        for (var k = 0; k < models.size(); k++) {
+            list += (k > 0 ? "," : "") + models[k];
+        }
         var now = Time.now().value();
         var tz = System.getClockTime().timeZoneOffset;
         var midnight = ((now + tz) / 86400) * 86400 - tz;
@@ -160,7 +198,7 @@ class WingService extends System.ServiceDelegate {
             "latitude" => lastLat,
             "longitude" => lastLon,
             "hourly" => "wind_speed_10m,wind_direction_10m",
-            "models" => "meteofrance_arome_france_hd,meteofrance_arpege_europe,icon_seamless",
+            "models" => list,
             "wind_speed_unit" => "kn",
             "past_hours" => past,
             "forecast_hours" => MAX_HOURS - past,
@@ -175,78 +213,113 @@ class WingService extends System.ServiceDelegate {
         Communications.makeWebRequest("https://api.open-meteo.com/v1/forecast", params, options, method(:onReceive));
     }
 
-    // Erreurs : code Garmin/HTTP de la requete, ou 1001-1004 si la reponse est inexploitable
+    // Erreurs : code Garmin/HTTP de la requete, ou 1001-1004 si la reponse est inexploitable.
+    // Erreur sur une requete suivante : on garde les heures deja remplies.
     function onReceive(code as Number, data as Dictionary or String or Null) as Void {
+        var err = 0;
         if (code != 200 || !(data instanceof Dictionary)) {
-            finish({ "err" => code });
+            err = code;
+        } else {
+            err = merge(data);
+        }
+        data = null;
+        if (err != 0) { noteError(err); }
+        if (err != 0 && step == 0) {
+            finish({ "err" => err });
             return;
         }
+        step++;
+        if (err == 0 && step < groups.size() && outV.indexOf(null) >= 0) {
+            fetchForecast();
+            return;
+        }
+        done();
+    }
+
+    // Erreur de requete : etat au moment de l'echec, pour fetch_error (memoire mesuree ici :
+    // -403 = reponse trop grosse pour la memoire du service)
+    function noteError(code as Number) as Void {
+        var st = System.getSystemStats();
+        var i = (step < groups.size()) ? step : groups.size() - 1;
+        var models = groups[i] as Array;
+        var names = "";
+        for (var k = 0; k < models.size(); k++) {
+            names += (k > 0 ? "," : "") + SHORT[MODELS.indexOf(models[k])];
+        }
+        var okAt = pingValue("okAt", 0);
+        errInfo = {
+            "code" => code,
+            "step" => (i + 1).toString() + "/" + groups.size(),
+            "models" => names,
+            "hours" => (outV == null) ? 0 : (outV.indexOf(null) < 0 ? outV.size() : outV.indexOf(null)),
+            "mem_free" => st.freeMemory,
+            "mem_total" => st.totalMemory,
+            "phone" => System.getDeviceSettings().phoneConnected ? 1 : 0,
+            "meta" => metaCode,
+            "age_h" => (okAt > 0) ? (Time.now().value() - okAt) / 3600 : -1
+        };
+    }
+
+    // Remplit les heures encore vides avec les modeles de la reponse, dans l'ordre de priorite
+    // (premier modele qui a une vitesse ; sa direction avec). Renvoie 0, ou 1001-1003.
+    function merge(data as Dictionary) as Number {
         var hourly = data["hourly"];
         if (!(hourly instanceof Dictionary)) {
-            finish({ "err" => 1001 });
-            return;
+            return 1001;
         }
         var times = hourly["time"];
         if (times == null || times.size() == 0) {
-            finish({ "err" => 1002 });
-            return;
+            return 1002;
         }
-
-        var models = ["meteofrance_arome_france_hd", "meteofrance_arpege_europe", "icon_seamless"];
-        var speeds = [];
-        var dirs = [];
-        for (var k = 0; k < models.size(); k++) {
-            var s = hourly["wind_speed_10m_" + models[k]];
-            if (s != null) {
-                speeds.add(s);
-                dirs.add(hourly["wind_direction_10m_" + models[k]]);
-            }
-        }
-        if (speeds.size() == 0) {
-            finish({ "err" => 1003 });
-            return;
-        }
-
-        // on garde les donnees depuis minuit (heure locale) pour le pic de la journee
-        var now = Time.now().value();
-        var tz = System.getClockTime().timeZoneOffset;
-        var midnight = ((now + tz) / 86400) * 86400 - tz;
         var start = times[0];
-        var off = (midnight - start) / 3600;
-        if (off < 0) { off = 0; }
-
-        var outV = [];
-        var outD = [];
-        var total = times.size() - off;
-        if (total > MAX_HOURS) { total = MAX_HOURS; }
-        for (var i = 0; i < total; i++) {
-            var j = off + i;
-            var v = null;
-            var dir = null;
-            for (var k = 0; k < speeds.size(); k++) {
-                var s = speeds[k];
-                if (j < s.size() && s[j] != null) {
-                    v = s[j];
-                    var ds = dirs[k];
-                    if (ds != null && j < ds.size()) { dir = ds[j]; }
-                    break;
-                }
-            }
-            if (v == null) {
-                break;
-            }
-            // dixiemes de noeud, entier ; direction en degres (d'ou vient le vent), -1 si absente
-            outV.add((v.toFloat() * 10 + 0.5).toNumber());
-            outD.add(dir == null ? -1 : dir.toNumber());
+        if (outV == null) {
+            // on garde les donnees depuis minuit (heure locale) pour le pic de la journee
+            var now = Time.now().value();
+            var tz = System.getClockTime().timeZoneOffset;
+            var midnight = ((now + tz) / 86400) * 86400 - tz;
+            var off = (midnight - start) / 3600;
+            if (off < 0) { off = 0; }
+            t0 = start + off * 3600;
+            var total = times.size() - off;
+            if (total > MAX_HOURS) { total = MAX_HOURS; }
+            if (total < 0) { total = 0; }
+            outV = new [total];
+            outD = new [total];
         }
+        var models = groups[step] as Array;
+        var found = false;
+        for (var k = 0; k < models.size(); k++) {
+            // un seul modele demande : cles sans suffixe (« wind_speed_10m »)
+            var suffix = (models.size() == 1) ? "" : "_" + models[k];
+            var s = hourly["wind_speed_10m" + suffix];
+            if (s == null) { continue; }
+            found = true;
+            var ds = hourly["wind_direction_10m" + suffix];
+            for (var i = 0; i < outV.size(); i++) {
+                var j = (t0 - start) / 3600 + i;
+                if (outV[i] != null || j < 0 || j >= s.size() || s[j] == null) { continue; }
+                // dixiemes de noeud, entier ; direction en degres (d'ou vient le vent), -1 si absente
+                outV[i] = (s[j].toFloat() * 10 + 0.5).toNumber();
+                outD[i] = (ds != null && j < ds.size() && ds[j] != null) ? ds[j].toNumber() : -1;
+            }
+        }
+        return found ? 0 : 1003;
+    }
 
-        if (outV.size() == 0) {
+    // Resultat : heures remplies sans trou depuis minuit
+    function done() as Void {
+        var n = (outV == null) ? -1 : outV.indexOf(null);
+        if (n < 0) { n = (outV == null) ? 0 : outV.size(); }
+        if (n == 0) {
+            noteError(1004);
             finish({ "err" => 1004 });
             return;
         }
         // coordonnees demandees : le cadran ignore la reponse si le spot a change entre-temps
-        var res = { "t0" => start + off * 3600, "v" => outV, "d" => outD, "f" => now, "lat" => lastLat, "lon" => lastLon };
+        var res = { "t0" => t0, "v" => outV.slice(0, n), "d" => outD.slice(0, n), "f" => Time.now().value(), "lat" => lastLat, "lon" => lastLon };
         if (runInfo != null) { res["run"] = runInfo; }
+        outV = null;
+        outD = null;
         finish(res);
     }
 }

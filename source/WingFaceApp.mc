@@ -53,6 +53,11 @@ class WingFaceApp extends Application.AppBase {
                 Application.Storage.setValue("pingVer", p[1]);
                 Application.Storage.setValue("pingSpot", p[2]);
             }
+            if (data.hasKey("errPing")) {
+                // fetch_error envoye : [jour, code] ; le meme code n'est pas renvoye avant demain
+                Application.Storage.setValue("errDay", data["errPing"][0]);
+                Application.Storage.setValue("errCode", data["errPing"][1]);
+            }
             if (data.hasKey("same")) {
                 // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle
                 Application.Storage.setValue("chk", Time.now().value());
@@ -63,6 +68,8 @@ class WingFaceApp extends Application.AppBase {
                 registerRefresh();
             } else if (data.hasKey("v")) {
                 Application.Storage.setValue("wind", data);
+                // heure des dernieres previsions recues (age_h de fetch_error)
+                Application.Storage.setValue("okAt", Time.now().value());
                 Application.Storage.deleteValue("err");
                 registerRefresh();
             } else if (data.hasKey("err")) {
