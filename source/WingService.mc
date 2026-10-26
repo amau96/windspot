@@ -64,7 +64,7 @@ class WingService extends System.ServiceDelegate {
     //  - fetch_error    : requete meteo en echec (une fois par jour et par code), avec de quoi chercher
     //                     la cause : etape, modeles, heures deja recues, memoire, telephone connecte
     // Renvoie false si rien n'est a envoyer (deja fait, desactive ou pas de cle).
-    // Etat des envois dans Storage (pingDay, pingVer, pingSpot), ancien emplacement : proprietes.
+    // Etat des envois dans Storage et dans les proprietes (pingDay, pingVer, pingSpot), voir pingValue.
     function sendStats() as Boolean {
         var uid = System.getDeviceSettings().uniqueIdentifier;
         if (GA_ID.equals("") || bgProp("stats", true) == false || uid == null) {
@@ -341,7 +341,8 @@ function bgProp(key as String, def) {
     return v;
 }
 
-// Etat des statistiques : Storage (ecrit par le cadran), sinon anciennes proprietes
+// Etat des statistiques : Storage (ecrit par le cadran), sinon proprietes (copie ecrite par le
+// cadran ; Storage illisible ici avant Connect IQ 3.2)
 (:background)
 function pingValue(key as String, def) {
     var v = null;

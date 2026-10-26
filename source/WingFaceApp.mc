@@ -46,17 +46,16 @@ class WingFaceApp extends Application.AppBase {
         if (data instanceof Dictionary) {
             if (data.hasKey("ping")) {
                 // statistiques envoyees : [jour, version, spot] ; rien de plus avant demain,
-                // une nouvelle version ou un autre spot. Dans Storage : les proprietes ajoutees
-                // par une mise a jour peuvent manquer (1.0.9 : pingVer, pingSpot)
+                // une nouvelle version ou un autre spot
                 var p = data["ping"];
-                Application.Storage.setValue("pingDay", p[0]);
-                Application.Storage.setValue("pingVer", p[1]);
-                Application.Storage.setValue("pingSpot", p[2]);
+                saveState("pingDay", p[0]);
+                saveState("pingVer", p[1]);
+                saveState("pingSpot", p[2]);
             }
             if (data.hasKey("errPing")) {
                 // fetch_error envoye : [jour, code] ; le meme code n'est pas renvoye avant demain
-                Application.Storage.setValue("errDay", data["errPing"][0]);
-                Application.Storage.setValue("errCode", data["errPing"][1]);
+                saveState("errDay", data["errPing"][0]);
+                saveState("errCode", data["errPing"][1]);
             }
             if (data.hasKey("same")) {
                 // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle
@@ -69,7 +68,7 @@ class WingFaceApp extends Application.AppBase {
             } else if (data.hasKey("v")) {
                 Application.Storage.setValue("wind", data);
                 // heure des dernieres previsions recues (age_h de fetch_error)
-                Application.Storage.setValue("okAt", Time.now().value());
+                saveState("okAt", Time.now().value());
                 Application.Storage.deleteValue("err");
                 registerRefresh();
             } else if (data.hasKey("err")) {
@@ -79,6 +78,16 @@ class WingFaceApp extends Application.AppBase {
             }
         }
         WatchUi.requestUpdate();
+    }
+
+    // Etat lu par le service : Storage (proprietes ajoutees par une mise a jour parfois absentes)
+    // et proprietes (seules lisibles par le service avant Connect IQ 3.2 : fenix 5, vivoactive 3...)
+    function saveState(key as String, value) as Void {
+        Application.Storage.setValue(key, value);
+        try {
+            Application.Properties.setValue(key, value);
+        } catch (e) {
+        }
     }
 
     function onSettingsChanged() {
