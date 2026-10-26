@@ -18,6 +18,7 @@
         <property id="errDay" type="number">0</property>
         <property id="errCode" type="number">0</property>
         <property id="okAt" type="number">0</property>
+        <property id="errPend" type="string"></property>
         <property id="model" type="string"></property>
         <property id="data1" type="number">1</property>
         <property id="data2" type="number">2</property>

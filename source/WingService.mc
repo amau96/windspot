@@ -31,6 +31,10 @@ class WingService extends System.ServiceDelegate {
     var errInfo = null;
     // fetch_error envoye pendant ce reveil : [jour, code], remonte au cadran
     var errPinged = null;
+    // erreur gardee par le cadran faute de connexion (errPend), envoyee pendant ce reveil
+    var pendSent = false;
+    // parametres d'une erreur gardee, dans l'ordre (texte separe par « | », heure de l'erreur en tete)
+    const ERR_KEYS = ["code", "step", "models", "hours", "mem_free", "mem_total", "phone", "meta", "age_h"];
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -63,6 +67,7 @@ class WingService extends System.ServiceDelegate {
     //  - daily_active   : une fois par jour
     //  - fetch_error    : requete meteo en echec (une fois par jour et par code), avec de quoi chercher
     //                     la cause : etape, modeles, heures deja recues, memoire, telephone connecte
+    //                     ; sans connexion, gardee par le cadran et envoyee au retour (delay_h)
     // Renvoie false si rien n'est a envoyer (deja fait, desactive ou pas de cle).
     // Etat des envois dans Storage et dans les proprietes (pingDay, pingVer, pingSpot), voir pingValue.
     function sendStats() as Boolean {
@@ -98,6 +103,21 @@ class WingService extends System.ServiceDelegate {
             events.add(ev);
             errPinged = [day, errInfo["code"]];
         }
+        // erreur d'un reveil precedent qui n'a pas pu partir (pas de connexion) : delay_h = heures
+        // entre l'erreur et cet envoi, soit la duree de la coupure vue par la montre
+        var pend = pingValue("errPend", "").toString();
+        if (!pend.equals("")) {
+            var f = splitPend(pend);
+            if (f.size() == ERR_KEYS.size() + 1) {
+                var pev = statEvent("fetch_error", model, spot, day, null);
+                var pp = pev["params"] as Dictionary;
+                for (var j = 0; j < ERR_KEYS.size(); j++) { pp[ERR_KEYS[j]] = f[j + 1]; }
+                var at = f[0].toNumber();
+                pp["delay_h"] = (at != null) ? (Time.now().value() - at) / 3600 : -1;
+                events.add(pev);
+            }
+            pendSent = true;
+        }
         if (events.size() == 0) {
             return false;
         }
@@ -125,11 +145,33 @@ class WingService extends System.ServiceDelegate {
         return { "name" => name, "params" => params };
     }
 
-    // Reponse ignoree (une statistique perdue n'est pas grave) : on rend le resultat meteo
+    // Envoi reussi : le cadran note ce qui est parti. Echec (pas de connexion) : rien n'est note,
+    // tout repart au reveil suivant, et une erreur meteo est gardee par le cadran (errPend) pour
+    // ne pas la perdre ; on garde la premiere, debut de la coupure. Puis on rend le resultat meteo.
     function onStat(code as Number, data as Dictionary or String or Null) as Void {
-        if (pinged != null) { result["ping"] = pinged; }
-        if (errPinged != null) { result["errPing"] = errPinged; }
+        if (code >= 200 && code < 300) {
+            if (pinged != null) { result["ping"] = pinged; }
+            if (errPinged != null) { result["errPing"] = errPinged; }
+            if (pendSent) { result["errPend"] = ""; }
+        } else if (errPinged != null && !pendSent) {
+            var s = Time.now().value().toString();
+            for (var i = 0; i < ERR_KEYS.size(); i++) { s += "|" + errInfo[ERR_KEYS[i]]; }
+            result["errPend"] = s;
+        }
         Background.exit(result);
+    }
+
+    // « a|b|c » -> ["a", "b", "c"]
+    function splitPend(s as String) as Array {
+        var out = [];
+        var i = s.find("|");
+        while (i != null) {
+            out.add(s.substring(0, i));
+            s = s.substring(i + 1, s.length());
+            i = s.find("|");
+        }
+        out.add(s);
+        return out;
     }
 
     // Fin de la meteo : statistiques s'il y en a a envoyer, puis fin du service. Une erreur dans
@@ -143,6 +185,7 @@ class WingService extends System.ServiceDelegate {
         } catch (e) {
             pinged = null;
             errPinged = null;
+            pendSent = false;
         }
         if (!sent) {
             Background.exit(res);
