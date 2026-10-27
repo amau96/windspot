@@ -880,3 +880,34 @@ class TestClock {
         min = m;
     }
 }
+
+// Previsions recues du service en texte (WingService.packSpeeds/packDirs) -> dixiemes de noeud
+// et degres par heure. Apres « h2 » heures, un caractere pour deux heures : l'heure entre deux
+// est la moyenne de ses voisines
+function unpackWind(data as Dictionary) as Dictionary {
+    var n = data["n"] as Number;
+    var s = (data["s"] as String).toCharArray();
+    var h2 = data.hasKey("h2") ? data["h2"] as Number : n;
+    var v = new [n];
+    for (var i = 0; i < n; i++) {
+        var a = (i < h2) ? i : h2 + (i - h2) / 2;
+        if (a >= s.size()) { a = s.size() - 1; }
+        var k = s[a].toNumber() - 33;
+        if (i >= h2 && (i - h2) % 2 == 1 && a + 1 < s.size()) {
+            v[i] = (k + s[a + 1].toNumber() - 33) * 5;
+        } else {
+            v[i] = k * 10;
+        }
+    }
+    var dc = data.hasKey("dir") ? (data["dir"] as String).toCharArray() : [];
+    var d = new [n];
+    for (var i = 0; i < n; i++) {
+        d[i] = (i < dc.size() && dc[i] != ' ') ? (dc[i].toNumber() - 33) * 10 : -1;
+    }
+    var out = { "t0" => data["t0"], "v" => v, "d" => d };
+    var keys = ["f", "lat", "lon", "run"];
+    for (var i = 0; i < keys.size(); i++) {
+        if (data.hasKey(keys[i])) { out[keys[i]] = data[keys[i]]; }
+    }
+    return out;
+}

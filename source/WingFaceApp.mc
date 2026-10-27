@@ -61,6 +61,10 @@ class WingFaceApp extends Application.AppBase {
                 // erreur meteo pas encore envoyee (pas de connexion), ou envoyee (texte vide)
                 saveState("errPend", data["errPend"]);
             }
+            if (data.hasKey("s")) {
+                // previsions en texte (1.0.16) : tableaux comme avant, pour la vue et Storage
+                data = unpackWind(data);
+            }
             if (data.hasKey("same")) {
                 // pas de nouveau run : les donnees restent valables, on note seulement l'heure du controle
                 Application.Storage.setValue("chk", Time.now().value());

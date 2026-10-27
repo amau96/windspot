@@ -2,6 +2,7 @@ import Toybox.Application;
 import Toybox.Background;
 import Toybox.Communications;
 import Toybox.Lang;
+import Toybox.StringUtil;
 import Toybox.System;
 import Toybox.Time;
 
@@ -16,6 +17,10 @@ class WingService extends System.ServiceDelegate {
 
     // minuit local + 24 h du jour + horizon de la courbe (113 h)
     const MAX_HOURS = 140;
+    // directions envoyees au cadran (seule la fleche du vent actuel s'en sert)
+    const DIR_HOURS = 48;
+    // resultat trop gros pour Background.exit : heure par heure jusque-la, puis une heure sur deux
+    const HOURLY = 48;
 
     var lastLat = "";
     var lastLon = "";
@@ -158,7 +163,7 @@ class WingService extends System.ServiceDelegate {
             for (var i = 0; i < ERR_KEYS.size(); i++) { s += "|" + errInfo[ERR_KEYS[i]]; }
             result["errPend"] = s;
         }
-        Background.exit(result);
+        exitWith(result);
     }
 
     // « a|b|c » -> ["a", "b", "c"]
@@ -188,8 +193,43 @@ class WingService extends System.ServiceDelegate {
             pendSent = false;
         }
         if (!sent) {
-            Background.exit(res);
+            exitWith(res);
         }
+    }
+
+    // Rend le resultat au cadran. Background.exit refuse les donnees trop grosses (environ 8 Ko,
+    // emballage compris, parfois bien moins sur montre : fenix 6 Pro, 1.0.15) : on reessaie avec
+    // une heure sur deux apres HOURLY heures (« h2 »), puis sans les previsions (erreur 1005)
+    function exitWith(res as Dictionary) as Void {
+        try {
+            Background.exit(res);
+            return;
+        } catch (e instanceof Background.ExitDataSizeLimitException) {
+        }
+        if (res.hasKey("s") && !res.hasKey("h2")) {
+            res["s"] = halve(res["s"] as String, HOURLY);
+            res["h2"] = HOURLY;
+            try {
+                Background.exit(res);
+                return;
+            } catch (e instanceof Background.ExitDataSizeLimitException) {
+            }
+        }
+        var small = { "err" => 1005 };
+        var keys = ["ping", "errPing", "errPend"];
+        for (var i = 0; i < keys.size(); i++) {
+            if (res.hasKey(keys[i])) { small[keys[i]] = res[keys[i]]; }
+        }
+        Background.exit(small);
+    }
+
+    // Garde les « from » premiers caracteres, puis un sur deux
+    function halve(s as String, from as Number) as String {
+        var c = s.toCharArray();
+        if (c.size() <= from) { return s; }
+        var out = c.slice(0, from);
+        for (var i = from; i < c.size(); i += 2) { out.add(c[i]); }
+        return StringUtil.charArrayToString(out);
     }
 
     // Metadonnees du modele : meme run que les donnees de la montre -> on s'arrete la ;
@@ -358,12 +398,37 @@ class WingService extends System.ServiceDelegate {
             finish({ "err" => 1004 });
             return;
         }
-        // coordonnees demandees : le cadran ignore la reponse si le spot a change entre-temps
-        var res = { "t0" => t0, "v" => outV.slice(0, n), "d" => outD.slice(0, n), "f" => Time.now().value(), "lat" => lastLat, "lon" => lastLon };
+        // previsions en texte, un caractere par heure (unpackWind dans le cadran) : un tableau de
+        // nombres depassait parfois la limite de Background.exit. Coordonnees demandees : le cadran
+        // ignore la reponse si le spot a change entre-temps
+        var res = { "t0" => t0, "n" => n, "s" => packSpeeds(n), "dir" => packDirs(n), "f" => Time.now().value(), "lat" => lastLat, "lon" => lastLon };
         if (runInfo != null) { res["run"] = runInfo; }
         outV = null;
         outD = null;
         finish(res);
+    }
+
+    // Vitesses en noeuds entiers (le cadran les affiche ainsi) : « ! » = 0 nd, jusqu'a 93 nd
+    function packSpeeds(n as Number) as String {
+        var c = new [n];
+        for (var i = 0; i < n; i++) {
+            var k = (outV[i] + 5) / 10;
+            if (k > 93) { k = 93; }
+            if (k < 0) { k = 0; }
+            c[i] = (33 + k).toChar();
+        }
+        return StringUtil.charArrayToString(c);
+    }
+
+    // Directions par dizaines de degres sur DIR_HOURS heures, espace : inconnue
+    function packDirs(n as Number) as String {
+        var m = (n < DIR_HOURS) ? n : DIR_HOURS;
+        var c = new [m];
+        for (var i = 0; i < m; i++) {
+            var d = outD[i];
+            c[i] = (d < 0) ? ' ' : (33 + ((d + 5) / 10) % 36).toChar();
+        }
+        return StringUtil.charArrayToString(c);
     }
 }
 
