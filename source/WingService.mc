@@ -384,15 +384,26 @@ function bgProp(key as String, def) {
     return v;
 }
 
-// Etat des statistiques : Storage (ecrit par le cadran), sinon proprietes (copie ecrite par le
-// cadran ; Storage illisible ici avant Connect IQ 3.2)
+// Etat des statistiques, ecrit par le cadran dans Storage et dans les proprietes. Avant Connect IQ
+// 3.2 (fenix 5/5S/5X, vivoactive 3...), Storage lu ici est une ancienne copie, pas vide : proprietes
+// seulement (1.0.11-1.0.14 : statistiques renvoyees a chaque reveil). Sinon Storage, puis proprietes.
 (:background)
 function pingValue(key as String, def) {
     var v = null;
-    try {
-        v = Application.Storage.getValue(key);
-    } catch (e) {
-        v = null;
+    if (storageShared()) {
+        try {
+            v = Application.Storage.getValue(key);
+        } catch (e) {
+            v = null;
+        }
     }
     return (v != null) ? v : bgProp(key, def);
+}
+
+// Storage a jour dans le service d'arriere-plan (Connect IQ 3.2 et plus)
+(:background)
+function storageShared() as Boolean {
+    var mv = System.getDeviceSettings().monkeyVersion;
+    if (mv == null || mv.size() < 2) { return true; }
+    return mv[0] > 3 || (mv[0] == 3 && mv[1] >= 2);
 }
