@@ -21,7 +21,7 @@ et la fonction `band()`.
 
 ## Montres compatibles
 
-113 montres (liste dans `data/devices.txt`) : écran rond, au moins 64 couleurs, API Connect IQ 3.1 ou plus.
+117 montres (liste dans `data/devices.txt`) : écran rond, au moins 64 couleurs, API Connect IQ 3.1 ou plus.
 L'aspect s'adapte tout seul : polices vectorielles et couleurs atténuées sur les écrans AMOLED récents (look 970),
 polices système et palette 64 couleurs sur les écrans MIP (look fenix 6).
 Les montres en API 3.x limitées à 254 textes (47) n'ont pas la liste de spots dans les réglages du téléphone

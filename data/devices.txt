@@ -2,6 +2,8 @@
 approachs50 phone
 approachs7042mm phone
 approachs7047mm phone
+approachs7243mm phone
+approachs7247mm phone
 d2air basic
 d2airx10 phone
 d2delta basic
@@ -18,6 +20,7 @@ descentmk343mm phone
 descentmk351mm phone
 enduro basic
 enduro3 phone
+enduro4 phone
 epix2 phone
 epix2pro42mm phone
 epix2pro47mm phone
@@ -88,6 +91,7 @@ legacysagadarthvader basic
 legacysagarey basic
 marq2 phone
 marq2aviator phone
+marq3 phone
 marqadventurer basic
 marqathlete basic
 marqaviator basic
