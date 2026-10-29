@@ -40,12 +40,26 @@ class WingService extends System.ServiceDelegate {
     var pendSent = false;
     // parametres d'une erreur gardee, dans l'ordre (texte separe par « | », heure de l'erreur en tete)
     const ERR_KEYS = ["code", "step", "models", "hours", "mem_free", "mem_total", "phone", "meta", "age_h"];
+    // Le systeme arrete le service au bout d'environ 30 s, sans rien rendre au cadran : sur une
+    // fenix 5 neuve (1.0.16), meta + 3 modeles + statistiques depassaient, et les statistiques
+    // repartaient a chaque reveil (5 min). Passe ces durees (ms depuis le reveil) : plus de nouveau
+    // modele (on rend les heures deja recues), puis plus de statistiques (envoyees au reveil suivant).
+    const FORECAST_LATE = 15000;
+    const STATS_LATE = 20000;
+    // System.getTimer() au reveil
+    var startAt = 0;
 
     function initialize() {
         ServiceDelegate.initialize();
     }
 
+    // Millisecondes depuis le reveil
+    function elapsed() as Number {
+        return System.getTimer() - startAt;
+    }
+
     function onTemporalEvent() {
+        startAt = System.getTimer();
         var lat = bgProp("curLat", "");
         var lon = bgProp("curLon", "");
         if (lat.equals("")) { lat = bgProp("lat", "47.46"); }
@@ -73,6 +87,7 @@ class WingService extends System.ServiceDelegate {
     //  - fetch_error    : requete meteo en echec (une fois par jour et par code), avec de quoi chercher
     //                     la cause : etape, modeles, heures deja recues, memoire, telephone connecte
     //                     ; sans connexion, gardee par le cadran et envoyee au retour (delay_h)
+    // Chaque evenement porte dur_s : secondes ecoulees depuis le reveil (voir STATS_LATE).
     // Renvoie false si rien n'est a envoyer (deja fait, desactive ou pas de cle).
     // Etat des envois dans Storage et dans les proprietes (pingDay, pingVer, pingSpot), voir pingValue.
     function sendStats() as Boolean {
@@ -144,6 +159,7 @@ class WingService extends System.ServiceDelegate {
             "app_version" => APP_VERSION,
             "spot" => spot,
             "session_id" => day.toString(),
+            "dur_s" => elapsed() / 1000,
             "engagement_time_msec" => 1000
         };
         if (previous != null) { params["previous_version"] = previous; }
@@ -186,7 +202,7 @@ class WingService extends System.ServiceDelegate {
         result = res;
         var sent = false;
         try {
-            sent = sendStats();
+            sent = (elapsed() < STATS_LATE) && sendStats();
         } catch (e) {
             pinged = null;
             errPinged = null;
@@ -312,7 +328,7 @@ class WingService extends System.ServiceDelegate {
             return;
         }
         step++;
-        if (err == 0 && step < groups.size() && outV.indexOf(null) >= 0) {
+        if (err == 0 && step < groups.size() && outV.indexOf(null) >= 0 && elapsed() < FORECAST_LATE) {
             fetchForecast();
             return;
         }
