@@ -89,11 +89,17 @@ class WingFaceApp extends Application.AppBase {
     }
 
     // Etat lu par le service : Storage (proprietes ajoutees par une mise a jour parfois absentes)
-    // et proprietes (seules lisibles par le service avant Connect IQ 3.2 : fenix 5, vivoactive 3...)
+    // et proprietes (seules lisibles par le service avant Connect IQ 3.2 : fenix 5, vivoactive 3...).
+    // Avant 3.2, les proprietes ne seraient ecrites qu'a la fermeture du cadran : le service relisait
+    // une ancienne copie et renvoyait les memes statistiques a chaque reveil (1.0.17, fenix 5S) ;
+    // saveProperties les ecrit tout de suite.
     function saveState(key as String, value) as Void {
         Application.Storage.setValue(key, value);
         try {
             Application.Properties.setValue(key, value);
+            if (!storageShared() && (self has :saveProperties)) {
+                saveProperties();
+            }
         } catch (e) {
         }
     }
