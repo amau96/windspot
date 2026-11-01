@@ -179,7 +179,30 @@ class WingService extends System.ServiceDelegate {
             for (var i = 0; i < ERR_KEYS.size(); i++) { s += "|" + errInfo[ERR_KEYS[i]]; }
             result["errPend"] = s;
         }
+        keepState();
         exitWith(result);
+    }
+
+    // Depuis Connect IQ 3.2, le service note lui-meme ce qui est parti : quand le cadran n'est pas
+    // actif, il ne recoit le resultat qu'a son prochain lancement, et tout repartait a chaque
+    // reveil en attendant (1.0.17, Venu 4 : 19 envois de la meme erreur en une matinee).
+    function keepState() as Void {
+        if (!storageShared()) { return; }
+        try {
+            if (result.hasKey("ping")) {
+                Application.Storage.setValue("pingDay", result["ping"][0]);
+                Application.Storage.setValue("pingVer", result["ping"][1]);
+                Application.Storage.setValue("pingSpot", result["ping"][2]);
+            }
+            if (result.hasKey("errPing")) {
+                Application.Storage.setValue("errDay", result["errPing"][0]);
+                Application.Storage.setValue("errCode", result["errPing"][1]);
+            }
+            if (result.hasKey("errPend")) {
+                Application.Storage.setValue("errPend", result["errPend"]);
+            }
+        } catch (e) {
+        }
     }
 
     // « a|b|c » -> ["a", "b", "c"]
@@ -465,7 +488,8 @@ function bgProp(key as String, def) {
     return v;
 }
 
-// Etat des statistiques, ecrit par le cadran dans Storage et dans les proprietes. Avant Connect IQ
+// Etat des statistiques, ecrit par le cadran dans Storage et dans les proprietes (et par le service
+// dans Storage depuis Connect IQ 3.2, voir keepState). Avant Connect IQ
 // 3.2 (fenix 5/5S/5X, vivoactive 3...), Storage lu ici est une ancienne copie, pas vide : proprietes
 // seulement (1.0.11-1.0.14 : statistiques renvoyees a chaque reveil). Sinon Storage, puis proprietes.
 (:background)
