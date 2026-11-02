@@ -163,14 +163,25 @@ class WingService extends System.ServiceDelegate {
             "engagement_time_msec" => 1000
         };
         if (previous != null) { params["previous_version"] = previous; }
+        var sc = pingValue("statCode", 0);
+        if (sc != 0) { params["stat_code"] = sc; }
         return { "name" => name, "params" => params };
     }
 
-    // Envoi reussi : le cadran note ce qui est parti. Echec (pas de connexion) : rien n'est note,
+    // Le serveur a repondu : l'envoi est parti, meme si la montre n'a pas su lire la reponse (GA
+    // repond 204 sans contenu ; fenix 5X en 1.0.18 : 23 envois en une matinee, code encore a confirmer)
+    function answered(code as Number) as Boolean {
+        return (code >= 200 && code < 300) || code == -400 || code == -401 || code == -402
+            || code == -403 || code == -1002;
+    }
+
+    // Envoi parti : le cadran note ce qui est parti. Echec (pas de connexion) : rien n'est note,
     // tout repart au reveil suivant, et une erreur meteo est gardee par le cadran (errPend) pour
-    // ne pas la perdre ; on garde la premiere, debut de la coupure. Puis on rend le resultat meteo.
+    // ne pas la perdre ; on garde la premiere, debut de la coupure. Un code hors 2xx est joint aux
+    // envois suivants (stat_code). Puis on rend le resultat meteo.
     function onStat(code as Number, data as Dictionary or String or Null) as Void {
-        if (code >= 200 && code < 300) {
+        result["statCode"] = (code >= 200 && code < 300) ? 0 : code;
+        if (answered(code)) {
             if (pinged != null) { result["ping"] = pinged; }
             if (errPinged != null) { result["errPing"] = errPinged; }
             if (pendSent) { result["errPend"] = ""; }
@@ -200,6 +211,9 @@ class WingService extends System.ServiceDelegate {
             }
             if (result.hasKey("errPend")) {
                 Application.Storage.setValue("errPend", result["errPend"]);
+            }
+            if (result.hasKey("statCode")) {
+                Application.Storage.setValue("statCode", result["statCode"]);
             }
         } catch (e) {
         }
@@ -255,7 +269,7 @@ class WingService extends System.ServiceDelegate {
             }
         }
         var small = { "err" => 1005 };
-        var keys = ["ping", "errPing", "errPend"];
+        var keys = ["ping", "errPing", "errPend", "statCode"];
         for (var i = 0; i < keys.size(); i++) {
             if (res.hasKey(keys[i])) { small[keys[i]] = res[keys[i]]; }
         }

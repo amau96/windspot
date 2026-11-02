@@ -61,6 +61,10 @@ class WingFaceApp extends Application.AppBase {
                 // erreur meteo pas encore envoyee (pas de connexion), ou envoyee (texte vide)
                 saveState("errPend", data["errPend"]);
             }
+            if (data.hasKey("statCode")) {
+                // code de la derniere reponse aux statistiques, hors 2xx (0 sinon)
+                saveState("statCode", data["statCode"]);
+            }
             if (data.hasKey("s")) {
                 // previsions en texte (1.0.16) : tableaux comme avant, pour la vue et Storage
                 data = unpackWind(data);
