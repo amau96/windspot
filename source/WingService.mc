@@ -48,6 +48,12 @@ class WingService extends System.ServiceDelegate {
     const STATS_LATE = 20000;
     // System.getTimer() au reveil
     var startAt = 0;
+    // Resultat du reveil precedent, pas encore recu par le cadran (Background.getBackgroundData) :
+    // le cadran ne recoit que le dernier resultat, et avant Connect IQ 3.2 c'est la seule memoire du
+    // service d'un reveil a l'autre. Null : le cadran a tout recu.
+    var queued = null;
+    // Previsions en attente plus recentes que ca (s) : le cadran ne tourne pas, on ne retelecharge pas
+    const QUEUE_FRESH = 14400;
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -60,6 +66,12 @@ class WingService extends System.ServiceDelegate {
 
     function onTemporalEvent() {
         startAt = System.getTimer();
+        var q = Background.getBackgroundData();
+        if (q instanceof Dictionary) { queued = q; }
+        if (queued != null && queued["at"] != null && Time.now().value() - queued["at"] < QUEUE_FRESH) {
+            finish(queued);
+            return;
+        }
         var lat = bgProp("curLat", "");
         var lon = bgProp("curLon", "");
         if (lat.equals("")) { lat = bgProp("lat", "47.46"); }
@@ -96,9 +108,10 @@ class WingService extends System.ServiceDelegate {
             return false;
         }
         var day = (Time.now().value() + System.getClockTime().timeZoneOffset) / 86400;
-        var lastDay = pingValue("pingDay", 0);
-        var lastVer = pingValue("pingVer", "");
-        var lastSpot = pingValue("pingSpot", "");
+        var qp = (queued != null) ? queued["ping"] : null;
+        var lastDay = (qp != null) ? qp[0] : pingValue("pingDay", 0);
+        var lastVer = (qp != null) ? qp[1] : pingValue("pingVer", "");
+        var lastSpot = (qp != null) ? qp[2] : pingValue("pingSpot", "");
         var model = bgProp("model", "");
         if (model.equals("")) { model = System.getDeviceSettings().partNumber; }
         var spot = bgProp("curName", "").toString();     // nom du spot (« Mazerolles »)
@@ -115,7 +128,10 @@ class WingService extends System.ServiceDelegate {
         if (day != lastDay) {
             events.add(statEvent("daily_active", model, spot, day, null));
         }
-        if (errInfo != null && !(pingValue("errDay", 0) == day && pingValue("errCode", 0) == errInfo["code"])) {
+        var qe = (queued != null) ? queued["errPing"] : null;
+        var errDay = (qe != null) ? qe[0] : pingValue("errDay", 0);
+        var errCode = (qe != null) ? qe[1] : pingValue("errCode", 0);
+        if (errInfo != null && !(errDay == day && errCode == errInfo["code"])) {
             var ev = statEvent("fetch_error", model, spot, day, null);
             var params = ev["params"] as Dictionary;
             var keys = errInfo.keys();
@@ -125,7 +141,8 @@ class WingService extends System.ServiceDelegate {
         }
         // erreur d'un reveil precedent qui n'a pas pu partir (pas de connexion) : delay_h = heures
         // entre l'erreur et cet envoi, soit la duree de la coupure vue par la montre
-        var pend = pingValue("errPend", "").toString();
+        var qd = (queued != null) ? queued["errPend"] : null;
+        var pend = ((qd != null) ? qd : pingValue("errPend", "")).toString();
         if (!pend.equals("")) {
             var f = splitPend(pend);
             if (f.size() == ERR_KEYS.size() + 1) {
@@ -163,8 +180,11 @@ class WingService extends System.ServiceDelegate {
             "engagement_time_msec" => 1000
         };
         if (previous != null) { params["previous_version"] = previous; }
-        var sc = pingValue("statCode", 0);
+        var qs = (queued != null) ? queued["statCode"] : null;
+        var sc = (qs != null) ? qs : pingValue("statCode", 0);
         if (sc != 0) { params["stat_code"] = sc; }
+        // le cadran n'avait pas recu le resultat precedent (cadran arrete ?)
+        if (queued != null) { params["queued"] = 1; }
         return { "name" => name, "params" => params };
     }
 
@@ -236,6 +256,16 @@ class WingService extends System.ServiceDelegate {
     // les statistiques ne doit jamais bloquer la meteo (1.0.10 : propriete absente apres une mise
     // a jour depuis la 1.0.8, le service plantait avant la requete et le cadran restait sans donnees).
     function finish(res as Dictionary) as Void {
+        if (res != queued) {
+            // ce resultat remplace celui en attente : on garde ce que le cadran doit encore noter
+            res["at"] = Time.now().value();
+            if (queued != null) {
+                var keep = ["ping", "errPing", "errPend", "statCode"];
+                for (var i = 0; i < keep.size(); i++) {
+                    if (queued[keep[i]] != null) { res[keep[i]] = queued[keep[i]]; }
+                }
+            }
+        }
         result = res;
         var sent = false;
         try {
