@@ -313,8 +313,9 @@ class WingService extends System.ServiceDelegate {
     var groups = null;  // modeles de chaque requete
     var step = 0;       // requete en cours
     var t0 = 0;         // debut des donnees (minuit local, s)
-    var outV = null;    // vitesses fusionnees (dixiemes de noeud), null : heure encore vide
-    var outD = null;    // directions (degres, -1 si absente)
+    // Tableaux d'octets : 5 fois moins de memoire que des tableaux de nombres, pour les requetes suivantes.
+    var outV = null;    // vitesses fusionnees (noeuds entiers + 1), 0 : heure encore vide
+    var outD = null;    // directions sur DIR_HOURS heures (dizaines de degres + 1), 0 : absente
 
     // Exactement les heures utiles : depuis minuit (heure locale) jusqu'a MAX_HOURS
     function fetchForecast() as Void {
@@ -333,7 +334,8 @@ class WingService extends System.ServiceDelegate {
         var params = {
             "latitude" => lastLat,
             "longitude" => lastLon,
-            "hourly" => "wind_speed_10m,wind_direction_10m",
+            // les directions ne servent que sur DIR_HOURS heures : inutile de les redemander au-dela
+            "hourly" => (outV != null && outV.indexOf(0) >= DIR_HOURS) ? "wind_speed_10m" : "wind_speed_10m,wind_direction_10m",
             "models" => list,
             "wind_speed_unit" => "kn",
             "past_hours" => past,
@@ -365,7 +367,7 @@ class WingService extends System.ServiceDelegate {
             return;
         }
         step++;
-        if (err == 0 && step < groups.size() && outV.indexOf(null) >= 0 && elapsed() < FORECAST_LATE) {
+        if (err == 0 && step < groups.size() && outV.indexOf(0) >= 0 && elapsed() < FORECAST_LATE) {
             fetchForecast();
             return;
         }
@@ -387,7 +389,7 @@ class WingService extends System.ServiceDelegate {
             "code" => code,
             "step" => (i + 1).toString() + "/" + groups.size(),
             "models" => names,
-            "hours" => (outV == null) ? 0 : (outV.indexOf(null) < 0 ? outV.size() : outV.indexOf(null)),
+            "hours" => (outV == null) ? 0 : (outV.indexOf(0) < 0 ? outV.size() : outV.indexOf(0)),
             "mem_free" => st.freeMemory,
             "mem_total" => st.totalMemory,
             "phone" => System.getDeviceSettings().phoneConnected ? 1 : 0,
@@ -419,8 +421,8 @@ class WingService extends System.ServiceDelegate {
             var total = times.size() - off;
             if (total > MAX_HOURS) { total = MAX_HOURS; }
             if (total < 0) { total = 0; }
-            outV = new [total];
-            outD = new [total];
+            outV = new [total]b;
+            outD = new [(total < DIR_HOURS) ? total : DIR_HOURS]b;
         }
         var models = groups[step] as Array;
         var found = false;
@@ -433,10 +435,15 @@ class WingService extends System.ServiceDelegate {
             var ds = hourly["wind_direction_10m" + suffix];
             for (var i = 0; i < outV.size(); i++) {
                 var j = (t0 - start) / 3600 + i;
-                if (outV[i] != null || j < 0 || j >= s.size() || s[j] == null) { continue; }
-                // dixiemes de noeud, entier ; direction en degres (d'ou vient le vent), -1 si absente
-                outV[i] = (s[j].toFloat() * 10 + 0.5).toNumber();
-                outD[i] = (ds != null && j < ds.size() && ds[j] != null) ? ds[j].toNumber() : -1;
+                if (outV[i] != 0 || j < 0 || j >= s.size() || s[j] == null) { continue; }
+                // noeuds entiers, jusqu'a 93 nd ; direction d'ou vient le vent, par dizaines de degres
+                var kn = (s[j].toFloat() + 0.5).toNumber();
+                if (kn > 93) { kn = 93; }
+                if (kn < 0) { kn = 0; }
+                outV[i] = kn + 1;
+                if (i < DIR_HOURS && ds != null && j < ds.size() && ds[j] != null) {
+                    outD[i] = (ds[j].toNumber() + 5) / 10 % 36 + 1;
+                }
             }
         }
         return found ? 0 : 1003;
@@ -444,7 +451,7 @@ class WingService extends System.ServiceDelegate {
 
     // Resultat : heures remplies sans trou depuis minuit
     function done() as Void {
-        var n = (outV == null) ? -1 : outV.indexOf(null);
+        var n = (outV == null) ? -1 : outV.indexOf(0);
         if (n < 0) { n = (outV == null) ? 0 : outV.size(); }
         if (n == 0) {
             noteError(1004);
@@ -465,10 +472,7 @@ class WingService extends System.ServiceDelegate {
     function packSpeeds(n as Number) as String {
         var c = new [n];
         for (var i = 0; i < n; i++) {
-            var k = (outV[i] + 5) / 10;
-            if (k > 93) { k = 93; }
-            if (k < 0) { k = 0; }
-            c[i] = (33 + k).toChar();
+            c[i] = (32 + outV[i]).toChar();
         }
         return StringUtil.charArrayToString(c);
     }
@@ -479,7 +483,7 @@ class WingService extends System.ServiceDelegate {
         var c = new [m];
         for (var i = 0; i < m; i++) {
             var d = outD[i];
-            c[i] = (d < 0) ? ' ' : (33 + ((d + 5) / 10) % 36).toChar();
+            c[i] = (d == 0) ? ' ' : (32 + d).toChar();
         }
         return StringUtil.charArrayToString(c);
     }

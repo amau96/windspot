@@ -20,9 +20,10 @@ class WingFaceApp extends Application.AppBase {
     }
 
     function getInitialView() {
-        resolveSpot();
-        resolveModel();
-        registerRefresh();
+        var f = new WingFg();
+        f.resolveSpot();
+        f.resolveModel();
+        f.registerRefresh();
         var d = editMode ? editDelegate() : null;
         if (d != null) {
             return [ new WingFaceView(), d ];
@@ -38,6 +39,19 @@ class WingFaceApp extends Application.AppBase {
     function getServiceDelegate() {
         return [ new WingService() ];
     }
+
+    function onBackgroundData(data) {
+        new WingFg().onBackgroundData(data);
+    }
+
+    function onSettingsChanged() {
+        new WingFg().onSettingsChanged();
+    }
+}
+
+// Code du cadran, hors de (:background) : charge a chaque reveil dans WingFaceApp, il occupait pres
+// de 3 Ko sur les 28,5 Ko du service des montres a 32 Ko (fenix 5, 2026-11 : -403 sur arpege et icon).
+class WingFg {
 
     // Appele quand le service d'arriere-plan renvoie ses donnees
     function onBackgroundData(data) {
@@ -101,8 +115,9 @@ class WingFaceApp extends Application.AppBase {
         Application.Storage.setValue(key, value);
         try {
             Application.Properties.setValue(key, value);
-            if (!storageShared() && (self has :saveProperties)) {
-                saveProperties();
+            var app = Application.getApp();
+            if (!storageShared() && (app has :saveProperties)) {
+                app.saveProperties();
             }
         } catch (e) {
         }

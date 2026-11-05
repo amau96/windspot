@@ -176,7 +176,7 @@ function chooseSpot(sp as Array) as Void {
     }
     Application.Storage.setValue("recent", list);
 
-    (Application.getApp() as WingFaceApp).registerRefresh();
+    new WingFg().registerRefresh();
     WatchUi.requestUpdate();
 }
 
