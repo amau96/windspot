@@ -119,6 +119,10 @@ class WingFaceView extends WatchUi.WatchFace {
 
     function onExitSleep() {
         inSleep = false;
+        // reveils arretes par le service (resultats non recus pendant 2 jours, voir QUEUE_GIVE_UP)
+        if (Background.getTemporalEventRegisteredTime() == null) {
+            new WingFg().registerRefresh();
+        }
         WatchUi.requestUpdate();
     }
 

@@ -33,7 +33,7 @@ function spotCoords() as Array<Float> {
     var lon = Application.Properties.getValue("curLon");
     if (lat == null || lat.toString().equals("")) { lat = Application.Properties.getValue("lat"); }
     if (lon == null || lon.toString().equals("")) { lon = Application.Properties.getValue("lon"); }
-    if (lat == null) { lat = "47.46"; }
-    if (lon == null) { lon = "-1.46"; }
+    if (lat == null) { lat = "47.36"; }
+    if (lon == null) { lon = "-1.51"; }
     return [lat.toString().toFloat(), lon.toString().toFloat()];
 }

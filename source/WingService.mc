@@ -54,6 +54,9 @@ class WingService extends System.ServiceDelegate {
     var queued = null;
     // Previsions en attente plus recentes que ca (s) : le cadran ne tourne pas, on ne retelecharge pas
     const QUEUE_FRESH = 14400;
+    // Resultats en attente depuis plus longtemps (s) : le cadran ne tourne plus, on arrete les reveils.
+    // Il les reprogramme a son prochain lancement ou a la sortie de veille (registerRefresh).
+    const QUEUE_GIVE_UP = 172800;
 
     function initialize() {
         ServiceDelegate.initialize();
@@ -68,14 +71,20 @@ class WingService extends System.ServiceDelegate {
         startAt = System.getTimer();
         var q = Background.getBackgroundData();
         if (q instanceof Dictionary) { queued = q; }
+        if (queued != null) {
+            var since = (queued["qs"] != null) ? queued["qs"] : queued["at"];
+            if (since != null && Time.now().value() - since > QUEUE_GIVE_UP) {
+                Background.deleteTemporalEvent();
+            }
+        }
         if (queued != null && queued["at"] != null && Time.now().value() - queued["at"] < QUEUE_FRESH) {
             finish(queued);
             return;
         }
         var lat = bgProp("curLat", "");
         var lon = bgProp("curLon", "");
-        if (lat.equals("")) { lat = bgProp("lat", "47.46"); }
-        if (lon.equals("")) { lon = bgProp("lon", "-1.46"); }
+        if (lat.equals("")) { lat = bgProp("lat", "47.36"); }
+        if (lon.equals("")) { lon = bgProp("lon", "-1.51"); }
         lastLat = lat.toString();
         lastLon = lon.toString();
 
@@ -260,6 +269,8 @@ class WingService extends System.ServiceDelegate {
             // ce resultat remplace celui en attente : on garde ce que le cadran doit encore noter
             res["at"] = Time.now().value();
             if (queued != null) {
+                // depuis quand le cadran ne recoit plus rien
+                res["qs"] = (queued["qs"] != null) ? queued["qs"] : queued["at"];
                 var keep = ["ping", "errPing", "errPend", "statCode"];
                 for (var i = 0; i < keep.size(); i++) {
                     if (queued[keep[i]] != null) { res[keep[i]] = queued[keep[i]]; }
