@@ -23,13 +23,13 @@ Si Chrome n'est pas connecte (`list_connected_browsers` vide), faire le reste et
 
 Les pages GA n'ont pas de texte exploitable (`get_page_text` echoue). Utiliser `find`, `read_page` ou une capture a petite echelle.
 
-1. `find` « Windspot - erreurs et stats », cliquer dessus. L'exploration se sauvegarde toute seule.
-2. Mettre la periode sur Today : clic sur la periode en haut du panneau Variables, « Today », « Apply ». Fermer le message de bienvenue s'il apparait.
-3. Onglet « Evenements par montre » : evenement, montre, version. Monter l'echelle de capture si les chiffres sont illisibles.
-4. Onglet « Erreurs meteo » : code, memoire libre, meta, modeles, retard.
-5. **Remettre la periode sur « Last 28 days » et verifier.** Ne pas ajouter de colonne a l'exploration, ou l'enlever ensuite.
-6. `dur_s` : `https://analytics.google.com/analytics/web/#/a412329189p559368289/reports/dashboard?r=events-overview&params=_u.dateOption%3Dtoday%26_r..dimension-value%3D%7B%22dimension%22:%22eventName%22,%22value%22:%22daily_active%22%7D`, carte « Duree reveil » (`find`, `scroll_to`, capture). Cette vue n'est pas detaillee par montre. La carte ne montre pas forcement toutes les valeurs : comparer son total annonce a ce qui est lisible.
-7. Fermer l'onglet.
+Exploration dediee **« Windspot - controle »** : periode fixe « Last 7 days » (hier inclus, aujourd'hui exclu : GA a du retard le matin), 100 lignes par onglet. **Ne jamais changer sa periode ni ses colonnes** : tout y est deja. « Windspot - erreurs et stats » reste la vue sur 28 jours, ne pas y toucher.
+
+1. `find` « Windspot - controle », cliquer dessus. Fermer le message de bienvenue s'il apparait.
+2. Onglet « Événements par montre » : date, evenement, montre, version, resultat en attente (`queued`), trie par date decroissante. Lire les lignes de la veille (zoom sur le tableau, defiler).
+3. Onglet « Erreurs météo » : code, modeles, retard, montre, version (7 jours, sans date). La montre et la version de chaque erreur y sont directement.
+4. Onglet « Réveil » : montre, version, duree reveil (`dur_s`), date, nombre d'evenements, trie par date. Chercher les valeurs de 15 s et plus.
+5. Fermer l'onglet.
 
 ## 3. Interpreter
 
