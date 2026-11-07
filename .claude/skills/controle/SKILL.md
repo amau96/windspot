@@ -26,7 +26,7 @@ Les pages GA n'ont pas de texte exploitable (`get_page_text` echoue). Utiliser `
 Exploration dediee **« Windspot - controle »** : periode fixe « Last 7 days » (hier inclus, aujourd'hui exclu : GA a du retard le matin), 100 lignes par onglet. **Ne jamais changer sa periode ni ses colonnes** : tout y est deja. « Windspot - erreurs et stats » reste la vue sur 28 jours, ne pas y toucher.
 
 1. `find` « Windspot - controle », cliquer dessus. Fermer le message de bienvenue s'il apparait.
-2. Onglet « Événements par montre » : date, evenement, montre, version, resultat en attente (`queued`), trie par date decroissante. Lire les lignes de la veille (zoom sur le tableau, defiler).
+2. Onglet « Événements par montre » : date, evenement, montre, version, resultat en attente (`queued`), nombre d'evenements et d'utilisateurs actifs, trie par date decroissante. Lire les lignes de la veille (zoom sur le tableau, defiler). Plus d'evenements que d'utilisateurs sur une ligne = au moins une montre qui renvoie.
 3. Onglet « Erreurs météo » : code, modeles, retard, montre, version (7 jours, sans date). La montre et la version de chaque erreur y sont directement.
 4. Onglet « Réveil » : montre, version, duree reveil (`dur_s`), date, nombre d'evenements, trie par date. Chercher les valeurs de 15 s et plus.
 5. Fermer l'onglet.
