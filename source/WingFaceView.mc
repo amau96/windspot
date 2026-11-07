@@ -281,17 +281,21 @@ class WingFaceView extends WatchUi.WatchFace {
     // Degrade des minutes facon cadran Garmin : vert -> cyan -> bleu
     const GRAD = [0x35E07A, 0x1FC9D6, 0x2F7FF0];
 
-    // MIP : trois couleurs exactes de la palette (vert, cyan, bleu) en paliers, sans teintes intermediaires
-    const GRAD_MIP = [0x55FF55, 0x00FFFF, 0x00AAFF];
+    // MIP (64 couleurs) : pas de degrade possible, minutes en blanc comme les heures (cadrans Garmin d'origine)
+    const MIN_MIP = 0x00FFFF;
 
     function gradColor(t) {
-        if (!amoled) { return GRAD_MIP[t < 0.34 ? 0 : (t < 0.67 ? 1 : 2)]; }
         if (t < 0.5) { return lerpColor(GRAD[0], GRAD[1], t * 2); }
         return lerpColor(GRAD[1], GRAD[2], (t - 0.5) * 2);
     }
 
-    // Texte en degrade horizontal, dessine par bandes verticales (clip), aligne a gauche sur x
+    // Texte en degrade horizontal, dessine par bandes verticales (clip), aligne a gauche sur x ; uni sur MIP
     function drawGradientText(dc, x, y, font, txt) {
+        if (!amoled) {
+            dc.setColor(MIN_MIP, Graphics.COLOR_TRANSPARENT);
+            dc.drawText(x, y, font, txt, Graphics.TEXT_JUSTIFY_LEFT | Graphics.TEXT_JUSTIFY_VCENTER);
+            return;
+        }
         var w = dc.getTextWidthInPixels(txt, font);
         var h = dc.getHeight();
         var step = 3;
